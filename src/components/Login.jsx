@@ -1,16 +1,35 @@
-import React from "react";
-import { useNavigate } from "react-router-dom"; // 🔥 Asegúrate de importarlo bien
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";  // 🔥 Importar axios
 import "../App.css"; 
 import logo from "../images/logos_Cosevif/LogoCosevif-removed.png";
 import portada from "../images/imagenes/cosevif-portada.jpg";
 
 function Login() {
-  const navigate = useNavigate(); // 🔥 Asegura que está bien definido
+  const navigate = useNavigate(); 
 
-  const handleLogin = (e) => {
+  // 🔹 Estados para manejar el email y password
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+
+  const handleLogin = async (e) => {
     e.preventDefault();
-    console.log("Redirigiendo al Dashboard..."); // 👀 Verifica si el evento se ejecuta
-    navigate("/dashboard"); // 🔥 Redirige al Dashboard
+    try {
+      const response = await axios.post(
+        "http://localhost:8080/auth/login",  // 🔥 URL del backend
+        { username: email, password: password },   // 📌 Enviar datos en el body
+        { withCredentials: true } // 💡 Si el backend usa cookies o JWT
+      );
+
+      console.log("Login exitoso:", response.data);
+      localStorage.setItem("token", response.data.token);  // 🔥 Guarda el token
+
+      navigate("/dashboard");  // ✅ Redirige al Dashboard si el login es exitoso
+    } catch (err) {
+      console.error("Error en login:", err.response ? err.response.data : err);
+      setError("Credenciales incorrectas. Inténtalo de nuevo.");
+    }
   };
 
   return (
@@ -23,12 +42,26 @@ function Login() {
           <h2>Bienvenido a Cosevif</h2>
           <p>Inicia sesión con tu cuenta</p>
 
+          {error && <p className="error">{error}</p>} {/* 🔥 Mostrar error si falla el login */}
+
           <form onSubmit={handleLogin}>
             <div className="input-group">
-              <input type="email" placeholder="Introduce tu correo electrónico" required />
+              <input 
+                type="email" 
+                placeholder="Introduce tu correo electrónico" 
+                value={email} 
+                onChange={(e) => setEmail(e.target.value)} // 🔹 Guardar email
+                required 
+              />
             </div>
             <div className="input-group">
-              <input type="password" placeholder="Escribe tu contraseña" required />
+              <input 
+                type="password" 
+                placeholder="Escribe tu contraseña" 
+                value={password} 
+                onChange={(e) => setPassword(e.target.value)} // 🔹 Guardar password
+                required 
+              />
             </div>
 
             <button type="submit" className="btn-marron">
@@ -50,4 +83,3 @@ function Login() {
 }
 
 export default Login;
-  

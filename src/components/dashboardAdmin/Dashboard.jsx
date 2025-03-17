@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import Sidebar from "./Sidebar";
 import Header from "./Header";
 import CasaCard from "./CasaCard";
@@ -6,7 +8,36 @@ import RegistroCasaModal from "./RegistroCasaModal";
 import "../../styles/Dashboard.css";
 
 const Dashboard = () => {
+  const navigate = useNavigate();
   const [modalOpen, setModalOpen] = useState(false);
+  const [casas, setCasas] = useState([]);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      navigate("/login");
+      return;
+    }
+
+    const fetchCasas = async () => {
+      try {
+        console.log("Obteniendo casas...");
+        const response = await axios.get("http://localhost:8080/admin/houses", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        console.log("Casas obtenidas:", response.data);
+        setCasas(response.data);
+      } catch (err) {
+        console.error("Error obteniendo casas:", err);
+        setError("No se pudieron cargar las casas.");
+      }
+    };
+
+    fetchCasas();
+  }, [navigate]);
 
   return (
     <div className="dashboard-container">
@@ -18,10 +49,15 @@ const Dashboard = () => {
           <button className="btn-add" onClick={() => setModalOpen(true)}>
             + Agregar Casa
           </button>
+
+          {error && <p className="error">{error}</p>}
+
           <div className="casa-list">
-            <CasaCard />
-            <CasaCard />
-            <CasaCard />
+            {casas.length > 0 ? (
+              casas.map((casa) => <CasaCard key={casa.id} data={casa} />)
+            ) : (
+              <p>No hay casas registradas.</p>
+            )}
           </div>
         </div>
       </div>
