@@ -1,0 +1,65 @@
+/* Dashboard.css */
+
+/* Contenedor principal */
+.dashboard-container {
+  display: flex;
+  height: 100vh;
+  font-family: "Arial", sans-serif;
+}
+
+/* Dashboard Content */
+.dashboard-content {
+  flex-grow: 1;
+  padding: 20px;
+  background: #f8f8f8;
+}
+
+/* Título principal y subtítulo */
+.dashboard-main h2 {
+  font-size: 24px;
+  font-weight: bold;
+  color: #4a2e2b;
+}
+
+.dashboard-main .subtitulo {
+  font-size: 16px;
+  color: #8a6b5b;
+  margin-top: 10px;
+}
+
+/* Botón Agregar Casa */
+.btn-add {
+  background-color: #862d26;
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-bottom: 20px;
+  display: inline-block;
+  transition: background 0.3s ease-in-out;
+}
+
+.btn-add:hover {
+  background-color: #6b1f1a;
+}
+
+/* Contenedor de la lista de casas */
+.casa-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* Adaptable */
+  gap: 20px;
+  justify-items: center; /* Centra las tarjetas dentro del contenedor */
+  margin-top: 20px;
+  width: 100%;
+  max-width: 1200px; /* Ajusta según la pantalla */
+  margin: auto; /* Centra el contenido */
+}
+
+/* Para pantallas más pequeñas */
+@media (max-width: 768px) {
+  .casa-list {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Ajusta las columnas en pantallas pequeñas */
+  }
+}

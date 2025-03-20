@@ -1,6 +1,7 @@
 import { Routes, Route } from "react-router-dom"; // ✅ NO IMPORTAMOS OTRA VEZ BrowserRouter
-import Login from "./components/Login";
-import Dashboard from "./components/dashboardAdmin/Dashboard";
+import Login from "./components/auth/Login";
+import Dashboard from "./components/admin/dashboard/Dashboard";
+
 
 function App() {
   return (

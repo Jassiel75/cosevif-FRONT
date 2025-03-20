@@ -1,0 +1,88 @@
+/* Sidebar.css */
+
+/* Sidebar */
+.sidebar {
+    width: 250px;
+    background-color: #e1b9a3;
+    padding: 30px 20px;
+    height: 100vh; /* El sidebar ocupará toda la altura */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 10; /* Asegura que el sidebar se quede encima del contenido */
+  }
+  
+  /* Logo del Sidebar */
+  .sidebar-logo {
+    text-align: center;
+    margin-bottom: 30px; /* Aumenta el espacio debajo del logo */
+  }
+  
+  .sidebar-logo img {
+    width: 85px; /* Ajusta el tamaño del logo */
+    height: auto;
+    margin-bottom: 15px;
+  }
+  
+  .sidebar-logo h2 {
+    font-size: 22px;
+    font-weight: bold;
+    color: #4a2e2b;
+  }
+  
+  /* Lista de opciones */
+  .sidebar ul {
+    list-style: none;
+    padding: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centra los ítems en la columna */
+  }
+  
+  .sidebar ul li {
+    padding: 12px 18px;
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    color: #4a2e2b;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s ease-in-out;
+    border-radius: 8px;
+    width: 100%; /* Asegura que los ítems ocupen el 100% */
+    text-align: center; /* Centra el texto de los elementos */
+  }
+  
+  .sidebar ul li:hover {
+    background: #d3a08b;
+    color: white;
+  }
+  
+  .sidebar .active {
+    background: #862D26;
+    color: white;
+  }
+  
+  /* Íconos */
+  .sidebar ul li span {
+    margin-right: 10px;
+    font-size: 18px;
+  }
+  
+  /* Botón Cerrar Sesión */
+  .sidebar .logout {
+    color: #862D26;
+    font-weight: bold;
+    margin-top: auto;
+    text-align: center;
+  }
+  
+  .sidebar .logout:hover {
+    background: #b22222;
+    color: white;
+    border-radius: 8px;
+  }
+  

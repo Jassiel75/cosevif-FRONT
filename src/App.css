@@ -153,3 +153,23 @@ input {
   height: 100%;
   object-fit: cover;
 }
+
+
+.error-message {
+  color: #fff;
+  background-color: #d9534f; /* Rojo fuerte */
+  padding: 12px;
+  border-radius: 5px;
+  text-align: center;
+  font-weight: bold;
+  margin-bottom: 15px;
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+/* Efecto de aparición */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+

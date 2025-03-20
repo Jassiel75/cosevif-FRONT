@@ -1,0 +1,77 @@
+/* 🔥 Fondo oscurecido cuando se abre la modal */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+/* 🔥 Estilo de la modal */
+.modal-content {
+  background: white;
+  padding: 25px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+  width: 350px;
+  text-align: center;
+}
+
+/* 🔥 Estilos para los títulos */
+.modal-content h2 {
+  font-size: 22px;
+  font-weight: bold;
+  color: #823b2e;
+  margin-bottom: 15px;
+}
+
+/* 🔥 Contenedor de información */
+.modal-info {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+/* 🔥 Estilo de los labels */
+.modal-info label {
+  font-weight: bold;
+  color: #4a2c2a;
+  text-align: left;
+  font-size: 14px;
+}
+
+/* 🔥 Campos de texto (inputs) */
+.modal-info input {
+  padding: 8px;
+  border: 1px solid #823b2e;
+  border-radius: 5px;
+  font-size: 14px;
+  background: #f9f5f3;
+  text-align: center;
+  color: #4a2c2a;
+  font-weight: bold;
+  cursor: default;
+}
+
+/* 🔥 Botón de cerrar */
+.btn-close {
+  background: #823b2e;
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s ease-in-out;
+}
+
+.btn-close:hover {
+  background: #6b1f1a;
+}
