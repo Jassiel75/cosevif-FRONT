@@ -1,87 +1,37 @@
-/* CasaCard.css */
+/* src/styles/admin/CasaCard.css */
 
-/* Tarjeta de Casa */
 .casa-card {
-    background-color: #f4dfd0;
-    padding: 15px;
+    background-color: #f2cbb6;
+    padding: 10px;
     text-align: center;
-    border-radius: 12px; /* Redondeo de las esquinas de la tarjeta */
-    width: 100%;
-    max-width: 250px; /* Ajustamos el tamaño de la tarjeta */
-    box-shadow: 3px 6px 12px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-    margin-bottom: 25px; /* Añadimos más espacio entre las tarjetas */
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-right: 20px; /* Separación horizontal entre las tarjetas */
-    margin-left: 20px; /* Separación horizontal entre las tarjetas */
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
   }
   
-  /* Efecto hover en la tarjeta */
-  .casa-card:hover {
-    transform: scale(1.05);
-    box-shadow: 4px 8px 16px rgba(0, 0, 0, 0.2);
-  }
-  
-  /* Ícono de la casa o imagen */
-  .casa-image-container {
-    margin-bottom: 15px;
-    display: flex;
-    justify-content: center;
-  }
-  
-  .casa-img {
-    width: 100%; /* Asegura que la imagen ocupe todo el espacio disponible */
-    max-width: 120px; /* Limita el tamaño máximo de la imagen */
-    height: auto;
-    border-radius: 10px;
-  }
-  
-  .casa-icon {
-    font-size: 40px;
-    margin-top: 10px;
-  }
-  
-  /* Título de la casa */
-  .casa-card h3 {
-    font-size: 16px;
-    font-weight: bold;
-    color: white; /* Cambiamos el color del texto a blanco */
+  .house-icon {
     margin-bottom: 10px;
+    font-size: 24px;
+    color: #862d26; /* Color de la casa */
   }
   
-  /* Botones */
-  .card-buttons {
+  .buttons {
     display: flex;
-    flex-direction: column;
-    gap: 10px; /* Espacio entre los botones */
-    margin-top: auto; /* Asegura que los botones estén en la parte inferior */
-    width: 100%;
+    justify-content: space-around;
+    margin-top: 20px;
   }
   
-  /* Botón Actualizar (MUI Button) */
-  .btn-update {
-    width: 100%; /* Los botones ocupan el ancho completo */
+  .btn-ver-detalles {
+    background-color: #862d26;
     color: white;
-    background-color: #99C8E4; /* Azul claro */
-    border-radius: 8px; /* Redondeamos los botones */
   }
   
-  /* Botón Ver detalles (MUI Button) */
-  .btn-details {
-    width: 100%; /* Los botones ocupan el ancho completo */
+  .btn-actualizar {
+    background-color: #86a5b0;
     color: white;
-    background-color: #862D26; /* Rojo */
-    border-radius: 8px; /* Redondeo de los botones */
   }
   
-  /* Efectos de hover en botones */
-  .btn-update:hover {
-    background-color: #7daed7; /* Tono más oscuro para el hover */
-  }
-  
-  .btn-details:hover {
-    background-color: #6b1f1a; /* Tono más oscuro para el hover */
+  .btn-ver-detalles:hover, .btn-actualizar:hover {
+    opacity: 0.9;
   }
   

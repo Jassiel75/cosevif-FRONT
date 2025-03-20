@@ -1,41 +1,25 @@
-import React, { useState } from "react";
-import { Button } from "@mui/material";  // Asegúrate de importar Button de MUI
-import DetallesCasaModal from "./DetallesCasaModal";
-import "../../../styles/admin/Dashboard.css";
-import "../../../styles/admin/CasaCard.css";
+// src/components/admin/dashboard/CasaCard.jsx
+import React from "react";
+import { Button, Card, CardContent, Typography } from "@mui/material";
+import "../../../styles/admin/CasaCard.css"; // Asegúrate de que la ruta de los estilos sea correcta
 
-const CasaCard = ({ data }) => {
-  const [modalOpen, setModalOpen] = useState(false);
-
-  if (!data) {
-    return <p className="error">Error: No hay datos de la casa.</p>;
-  }
-
-  // Verifica si hay una imagen en Base64
-  const imageUrl = data.photo ? `data:image/jpeg;base64,${data.photo}` : null;
-
+const CasaCard = ({ casa }) => {
   return (
-    <div className="casa-card">
-      <h3>Casa #{data.houseNumber || "Sin número"}</h3>
-      <div className="casa-image-container">
-        {imageUrl ? (
-          <img src={imageUrl} alt="Casa" className="casa-img" />
-        ) : (
-          <div className="casa-icon">🏡</div>
-        )}
-      </div>
-
-      <div className="card-buttons">
-        <Button variant="contained" color="primary" className="btn-update">
-          Actualizar
-        </Button>
-        <Button variant="contained" color="secondary" className="btn-details" onClick={() => setModalOpen(true)}>
-          Ver detalles
-        </Button>
-      </div>
-
-      {modalOpen && <DetallesCasaModal casa={data} onClose={() => setModalOpen(false)} />}
-    </div>
+    <Card className="casa-card">
+      <CardContent>
+        <div className="house-icon">
+          <Typography variant="h5">CASA #{casa.id}</Typography>
+        </div>
+        <div className="buttons">
+          <Button variant="outlined" color="primary" className="btn-ver-detalles">
+            Ver detalles
+          </Button>
+          <Button variant="outlined" color="secondary" className="btn-actualizar">
+            Actualizar
+          </Button>
+        </div>
+      </CardContent>
+    </Card>
   );
 };
 

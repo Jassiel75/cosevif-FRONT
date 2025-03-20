@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import Sidebar from "../../layout/Sidebar";
-import Header from "../../layout/Header";
-import CasaCard from "../../admin/dashboard/CasaCard";
-import RegistroCasaModal from "./RegistroCasaModal";
+import { Grid, Typography } from "@mui/material";
+
+import Header from "./Header";
+import Sidebar from "./Sidebar"; // No es necesario ../../ ya que Sidebar está en el mismo nivel
+import CasaCard from "./CasaCard"; // Importamos el componente CasaCard
+
 import "../../../styles/admin/Dashboard.css";
 
 const Dashboard = () => {
   const navigate = useNavigate();
-  const [modalOpen, setModalOpen] = useState(false);
   const [casas, setCasas] = useState([]);
   const [error, setError] = useState("");
 
@@ -23,15 +24,12 @@ const Dashboard = () => {
 
     const fetchCasas = async () => {
       try {
-        console.log("Obteniendo casas...");
         const response = await axios.get("http://localhost:8080/admin/houses", {
           headers: { Authorization: `Bearer ${token}` },
         });
 
-        console.log("Casas obtenidas:", response.data);
         setCasas(response.data);
       } catch (err) {
-        console.error("Error obteniendo casas:", err);
         setError("No se pudieron cargar las casas.");
       }
     };
@@ -41,29 +39,33 @@ const Dashboard = () => {
 
   return (
     <div className="dashboard-container">
-  <Sidebar />
-  <div className="dashboard-content">
-    <Header />
-    <div className="dashboard-main">
-      <h2>Todas las Casas</h2>
-      <p className="subtitulo">Monitor Casas.</p>
-      <button className="btn-add" onClick={() => setModalOpen(true)}>
-        ➕ Agregar Casa
-      </button>
+      <Sidebar />
+      <div className="dashboard-content">
+        <Header />
+        <div className="dashboard-main">
+          {error && <Typography color="error">{error}</Typography>}
 
-      {error && <p className="error">{error}</p>}
-
-      <div className="casa-list">
-        {casas.length > 0 ? (
-          casas.map((casa) => <CasaCard key={casa.id} data={casa} />)
-        ) : (
-          <p>No hay casas registradas.</p>
-        )}
+          <Grid container spacing={2}>
+            {casas.length > 0 ? (
+              casas.map((casa) => (
+                <Grid
+                  item
+                  key={casa.id}
+                  xs={12} // Ocupa todo el ancho en pantallas pequeñas
+                  sm={6}  // Ocupa la mitad del ancho en pantallas medianas
+                  md={3}  // Ocupa un cuarto del ancho en pantallas grandes
+                >
+                  {/* Usamos CasaCard para cada casa */}
+                  <CasaCard casa={casa} />
+                </Grid>
+              ))
+            ) : (
+              <Typography>No hay casas registradas.</Typography>
+            )}
+          </Grid>
+        </div>
       </div>
     </div>
-  </div>
-  {modalOpen && <RegistroCasaModal onClose={() => setModalOpen(false)} />}
-</div>
   );
 };
 
