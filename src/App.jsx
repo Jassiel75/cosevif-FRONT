@@ -1,6 +1,7 @@
 import { Routes, Route } from "react-router-dom";
-import Login from "./components/auth/Login";
-import Dashboard from "./components/admin/dashboard/Dashboard";
+import Login from "./auth/Login";
+import Dashboard from "./components/Dashboard";
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
   return (

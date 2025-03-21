@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";  
-import "../../App.css";
-import logo from "../../assets/logos/LogoCosevif-removed.png";
-import portada from "../../assets/images/cosevif-portada.jpg";
+import "../App.css";  // Importa App.css desde la raíz de src
+import logo from "../assets/logos/LogoCosevif-removed.png";
+import portada from "../assets/images/cosevif-portada.jpg";
 
 function Login() {
   const navigate = useNavigate(); 
