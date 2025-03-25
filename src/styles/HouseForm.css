@@ -1,0 +1,108 @@
+/* Modal centrándolo y mejorando la apariencia */
+.modal-content {
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    width: 80%;  /* Aumentamos el ancho del modal */
+    max-width: 900px;  /* Controlamos el ancho máximo */
+  }
+  
+  .modal-header {
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .modal-title {
+    font-weight: bold;
+    color: #9b2d20; /* Color del título */
+  }
+  
+  .modal-body {
+    padding: 20px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);  /* Crear dos columnas */
+    gap: 20px;
+  }
+  
+  .modal-footer {
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .modal-footer button {
+    padding: 8px 20px;
+    border-radius: 5px;
+  }
+  
+  /* Estilo del input y textarea */
+  .form-control {
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    box-shadow: none;
+  }
+  
+  /* Estilo de los botones */
+  .btn-danger {
+    background-color: #9b2d20;
+    color: white;
+    border: none;
+  }
+  
+  .btn-danger:hover {
+    background-color: #7a1d13;
+  }
+  
+  .btn-secondary {
+    background-color: #a0a0a0;
+    color: white;
+    border: none;
+  }
+  
+  .btn-secondary:hover {
+    background-color: #7a7a7a;
+  }
+  
+  /* Estilos para el campo de la imagen */
+  .form-label {
+    color: #9b2d20; /* Color del texto */
+  }
+  
+  /* Modificar el tamaño y apariencia del campo de imagen */
+  input[type="file"] {
+    padding: 10px;
+    border-radius: 8px;
+    background-color: #f8f8f8;
+    cursor: pointer;
+    width: 100%;  /* Aseguramos que ocupe todo el espacio */
+    display: block;
+  }
+  
+  textarea {
+    resize: none;
+  }
+  
+  /* Centrado de campos y ajustes para las dos columnas */
+  .modal-body .mb-3 {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .modal-body .mb-3:nth-child(even) {
+    margin-left: 20px;
+  }
+  
+  /* Estilo adicional para inputs centrados */
+  input:focus, textarea:focus {
+    border-color: #9b2d20;
+    box-shadow: 0 0 3px rgba(155, 45, 32, 0.5);
+  }
+  
+  /* Diseño centrado para el campo de la imagen */
+  input[type="file"] {
+    margin-top: 10px;
+  }
+  
+  /* Alineamos los botones de acción a la derecha */
+  .modal-footer {
+    justify-content: flex-end;
+  }
+  

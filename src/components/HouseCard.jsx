@@ -1,22 +1,25 @@
 import React from "react";
-import { Card, Button } from "react-bootstrap";
+import "../styles/HouseCard.css";
 
-function HouseCard({ number }) {
+function HouseCard({ number, image, }) {
   return (
-    <Card className="house-card">
-      <Card.Body>
-        <div className="house-icon">
-          <i className="bi bi-house-door-fill"></i>
-        </div>
-        <Card.Title>CASA #{number}</Card.Title>
-        <Button variant="outline-primary" className="mb-2 w-100">
-          Ver detalles
-        </Button>
-        <Button variant="primary" className="w-100">
-          Actualizar
-        </Button>
-      </Card.Body>
-    </Card>
+    <div className="card shadow-sm house-card">
+      {/* Imagen de la casa */}
+      <div className="card-img-top bg-house justify-content-center align-items-center">
+        <img
+          src={image || "https://via.placeholder.com/150"}
+          alt={`Casa ${number}`}
+          className="img-fluid house-img"
+        />
+      </div>
+
+      {/* Contenido */}
+      <div className="card-body text-center p-3">
+        <h6 className="card-title mb-3 fw-bold text-uppercase">CASA #{number}</h6>
+        <button className="btn btn-update w-100 mb-2">Actualizar</button>
+        <button className="btn btn-details w-100"  >Ver detalles</button>
+      </div>
+    </div>
   );
 }
 
