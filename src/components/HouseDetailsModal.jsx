@@ -11,10 +11,7 @@ function HouseDetailsModal({ house, onClose }) {
           </div>
 
           <div className="modal-body">
-            <div className="mb-3">
-              <label className="form-label">Residente de la Casa</label>
-              <p>{house.resident}</p>
-            </div>
+          
             <div className="mb-3">
               <label className="form-label">Dirección</label>
               <p>{house.address}</p>

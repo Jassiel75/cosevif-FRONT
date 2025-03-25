@@ -6,6 +6,7 @@ import HeaderDashboard from "../components/HeaderDashboard";
 import HouseCard from "../components/HouseCard";
 import HouseForm from "../components/HouseForm"; // 👈 Importar el nuevo componente
 import HouseDetailsModal from "../components/HouseDetailsModal"; // Importamos el modal de detalles
+import HouseUpdateModal from "../components/houses/HouseUpdateModal"; // Importamos el modal de actualización
 
 
 
@@ -16,6 +17,7 @@ function Dashboard() {
   const [houses, setHouses] = useState([]);
   const [showForm, setShowForm] = useState(false); // 👈 Control del modal
   const [selectedHouse, setSelectedHouse] = useState(null); // Control de la casa seleccionada para detalles
+  const [houseToUpdate, setHouseToUpdate] = useState(null); // Control de la casa seleccionada para actualizar
 
 
 
@@ -48,6 +50,17 @@ function Dashboard() {
   const closeHouseDetails = () => {
     setSelectedHouse(null);
   };
+
+// Función para abrir el modal de actualización de la casa
+const openHouseUpdate = (house) => {
+  setHouseToUpdate(house); // Establecer la casa seleccionada para la actualización
+};
+
+// Función para cerrar el modal de actualización
+const closeHouseUpdate = () => {
+  setHouseToUpdate(null);
+};
+
   return (
     <div className="d-flex">
       <Sidebar />
@@ -66,6 +79,8 @@ function Dashboard() {
                       : null
                   }
                   onViewDetails={() => openHouseDetails(house)}
+                  onUpdate={() => openHouseUpdate(house)} // Pasar la casa completa
+
                 />
               </div>
             ))}
@@ -78,7 +93,12 @@ function Dashboard() {
         <HouseDetailsModal house={selectedHouse} onClose={closeHouseDetails} />
       )}
 
-              {/* Mostrar el modal si está activo */}
+       {/* Mostrar el modal de actualización si está activo */}
+       {houseToUpdate && (
+        <HouseUpdateModal house={houseToUpdate} onClose={closeHouseUpdate} onSuccess={loadHouses} />
+      )}
+
+              {/* Mostrar el modal si está activo para registrar casa*/}
       {showForm && (
         <HouseForm
           onClose={() => setShowForm(false)}

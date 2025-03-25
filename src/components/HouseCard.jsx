@@ -1,7 +1,7 @@
 import React from "react";
 import "../styles/HouseCard.css";
 
-function HouseCard({ number, image, }) {
+function HouseCard({ number, image, onViewDetails, onUpdate }) {
   return (
     <div className="card shadow-sm house-card">
       {/* Imagen de la casa */}
@@ -16,8 +16,8 @@ function HouseCard({ number, image, }) {
       {/* Contenido */}
       <div className="card-body text-center p-3">
         <h6 className="card-title mb-3 fw-bold text-uppercase">CASA #{number}</h6>
-        <button className="btn btn-update w-100 mb-2">Actualizar</button>
-        <button className="btn btn-details w-100"  >Ver detalles</button>
+        <button className="btn btn-update w-100 mb-2" onClick={onUpdate}>Actualizar</button>
+        <button className="btn btn-details w-100" onClick={onViewDetails}>Ver detalles</button>
       </div>
     </div>
   );
