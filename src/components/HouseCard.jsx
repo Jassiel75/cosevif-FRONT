@@ -1,7 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
+import axios from "axios";
+
+import { FaPen, FaTrashAlt, FaEye } from "react-icons/fa"; // Importa los iconos de React Icons
 import "../styles/HouseCard.css";
 
-function HouseCard({ number, image, onViewDetails, onUpdate }) {
+function HouseCard({ number, image, onViewDetails, onUpdate, onDelete }) {
   return (
     <div className="card shadow-sm house-card">
       {/* Imagen de la casa */}
@@ -16,8 +19,24 @@ function HouseCard({ number, image, onViewDetails, onUpdate }) {
       {/* Contenido */}
       <div className="card-body text-center p-3">
         <h6 className="card-title mb-3 fw-bold text-uppercase">CASA #{number}</h6>
-        <button className="btn btn-update w-100 mb-2" onClick={onUpdate}>Actualizar</button>
-        <button className="btn btn-details w-100" onClick={onViewDetails}>Ver detalles</button>
+        
+        {/* Contenedor de botones en una línea */}
+        <div className="btn-container justify-content-between">
+          {/* Botón de actualizar con icono azul */}
+          <button className="btn btn-update" onClick={onUpdate}>
+            <FaPen />
+          </button>
+
+          {/* Botón de eliminar con icono rojo */}
+          <button className="btn btn-delete" onClick={onDelete}>
+            <FaTrashAlt />
+          </button>
+
+          {/* Botón de detalles con icono café */}
+          <button className="btn btn-details" onClick={onViewDetails}>
+            <FaEye />
+          </button>
+        </div>
       </div>
     </div>
   );

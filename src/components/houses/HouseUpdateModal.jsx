@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import "../../styles/HouseUpdateModal.css";
 
 function HouseUpdateModal({ house, onClose, onSuccess }) {
   const [form, setForm] = useState({
@@ -54,7 +55,6 @@ function HouseUpdateModal({ house, onClose, onSuccess }) {
         <div className="modal-content p-4">
           <div className="modal-header">
             <h5 className="modal-title">Actualizar Casa #{house.houseNumber}</h5>
-            <button type="button" className="btn-close" onClick={onClose}></button>
           </div>
 
           <form onSubmit={handleSubmit}>
@@ -63,7 +63,7 @@ function HouseUpdateModal({ house, onClose, onSuccess }) {
                 <label className="form-label">Dirección</label>
                 <input type="text" name="address" className="form-control" value={form.address} onChange={handleChange} required />
               </div>
-              <div className="mb-3">
+              <div className="mb-4">
                 <label className="form-label">Calle</label>
                 <input type="text" name="street" className="form-control" value={form.street} onChange={handleChange} required />
               </div>
@@ -71,7 +71,7 @@ function HouseUpdateModal({ house, onClose, onSuccess }) {
                 <label className="form-label">Número de Casa</label>
                 <input type="number" name="houseNumber" className="form-control" value={form.houseNumber} onChange={handleChange} required />
               </div>
-              <div className="mb-3">
+              <div className="mb-4">
                 <label className="form-label">Descripción</label>
                 <textarea name="description" className="form-control" rows="2" value={form.description} onChange={handleChange} required></textarea>
               </div>

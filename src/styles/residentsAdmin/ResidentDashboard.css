@@ -1,0 +1,207 @@
+/* Sidebar */
+.sidebar {
+    height: 100vh;  /* Asegúrate de que ocupe todo el alto de la pantalla */
+    padding-top: 20px;
+    transition: all 0.3s ease;
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 1040;
+    display: flex;
+    flex-direction: column;  /* Asegura que el contenido se alinee correctamente */
+    overflow: hidden; /* Evita desbordamientos */
+  }
+  
+  .bg-sidebar {
+    background-color: #F2CBB6 !important;  /* Color de fondo personalizado */
+  }
+  
+  /* Sidebar cerrado */
+  .sidebar-close {
+    width: 80px;  /* Ancho estrecho solo con íconos */
+    transition: width 0.3s ease; /* Transición suave */
+  }
+  
+  /* Sidebar abierto */
+  .sidebar-open {
+    width: 250px;  /* Ancho expandido con íconos y nombres */
+    transition: width 0.3s ease; /* Transición suave */
+  }
+  
+  /* Ajusta la posición y el diseño de los elementos dentro del sidebar */
+  .sidebar .logo-container {
+    text-align: center;
+    margin-bottom: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .sidebar .logo-img {
+    max-width: 60px;
+    height: auto;
+  }
+  
+  /* Para mostrar el título COSEVIF solo cuando el sidebar está abierto */
+  .sidebar-title {
+    font-size: 22px;
+    color: #3A1110;
+    font-weight: bold;
+    opacity: 0;
+    margin-top: 10px;
+    transition: opacity 0.3s ease;
+  }
+  
+  /* Cuando el sidebar está abierto, mostramos el título COSEVIF */
+  .sidebar-open .sidebar-title {
+    opacity: 1;
+  }
+  
+  /* Para cuando el sidebar está cerrado, centramos los iconos */
+  .sidebar-close .nav-link {
+    justify-content: center;
+    text-align: center; /* Alineación centrada de los textos */
+  }
+  
+  /* Para cuando el sidebar está abierto, centramos los iconos */
+  .sidebar-open .nav-link {
+    display: flex;
+    justify-content: flex-start; /* Alineación a la izquierda */
+    align-items: center;  /* Centrado vertical de los iconos y el texto */
+    text-align: left;  /* Alineación del texto */
+    padding-left: 30px; /* Espacio entre el icono y el texto */
+  }
+  
+  .sidebar .nav-link {
+    font-size: 16px;
+    margin-bottom: 20px;
+    color: #132bfc;  /* Color de texto azul */
+    display: flex;
+    align-items: center;
+    padding: 10px 15px; /* Añadido padding para mejor espaciado */
+  }
+  
+  .d-flex {
+    height: 100vh; /* Contenedor que envuelve todo, incluyendo el sidebar y el contenido */
+  }
+  
+  .sidebar .nav-link span {
+    margin-left: 10px;
+    opacity: 0; /* Inicialmente ocultamos el texto */
+    transition: opacity 0.3s ease; /* Desvanecimiento suave */
+  }
+  
+  .sidebar .nav-link .sidebar-icon {
+    justify-content: center;
+    font-size: 20px;
+    color: #e00b0b; /* Color rojo para los iconos */
+  }
+  
+  /* Botón de abrir/cerrar sidebar */
+  .sidebar-toggle-btn {
+    background: none;
+    border: none;
+    color: rgb(190, 0, 0);
+    font-size: 30px;
+    position: absolute;
+    top: 50%; /* Centrado verticalmente */
+    transform: translateY(-50%); /* Alineación vertical del ícono */
+    z-index: 1050;
+    cursor: pointer;
+    transition: right 0.3s ease; /* Añadir transición para un movimiento suave */
+  }
+  
+  /* Cuando el sidebar está abierto */
+  .sidebar-open .sidebar-toggle-btn {
+    right: 1120px; /* Ajusta el valor según el ancho de tu sidebar */
+  }
+  
+  /* Cuando el sidebar está cerrado */
+  .sidebar-close .sidebar-toggle-btn {
+    right: 1255px; /* Coloca el ícono en el borde derecho del sidebar con un pequeño espacio de separación */
+  }
+  
+  /* Estilo de los íconos de la barra lateral */
+  .sidebar i {
+    margin-right: 10px;
+  }
+  
+  /* Cerrar sesión */
+  
+  .sidebar .logout {
+    margin-top: auto; /* Asegura que el botón de logout esté al final */
+  }
+  
+  /* Ajustes para el contenido cuando el sidebar se abre */
+  .main-content {
+    transition: margin-left 0.3s ease;
+    margin-left: 0;
+  }
+  
+  .sidebar-open ~ .main-content {
+    margin-left: 250px; /* El contenido se desplaza solo por el ancho del sidebar abierto */
+    padding-left: 15px; /* Añadir algo de padding para que el contenido se vea más fluido */
+  }
+  
+  .sidebar-close ~ .main-content {
+    margin-left: 0; /* Cuando está cerrado, no se desplaza */
+    padding-left: 0;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  /* Responsividad para pantallas pequeñas */
+  @media (max-width: 768px) {
+    .sidebar {
+      width: 100%;
+      height: 100vh;
+      position: fixed;
+      left: -100%;
+    }
+  
+    .sidebar-open {
+      left: 200;
+    }
+  
+    .main-content {
+      transition: margin-left 0.3s ease, padding-left 0.3s ease;
+      margin-left: 0; /* Por defecto, el contenido no se desplaza */
+    }
+  
+    .sidebar-toggle-btn {
+      top: 10px;
+      left: 10px;
+    }
+  }
+  
+  @media (min-width: 768px) {
+    .sidebar {
+      width: 250px;
+    }
+  }
+  
+  /* Para cuando el sidebar está abierto, mostramos los textos */
+  .sidebar-open .nav-link span {
+    opacity: 1;
+  }
+  
+  /* Efectos de transición */
+  .sidebar-open ~ .main-content {
+    margin-left: 0px; /* Desplazamiento suave cuando el sidebar está abierto */
+    padding-left: 10px; /* Añadir algo de padding para un efecto más suave */
+  }
+  
+  /* Cerrar sesión - No es un botón, sino un enlace estilo "Cerrar sesión" */
+  .logout a {
+    color: #862d26;  /* Color del texto */
+    font-size: 16px;
+    padding: 10px 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: auto; /* Asegura que el enlace de logout esté al final */
+    transition: all 0.3s ease;
+    text-decoration: none;
+  }
+  

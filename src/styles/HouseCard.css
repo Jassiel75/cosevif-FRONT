@@ -25,7 +25,27 @@
   justify-content: space-between;
   border-radius: 12px;
   overflow: hidden;
+  margin-bottom: 20px; /* Agrega un margen inferior para separar las tarjetas */
+
 }
+  /* Boton para eliminar */
+.btn-delete{
+    background-color: #c05c55 !important;
+    color: #fff !important;
+    border: none !important;
+    font-weight: 600;
+    margin-right: 10px; /* Espacio a la derecha del botón */
+
+  }
+  
+  .btn-delete:hover {
+    background-color: #9e0303 !important;
+    color: #fff !important;
+    border: none !important;
+
+
+}
+
   
   /* Botón azul: Actualizar */
   .btn-update {
@@ -33,30 +53,32 @@
     color: #000 !important;
     border: none !important;
     font-weight: 600;
+    margin-right: 10px; /* Espacio a la derecha del botón */
+
   }
   
   .btn-update:hover {
-    background-color: #86b6d1 !important;
+    background-color: #146b9e !important;
     color: #000 !important;
   }
   
   /* Botón rojo: Ver detalles */
   .btn-details {
-    background-color: #862D26 !important;
+    background-color: #5cbd5c !important;
     color: #fff !important;
     border: none !important;
     font-weight: 600;
   }
   
   .btn-details:hover {
-    background-color: #6e211f !important;
+    background-color: #106b27 !important;
     color: #fff !important;
   }
   
 
   .card-img-top {
     width: 100%;
-    height: 160px;          /* Altura fija */
+    height: 160px;/* Altura fija */
     overflow: hidden;
     display: flex;
     justify-content: center;
