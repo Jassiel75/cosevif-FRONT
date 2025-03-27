@@ -1,6 +1,4 @@
-import React, { useState } from "react";
-import axios from "axios";
-
+import React from "react";
 import { FaPen, FaTrashAlt, FaEye } from "react-icons/fa"; // Importa los iconos de React Icons
 import "../styles/HouseCard.css";
 

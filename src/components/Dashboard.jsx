@@ -7,6 +7,7 @@ import HouseCard from "../components/HouseCard";
 import HouseForm from "../components/HouseForm"; // 👈 Importar el nuevo componente
 import HouseDetailsModal from "../components/HouseDetailsModal"; // Importamos el modal de detalles
 import HouseUpdateModal from "../components/houses/HouseUpdateModal"; // Importamos el modal de actualización
+import ConfirmDeleteHouse from "../components/alerts/ConfirmDeleteHouse"; // Importar el nuevo componente
 
 
 
@@ -18,6 +19,8 @@ function Dashboard() {
   const [showForm, setShowForm] = useState(false); // 👈 Control del modal
   const [selectedHouse, setSelectedHouse] = useState(null); // Control de la casa seleccionada para detalles
   const [houseToUpdate, setHouseToUpdate] = useState(null); // Control de la casa seleccionada para actualizar
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [houseToDelete, setHouseToDelete] = useState(null);
 
 
 
@@ -61,6 +64,43 @@ const closeHouseUpdate = () => {
   setHouseToUpdate(null);
 };
 
+
+  // Función para eliminar la casa
+  const handleDelete = (id) => {
+    const token = localStorage.getItem("token");
+    axios
+      .delete(`http://localhost:8080/admin/houses/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => {
+        const updatedHouses = houses.filter((house) => house.id !== id);
+        setHouses(updatedHouses); // Actualizar el estado
+        setShowDeleteModal(false); // Cerrar el modal después de eliminar
+      })
+      .catch((err) => {
+        console.error("Error al eliminar la casa:", err);
+      });
+  };
+
+
+
+   // Función para abrir el modal de confirmación de eliminación
+   const openDeleteModal = (house) => {
+    setHouseToDelete(house);
+    setShowDeleteModal(true);
+  };
+
+  const closeDeleteModal = () => {
+    setShowDeleteModal(false);
+    setHouseToDelete(null);
+  };
+
+
+
+
+
   return (
     <div className="d-flex">
       <Sidebar />
@@ -80,6 +120,9 @@ const closeHouseUpdate = () => {
                   }
                   onViewDetails={() => openHouseDetails(house)}
                   onUpdate={() => openHouseUpdate(house)} // Pasar la casa completa
+                  onDelete={() => openDeleteModal(house)} // Abre el modal para confirmar eliminación
+                  
+
 
                 />
               </div>
@@ -96,6 +139,17 @@ const closeHouseUpdate = () => {
        {/* Mostrar el modal de actualización si está activo */}
        {houseToUpdate && (
         <HouseUpdateModal house={houseToUpdate} onClose={closeHouseUpdate} onSuccess={loadHouses} />
+      )}
+      
+
+      {/* Mostrar el modal de confirmación de eliminación */}
+      {showDeleteModal && (
+        <ConfirmDeleteHouse
+          show={showDeleteModal}
+          handleClose={closeDeleteModal}
+          handleConfirm={() => handleDelete(houseToDelete.id)} // Confirmar eliminación
+          houseNumber={houseToDelete.houseNumber} // Número de la casa para mostrar en el modal
+        />
       )}
 
               {/* Mostrar el modal si está activo para registrar casa*/}
