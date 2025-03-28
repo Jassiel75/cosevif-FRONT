@@ -1,61 +1,49 @@
-import React from "react";
-import "../styles/HeaderDashboard.css";
+"use client"
 
-function HeaderDashboard({onOpenForm }) {
+import { useState } from "react"
+import { FaSearch, FaBell, FaPlus } from "react-icons/fa"
+import "../styles/HeaderDashboard.css"
+
+function HeaderDashboard({ title = "Dashboard", subtitle = "Bienvenido", onOpenForm }) {
+  const [searchTerm, setSearchTerm] = useState("")
+
   return (
-    <div className="container-fluid header-container">
-      {/* Parte de arriba: nombre y avatar */}
-      <div className="header-top row justify-content-end align-items-center mb-2">
-        <div className="col-auto text-end admin-name">
-          <span>Alejandro Torres</span><br />
-          <small>Admin</small>
-        </div>
-        <div className="col-auto">
-          <img
-            src="https://i.pravatar.cc/40"
-            alt="Perfil"
-            className="rounded-circle ms-2"
-            style={{ width: "40px", height: "40px" }}
-          />
-        </div>
+    <div className="header-dashboard">
+      <div className="header-left">
+        <h1 className="header-title">{title}</h1>
+        <p className="header-subtitle">{subtitle}</p>
       </div>
 
-      {/* Parte de abajo: 3 secciones en línea */}
-      <div className="header-bottom row align-items-center gy-2">
-        {/* Izquierda */}
-        <div className="col-12 col-md-4 header-left">
-          <p className="mb-0">Todas las Casas</p>
-          <small>Mostrar Casas</small>
+      <div className="header-right">
+        <div className="search-box">
+          <FaSearch className="search-icon" />
+          <input
+            type="text"
+            placeholder="Buscar..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
         </div>
 
-        {/* Centro */}
-        <div className="col-12 col-md-4 center">
-          <button className="add-house-button" onClick={onOpenForm}>
-            <i className="fas fa-plus"></i> Agregar Casa
+        <button className="notification-btn">
+          <FaBell />
+          <span className="notification-badge">3</span>
+        </button>
+
+        {onOpenForm && (
+          <button className="add-btn" onClick={onOpenForm}>
+            <FaPlus />
+            <span>Agregar</span>
           </button>
-        </div>
+        )}
 
-        {/* Derecha */}
-        <div className="col-12 col-md-4">
-          <div className="search-form justify-content-md-end">
-            <div className="input-group">
-              <span className="input-group-text bg-white border-end-0">
-                <i className="fas fa-search"></i>
-              </span>
-              <input
-                type="text"
-                className="form-control border-start-0"
-                placeholder="Buscar Casa"
-              />
-            </div>
-            <button className="btn btn-outline-secondary">
-              <i className="fas fa-filter"></i> Filter
-            </button>
-          </div>
+        <div className="user-profile">
+          <img src="/src/assets/images/cosevif-32x32.png" alt="User" className="user-avatar" />
         </div>
       </div>
     </div>
-  );
+  )
 }
 
-export default HeaderDashboard;
+export default HeaderDashboard
+

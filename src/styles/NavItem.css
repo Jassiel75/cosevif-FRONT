@@ -1,0 +1,42 @@
+.nav-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 12px;
+    border-radius: 6px;
+    text-decoration: none;
+    color: #495057;
+    transition: background-color 0.2s ease;
+  }
+  
+  .nav-item:hover {
+    background-color: #e9ecef;
+    color: #212529;
+  }
+  
+  .nav-item.active {
+    background-color: #e9ecef;
+    color: #212529;
+    font-weight: 500;
+  }
+  
+  .nav-icon {
+    display: flex;
+    flex-shrink: 0;
+  }
+  
+  .nav-label {
+    transition: opacity 0.2s ease-in-out;
+    white-space: nowrap;
+  }
+  
+  .nav-label.visible {
+    opacity: 1;
+  }
+  
+  .nav-label.hidden {
+    opacity: 0;
+    display: none;
+  }
+  
+  

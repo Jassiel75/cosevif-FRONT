@@ -1,6 +1,6 @@
-import React from "react";
-import { FaPen, FaTrashAlt, FaEye } from "react-icons/fa"; // Importa los iconos de React Icons
-import "../styles/HouseCard.css";
+"use client"
+import { FaPen, FaTrashAlt, FaEye } from "react-icons/fa" // Importa los iconos de React Icons
+import "../styles/HouseCard.css"
 
 function HouseCard({ number, image, onViewDetails, onUpdate, onDelete }) {
   return (
@@ -17,7 +17,7 @@ function HouseCard({ number, image, onViewDetails, onUpdate, onDelete }) {
       {/* Contenido */}
       <div className="card-body text-center p-3">
         <h6 className="card-title mb-3 fw-bold text-uppercase">CASA #{number}</h6>
-        
+
         {/* Contenedor de botones en una línea */}
         <div className="btn-container justify-content-between">
           {/* Botón de actualizar con icono azul */}
@@ -37,7 +37,8 @@ function HouseCard({ number, image, onViewDetails, onUpdate, onDelete }) {
         </div>
       </div>
     </div>
-  );
+  )
 }
 
-export default HouseCard;
+export default HouseCard
+

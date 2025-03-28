@@ -1,78 +1,95 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import { MdOutlineDoubleArrow } from "react-icons/md"; // Importa el nuevo ícono de flecha doble
-<MdOutlineDoubleArrow style={{ color: '#yourColor' }} />
+"use client"
 
-import { FaHome, FaUsers, FaShieldAlt, FaUserCircle } from 'react-icons/fa'; // Otros iconos
-import logo from "../assets/logos/LogoCosevif-removed.png"; // Asegúrate de que la ruta sea correcta
+import { useState } from "react"
+import { ChevronLeft, ChevronRight, Home, Settings, Users, Shield, LogOut, Building } from "lucide-react"
+import { useLocation, Link } from "react-router-dom"
+import "../styles/Sidebar.css"
 
 function Sidebar() {
-  const [open, setOpen] = useState(false);  // Controlar si el sidebar está abierto o cerrado
+  // Initialize sidebar as collapsed (closed)
+  const [expanded, setExpanded] = useState(false)
+  const location = useLocation()
+
+  // Toggle sidebar only when the toggle button is clicked
+  const toggleSidebar = () => {
+    setExpanded(!expanded)
+  }
+
+  // Verify if a route is active
+  const isActive = (path) => {
+    return location.pathname === path || location.pathname.startsWith(path)
+  }
 
   const handleLogout = () => {
-    localStorage.removeItem('token'); // Esto eliminaría el token si estás usando localStorage
-  };
+    localStorage.removeItem("token")
+    window.location.href = "/"
+  }
 
   return (
-    <div className={`d-flex flex-column bg-sidebar ${open ? 'sidebar-open' : 'sidebar-close'}`}>
-      {/* Botón de la flecha para abrir y cerrar el sidebar */}
-      <button
-  onClick={() => setOpen(!open)}
-  className={`sidebar-toggle-btn ${open ? 'open' : 'closed'}`}
->
-  <MdOutlineDoubleArrow style={{ color: '#9b2d20' }} />
-</button>
-
-      {/* Logo */}
-      <div className="logo-container text-center">
-
-        <img src={logo} alt="Logo" className="logo-img" />
-
+    <aside className={`sidebar ${expanded ? "expanded" : "collapsed"}`}>
+      {/* Header with logo */}
+      <div className="sidebar-header">
+        <div className="logo-container">
+          <div className="logo-icon">
+            <Building size={16} />
+          </div>
+          <span className={`logo-text ${expanded ? "visible" : "hidden"}`}>COSEVIF</span>
+        </div>
+        <button onClick={toggleSidebar} className="toggle-button">
+          {expanded ? <ChevronLeft size={18} /> : <ChevronRight size={18} />}
+        </button>
       </div>
 
-      {/* Lista de navegación */}
-      <ul className="nav flex-column">
-        <li className="nav-item">
-          <Link to="/dashboard" className="nav-link">
-            <FaHome className="sidebar-icon" />
-            {open && <span className="text-white">Dashboard</span>}
-          </Link>
-        </li>
-        <li className="nav-item">
-          <Link to="/residents" className="nav-link">
-            <FaUsers className="sidebar-icon" />
-            {open && <span className="text-white">Residentes</span>}
-          </Link>
-        </li>
-        <li className="nav-item">
-          <Link to="/houses" className="nav-link">
-            <FaHome className="sidebar-icon" />
-            {open && <span className="text-white">Casas</span>}
-          </Link>
-        </li>
-        <li className="nav-item">
-          <Link to="/guards" className="nav-link">
-            <FaShieldAlt className="sidebar-icon" />
-            {open && <span className="text-white">Guardias</span>}
-          </Link>
-        </li>
-        <li className="nav-item">
-          <Link to="/account" className="nav-link">
-            <FaUserCircle className="sidebar-icon" />
-            {open && <span className="text-white">Cuenta</span>}
-          </Link>
-        </li>
-      </ul>
-
-      {/* Cerrar sesión */}
-      <div className="logout">
-        <Link to="/" onClick={handleLogout} className="nav-link">
-          <FaUserCircle className="sidebar-icon" />
-          {open && <span className="text-white">Cerrar sesión</span>}
+      {/* Navigation */}
+      <nav className="sidebar-nav">
+        <Link to="/dashboard" className={`nav-item ${isActive("/dashboard") ? "active" : ""}`}>
+          <span className="nav-icon">
+            <Home size={20} />
+          </span>
+          <span className={`nav-label ${expanded ? "visible" : "hidden"}`}>Dashboard</span>
         </Link>
+
+        <Link to="/dashboard" className={`nav-item ${isActive("/houses") || isActive("/dashboard") ? "active" : ""}`}>
+          <span className="nav-icon">
+            <Building size={20} />
+          </span>
+          <span className={`nav-label ${expanded ? "visible" : "hidden"}`}>Casas</span>
+        </Link>
+
+        <Link to="/residents" className={`nav-item ${isActive("/residents") ? "active" : ""}`}>
+          <span className="nav-icon">
+            <Users size={20} />
+          </span>
+          <span className={`nav-label ${expanded ? "visible" : "hidden"}`}>Residentes</span>
+        </Link>
+
+        <Link to="/guards" className={`nav-item ${isActive("/guards") ? "active" : ""}`}>
+          <span className="nav-icon">
+            <Shield size={20} />
+          </span>
+          <span className={`nav-label ${expanded ? "visible" : "hidden"}`}>Guardias</span>
+        </Link>
+
+        <Link to="/settings" className={`nav-item ${isActive("/settings") ? "active" : ""}`}>
+          <span className="nav-icon">
+            <Settings size={20} />
+          </span>
+          <span className={`nav-label ${expanded ? "visible" : "hidden"}`}>Configuración</span>
+        </Link>
+      </nav>
+
+      {/* Logout at bottom */}
+      <div className="sidebar-footer">
+        <button onClick={handleLogout} className="logout-button">
+          <span className="nav-icon">
+            <LogOut size={20} />
+          </span>
+          <span className={`nav-label ${expanded ? "visible" : "hidden"}`}>Cerrar Sesión</span>
+        </button>
       </div>
-    </div>
-  );
+    </aside>
+  )
 }
 
-export default Sidebar;
+export default Sidebar
+
