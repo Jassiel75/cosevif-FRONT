@@ -8,6 +8,7 @@ import HouseDetailsModal from "./HouseDetailsModal"
 import HouseUpdateModal from "./houses/HouseUpdateModal"
 import ConfirmDeleteHouse from "./alerts/ConfirmDeleteHouse"
 import Layout from "./Layout"
+import { FaHome, FaPlus } from "react-icons/fa" // Importamos los iconos
 
 import "../styles/Dashboard.css"
 
@@ -101,7 +102,7 @@ function Dashboard() {
   }
 
   return (
-    <Layout title="Todas las Casas" onOpenForm={handleOpenForm}>
+    <Layout title="Todas las Casas" onOpenForm={handleOpenForm} viewType="houses">
       {loading ? (
         <div className="loading-container">
           <div className="spinner"></div>
@@ -112,7 +113,7 @@ function Dashboard() {
             <div className="no-houses">
               <h3>No hay casas registradas</h3>
               <button className="add-house-btn" onClick={handleOpenForm}>
-                Agregar Casa
+                <FaHome className="me-1" /> Agregar Casa
               </button>
             </div>
           ) : (

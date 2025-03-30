@@ -1,8 +1,19 @@
-import React from "react";
-import { FaEye } from "react-icons/fa";
-// import "../../styles/residentsAdmin/ResidentTable.css"; // Puedes crear este CSS si deseas personalizar más
+"use client"
+import { FaEye, FaTrashAlt, FaUserPlus } from "react-icons/fa"
 
-function ResidentTable({ residents, onView, onUpdate, onToggleStatus }) {
+function ResidentTable({ residents, onView, onUpdate, onToggleStatus, onDelete, onOpenForm }) {
+  // Si no hay residentes, mostrar mensaje centrado con botón similar a la vista de casas
+  if (!residents || residents.length === 0) {
+    return (
+      <div className="no-residents">
+        <h3>No hay residentes registrados</h3>
+        <button className="add-resident-btn" onClick={onOpenForm}>
+          <FaUserPlus className="me-2" /> Agregar Residente
+        </button>
+      </div>
+    )
+  }
+
   return (
     <div className="table-responsive">
       <table className="table table-bordered text-center align-middle">
@@ -16,15 +27,18 @@ function ResidentTable({ residents, onView, onUpdate, onToggleStatus }) {
             <th>Ver más</th>
             <th>Actualizar</th>
             <th>Bloquear / Desbloquear</th>
+            <th>Eliminar</th>
           </tr>
         </thead>
         <tbody>
           {residents.map((residente) => (
             <tr key={residente._id}>
-              <td>{residente.name} {residente.lastName}</td>
-              <td>#{residente.house?.houseNumber || "N/A"}</td>
+              <td>
+                {residente.name} {residente.lastName || residente.surnames}
+              </td>
+              <td>{residente.house?.houseNumber || "N/A"}</td>
               <td>{residente.email}</td>
-              <td>{residente.house?.street || "N/A"}</td>
+              <td>{residente.house?.street || residente.street || "N/A"}</td>
               <td>{residente.phone}</td>
               <td>
                 <button className="btn btn-link" onClick={() => onView(residente)}>
@@ -38,21 +52,25 @@ function ResidentTable({ residents, onView, onUpdate, onToggleStatus }) {
               </td>
               <td>
                 <span
-                  className={`badge rounded-pill ${
-                    residente.status ? "bg-success" : "bg-danger"
-                  }`}
+                  className={`badge rounded-pill ${residente.status ? "bg-success" : "bg-danger"}`}
                   style={{ cursor: "pointer" }}
                   onClick={() => onToggleStatus(residente)}
                 >
                   {residente.status ? "Activo" : "Inactivo"}
                 </span>
               </td>
+              <td>
+                <button className="btn btn-danger btn-sm" onClick={() => onDelete(residente)}>
+                  <FaTrashAlt className="me-1" /> Eliminar
+                </button>
+              </td>
             </tr>
           ))}
         </tbody>
       </table>
     </div>
-  );
+  )
 }
 
-export default ResidentTable;
+export default ResidentTable
+

@@ -2,13 +2,14 @@
 
 import { useState } from "react"
 import { ChevronLeft, ChevronRight, Home, Settings, Users, Shield, LogOut, Building } from "lucide-react"
-import { useLocation, Link } from "react-router-dom"
+import { useLocation, useNavigate } from "react-router-dom"
 import "../styles/Sidebar.css"
 
 function Sidebar() {
   // Initialize sidebar as collapsed (closed)
   const [expanded, setExpanded] = useState(false)
   const location = useLocation()
+  const navigate = useNavigate() // Añadimos useNavigate para la navegación programática
 
   // Toggle sidebar only when the toggle button is clicked
   const toggleSidebar = () => {
@@ -23,6 +24,11 @@ function Sidebar() {
   const handleLogout = () => {
     localStorage.removeItem("token")
     window.location.href = "/"
+  }
+
+  // Función para manejar la navegación
+  const handleNavigation = (path) => {
+    navigate(path)
   }
 
   return (
@@ -42,40 +48,60 @@ function Sidebar() {
 
       {/* Navigation */}
       <nav className="sidebar-nav">
-        <Link to="/dashboard" className={`nav-item ${isActive("/dashboard") ? "active" : ""}`}>
+        <div
+          onClick={() => handleNavigation("/dashboard")}
+          className={`nav-item ${isActive("/dashboard") ? "active" : ""}`}
+          style={{ cursor: "pointer" }}
+        >
           <span className="nav-icon">
             <Home size={20} />
           </span>
           <span className={`nav-label ${expanded ? "visible" : "hidden"}`}>Dashboard</span>
-        </Link>
+        </div>
 
-        <Link to="/dashboard" className={`nav-item ${isActive("/houses") || isActive("/dashboard") ? "active" : ""}`}>
+        <div
+          onClick={() => handleNavigation("/dashboard")}
+          className={`nav-item ${isActive("/houses") || isActive("/dashboard") ? "active" : ""}`}
+          style={{ cursor: "pointer" }}
+        >
           <span className="nav-icon">
             <Building size={20} />
           </span>
           <span className={`nav-label ${expanded ? "visible" : "hidden"}`}>Casas</span>
-        </Link>
+        </div>
 
-        <Link to="/residents" className={`nav-item ${isActive("/residents") ? "active" : ""}`}>
+        <div
+          onClick={() => handleNavigation("/residents")}
+          className={`nav-item ${isActive("/residents") ? "active" : ""}`}
+          style={{ cursor: "pointer" }}
+        >
           <span className="nav-icon">
             <Users size={20} />
           </span>
           <span className={`nav-label ${expanded ? "visible" : "hidden"}`}>Residentes</span>
-        </Link>
+        </div>
 
-        <Link to="/guards" className={`nav-item ${isActive("/guards") ? "active" : ""}`}>
+        <div
+          onClick={() => handleNavigation("/guards")}
+          className={`nav-item ${isActive("/guards") ? "active" : ""}`}
+          style={{ cursor: "pointer" }}
+        >
           <span className="nav-icon">
             <Shield size={20} />
           </span>
           <span className={`nav-label ${expanded ? "visible" : "hidden"}`}>Guardias</span>
-        </Link>
+        </div>
 
-        <Link to="/settings" className={`nav-item ${isActive("/settings") ? "active" : ""}`}>
+        <div
+          onClick={() => handleNavigation("/settings")}
+          className={`nav-item ${isActive("/settings") ? "active" : ""}`}
+          style={{ cursor: "pointer" }}
+        >
           <span className="nav-icon">
             <Settings size={20} />
           </span>
           <span className={`nav-label ${expanded ? "visible" : "hidden"}`}>Configuración</span>
-        </Link>
+        </div>
       </nav>
 
       {/* Logout at bottom */}

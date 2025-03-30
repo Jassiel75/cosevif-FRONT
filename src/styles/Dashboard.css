@@ -242,7 +242,7 @@
   align-items: center;
   gap: 8px;
   padding: 10px 16px;
-  background-color: #6b5eae;
+  background-color: #26867e;
   color: white;
   border: none;
   border-radius: 5px;
@@ -252,7 +252,7 @@
 }
 
 .add-house-btn:hover {
-  background-color: #5a4e94;
+  background-color: #02524c;
 }
 
 .houses-grid {
