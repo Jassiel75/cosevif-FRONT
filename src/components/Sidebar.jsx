@@ -1,15 +1,17 @@
 "use client"
 
+// Importar el logo al inicio del archivo
 import { useState } from "react"
 import { ChevronLeft, ChevronRight, Home, Settings, Users, Shield, LogOut, Building } from "lucide-react"
 import { useLocation, useNavigate } from "react-router-dom"
 import "../styles/Sidebar.css"
+import logo from "../assets/logos/LogoCosevif-removed.png"
 
 function Sidebar() {
   // Initialize sidebar as collapsed (closed)
   const [expanded, setExpanded] = useState(false)
   const location = useLocation()
-  const navigate = useNavigate() // Añadimos useNavigate para la navegación programática
+  const navigate = useNavigate()
 
   // Toggle sidebar only when the toggle button is clicked
   const toggleSidebar = () => {
@@ -36,9 +38,8 @@ function Sidebar() {
       {/* Header with logo */}
       <div className="sidebar-header">
         <div className="logo-container">
-          <div className="logo-icon">
-            <Building size={16} />
-          </div>
+          {/* Reemplazar el icono con la imagen del logo */}
+          <img src={logo || "/placeholder.svg"} alt="Logo Cosevif" className="sidebar-logo" />
           <span className={`logo-text ${expanded ? "visible" : "hidden"}`}>COSEVIF</span>
         </div>
         <button onClick={toggleSidebar} className="toggle-button">
@@ -61,7 +62,7 @@ function Sidebar() {
 
         <div
           onClick={() => handleNavigation("/dashboard")}
-          className={`nav-item ${isActive("/houses") || isActive("/dashboard") ? "active" : ""}`}
+          className={`nav-item ${isActive("/houses") || location.pathname === "/dashboard" ? "active" : ""}`}
           style={{ cursor: "pointer" }}
         >
           <span className="nav-icon">

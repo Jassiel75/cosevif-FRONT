@@ -1,6 +1,6 @@
 .sidebar {
   height: 100vh;
-  background-color: #F2CBB6;
+  background-color: #f2cbb6;
   border-right: 1px solid #e9ecef;
   transition: width 0.3s ease-in-out;
   position: fixed;
@@ -29,23 +29,50 @@
   display: flex;
   align-items: center;
   gap: 12px;
+  position: relative; /* Para posicionamiento del logo */
 }
 
-.logo-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+/* Estilo base para el logo */
+.sidebar-logo {
   width: 32px;
   height: 32px;
-  border-radius: 8px;
-  background-color: #8b2e22;
-  color: white;
+  object-fit: contain;
+  transition: transform 0.3s ease; /* Transición suave para el cambio de tamaño */
+}
+
+/* Cuando el sidebar está colapsado, hacemos el logo más grande con transform */
+.sidebar.collapsed .sidebar-logo {
+  transform: scale(2.0); /* Aumenta el tamaño en un 25% sin afectar el flujo del documento */
+  transform-origin: center; /* Escala desde el centro */
+}
+
+/* Cuando el sidebar está abierto, hacemos el logo normal */
+.sidebar.expanded .sidebar-logo {
+  transform: scale(2.5); /* Aumenta el tamaño en un 25% sin afectar el flujo del documento */
+  transform-origin: center; /* Escala desde el centro */
 }
 
 .logo-text {
-  font-weight: 600;
-  transition: opacity 0.2s ease-in-out;
+  font-weight: 700;
+  font-size: 22px;
+  color: #3a0f0b;
+  letter-spacing: 0.5px;
+  text-align: center;
+  width: 100%;
+  transition: all 0.2s ease-in-out;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
+
+/* Cuando el sidebar está expandido, centramos el texto del logo */
+.sidebar.expanded .logo-container {
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  gap: 8px;
+  padding-bottom: 8px;
+}
+
 
 .logo-text.visible {
   opacity: 1;
@@ -98,7 +125,7 @@
 }
 
 .nav-item.active {
-  background-color: #862D26;
+  background-color: #862d26;
   color: #212529;
   font-weight: 500;
 }
@@ -166,3 +193,4 @@
     width: 64px;
   }
 }
+

@@ -19,7 +19,7 @@ function Layout({ children, title, subtitle, onOpenForm, viewType = "houses" }) 
           <div className="header-center">
             <button className="add-button" onClick={onOpenForm}>
               <CirclePlus className="add-icon" size={18} />
-              {viewType === "houses" ? "Agregar Casa" : "Agregar Residente"}
+              {viewType === "houses" ? "Agregar Casa" : viewType === "guards" ? "Agregar Guardia" : "Agregar Residente"}
             </button>
           </div>
 
@@ -31,7 +31,9 @@ function Layout({ children, title, subtitle, onOpenForm, viewType = "houses" }) 
             <div className="search-container">
               <input
                 type="text"
-                placeholder={viewType === "houses" ? "Buscar Casa" : "Buscar Residente"}
+                placeholder={
+                  viewType === "houses" ? "Buscar Casa" : viewType === "guards" ? "Buscar Guardia" : "Buscar Residente"
+                }
                 className="search-input"
               />
               <button className="filter-button">Filter</button>
