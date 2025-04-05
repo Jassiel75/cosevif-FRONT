@@ -1,0 +1,53 @@
+.link-container {
+    margin: 20px 0;
+  }
+  
+  .input-group .form-control {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+  
+  .input-group .btn {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+  }
+  
+  .expiry-info {
+    font-size: 0.9rem;
+    margin-top: 15px;
+  }
+  
+  .share-options {
+    text-align: center;
+  }
+  
+  .share-options h6 {
+    font-size: 1rem;
+    margin-bottom: 10px;
+  }
+  
+  .visit-info {
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 20px;
+  }
+  
+  .visit-info h6 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: #333;
+  }
+  
+  .btn-success {
+    background-color: #25d366;
+    border-color: #25d366;
+  }
+  
+  .btn-success:hover {
+    background-color: #128c7e;
+    border-color: #128c7e;
+  }
+  
+  

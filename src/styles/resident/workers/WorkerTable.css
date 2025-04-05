@@ -1,0 +1,139 @@
+/* Estilos generales para la tabla */
+.table-responsive {
+    overflow-x: auto;
+  }
+  
+  .table {
+    width: 100%;
+    margin-bottom: 1rem;
+    border-collapse: separate;
+    border-spacing: 0;
+  }
+  
+  .table thead th {
+    background-color: #f2cbb6;
+    color: #333;
+    font-weight: 600;
+    border-color: #e9ecef;
+    padding: 12px 8px;
+    vertical-align: middle;
+  }
+  
+  .table tbody td {
+    vertical-align: middle;
+    border-color: #e9ecef;
+    padding: 10px 8px;
+  }
+  
+  /* Estilos para cuando no hay trabajadores */
+  .no-workers {
+    text-align: center;
+    padding: 50px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    min-height: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+  }
+  
+  .no-workers h3 {
+    margin-bottom: 20px;
+    color: #555;
+  }
+  
+  .add-worker-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    background-color: #862d26;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.2s;
+  }
+  
+  .add-worker-btn:hover {
+    background-color: #6b1f1a;
+  }
+  
+  /* Estilos para los botones de acción */
+  td .justify-content-center {
+    display: flex !important;
+    justify-content: center !important;
+    gap: 8px !important;
+  }
+  
+  /* Estilo para los botones de acción */
+  .btn-info,
+  .btn-primary,
+  .btn-danger {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    padding: 0;
+    margin: 0 3px;
+    border: none;
+    transition: all 0.2s ease;
+  }
+  
+  /* Botón de ver (ojo) */
+  .btn-info {
+    background-color: #17a2b8;
+    color: white;
+  }
+  
+  .btn-info:hover {
+    background-color: #138496;
+    transform: translateY(-2px);
+  }
+  
+  /* Botón de editar (lápiz) */
+  .btn-primary {
+    background-color: #007bff;
+    color: white;
+  }
+  
+  .btn-primary:hover {
+    background-color: #0069d9;
+    transform: translateY(-2px);
+  }
+  
+  /* Botón de eliminar (papelera) */
+  .btn-danger {
+    background-color: #dc3545;
+    color: white;
+  }
+  
+  .btn-danger:hover {
+    background-color: #c82333;
+    transform: translateY(-2px);
+  }
+  
+  /* Responsive para dispositivos pequeños */
+  @media (max-width: 768px) {
+    .table thead th,
+    .table tbody td {
+      padding: 8px 4px;
+      font-size: 0.9rem;
+    }
+  
+    .btn-info,
+    .btn-primary,
+    .btn-danger {
+      width: 32px;
+      height: 32px;
+      margin: 0 2px;
+    }
+  }
+  
+  

@@ -1,0 +1,63 @@
+.qr-container {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+}
+
+.qr-container canvas,
+.qr-image {
+  border: 10px solid white;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  max-width: 100%;
+  height: auto;
+}
+
+.visit-info {
+  text-align: center;
+}
+
+.visit-info h6 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 15px;
+  color: #333;
+}
+
+.time-remaining {
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  padding: 10px;
+  margin-top: 15px;
+}
+
+.countdown {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #862d26;
+  margin-bottom: 0;
+}
+
+.qr-instructions {
+  font-size: 0.9rem;
+  color: #6c757d;
+  margin-top: 15px;
+}
+
+@media print {
+  .modal-header,
+  .modal-footer {
+    display: none;
+  }
+
+  .modal-content {
+    border: none;
+    box-shadow: none;
+  }
+
+  .qr-container canvas,
+  .qr-image {
+    width: 100%;
+    height: auto;
+  }
+}
+

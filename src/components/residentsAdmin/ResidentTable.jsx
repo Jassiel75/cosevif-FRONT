@@ -1,5 +1,6 @@
 "use client"
-import { FaEye, FaTrashAlt, FaUserPlus } from "react-icons/fa"
+import { FaEye, FaTrashAlt, FaUserPlus, FaPen } from "react-icons/fa"
+import "../../styles/residentsAdmin/ResidentTable.css"
 
 function ResidentTable({ residents, onView, onUpdate, onToggleStatus, onDelete, onOpenForm }) {
   // Si no hay residentes, mostrar mensaje centrado con botón similar a la vista de casas
@@ -41,13 +42,13 @@ function ResidentTable({ residents, onView, onUpdate, onToggleStatus, onDelete, 
               <td>{residente.house?.street || residente.street || "N/A"}</td>
               <td>{residente.phone}</td>
               <td>
-                <button className="btn btn-link" onClick={() => onView(residente)}>
+                <button className="btn btn-info btn-action" onClick={() => onView(residente)}>
                   <FaEye />
                 </button>
               </td>
               <td>
                 <button className="btn btn-primary btn-sm" onClick={() => onUpdate(residente)}>
-                  Actualizar
+                  <FaPen />
                 </button>
               </td>
               <td>
@@ -61,7 +62,7 @@ function ResidentTable({ residents, onView, onUpdate, onToggleStatus, onDelete, 
               </td>
               <td>
                 <button className="btn btn-danger btn-sm" onClick={() => onDelete(residente)}>
-                  <FaTrashAlt className="me-1" /> Eliminar
+                  <FaTrashAlt />
                 </button>
               </td>
             </tr>

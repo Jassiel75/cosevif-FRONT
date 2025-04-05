@@ -1,5 +1,6 @@
 "use client"
-import { FaEye, FaTrashAlt, FaShieldAlt } from "react-icons/fa"
+import { FaEye, FaTrashAlt, FaShieldAlt, FaPen } from "react-icons/fa"
+//import "../../styles/guardsAdmin/GuardTable.css"
 
 function GuardTable({ guards, onView, onUpdate, onToggleStatus, onDelete, onOpenForm }) {
   // Si no hay guardias, mostrar mensaje centrado con botón para agregar
@@ -41,13 +42,13 @@ function GuardTable({ guards, onView, onUpdate, onToggleStatus, onDelete, onOpen
               <td>{guardia.phone || "N/A"}</td>
               <td>{guardia.age || "N/A"}</td>
               <td>
-                <button className="btn btn-link" onClick={() => onView(guardia)}>
+                <button className="btn btn-info btn-action" onClick={() => onView(guardia)}>
                   <FaEye />
                 </button>
               </td>
               <td>
                 <button className="btn btn-primary btn-sm" onClick={() => onUpdate(guardia)}>
-                  Actualizar
+                  <FaPen />
                 </button>
               </td>
               <td>
@@ -61,7 +62,7 @@ function GuardTable({ guards, onView, onUpdate, onToggleStatus, onDelete, onOpen
               </td>
               <td>
                 <button className="btn btn-danger btn-sm" onClick={() => onDelete(guardia)}>
-                  <FaTrashAlt className="me-1" /> Eliminar
+                  <FaTrashAlt />
                 </button>
               </td>
             </tr>
