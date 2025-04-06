@@ -7,10 +7,11 @@ import VisitForm from "./visits/VisitForm"
 import VisitUpdateModal from "./visits/VisitUpdateModal"
 import VisitDetailsModal from "./visits/VisitDetailsModal"
 import QRCodeModal from "./visits/QRCodeModal"
+import ShareLinkModal from "./visits/ShareLinkModal"
 import ConfirmDeleteVisit from "./visits/ConfirmDeleteVisit"
 import { determineVisitStatus } from "./visits/VisitModel"
 
-function ResidentVisitsDashboard({ showForm, setShowForm }) {
+function ResidentVisitsDashboard({ showForm, setShowForm, userData }) {
   const [visits, setVisits] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState("")
@@ -19,7 +20,9 @@ function ResidentVisitsDashboard({ showForm, setShowForm }) {
   const [visitToDelete, setVisitToDelete] = useState(null)
   const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [showQRModal, setShowQRModal] = useState(false)
+  const [showShareLinkModal, setShowShareLinkModal] = useState(false)
   const [visitForQR, setVisitForQR] = useState(null)
+  const [visitForShareLink, setVisitForShareLink] = useState(null)
 
   // Cargar visitas desde la API
   const loadVisits = () => {
@@ -46,6 +49,48 @@ function ResidentVisitsDashboard({ showForm, setShowForm }) {
       .catch((err) => {
         console.error("Error al obtener las visitas:", err)
         setError("Hubo un error al obtener las visitas.")
+        setLoading(false)
+
+        // Para desarrollo, si la API falla, mostrar datos de ejemplo
+        const mockVisits = [
+          {
+            id: "1",
+            visitorName: "Juan Pérez",
+            dateTime: new Date(Date.now() + 86400000).toISOString(), // Mañana
+            numPeople: 2,
+            description: "Visita familiar",
+            vehiclePlate: "ABC123",
+            password: "1234",
+            status: "PENDIENTE",
+          },
+          {
+            id: "2",
+            visitorName: "María González",
+            dateTime: new Date(Date.now() - 86400000).toISOString(), // Ayer
+            numPeople: 3,
+            description: "Reunión de amigos",
+            vehiclePlate: "XYZ789",
+            password: "5678",
+            status: "CADUCADO",
+          },
+          {
+            id: "3",
+            visitorName: "Carlos Rodríguez",
+            dateTime: new Date(Date.now() + 3600000).toISOString(), // En una hora
+            numPeople: 1,
+            description: "Entrega de paquete",
+            vehiclePlate: "",
+            password: "9012",
+            status: "EN_PROGRESO",
+          },
+        ]
+
+        const updatedMockVisits = mockVisits.map((visit) => ({
+          ...visit,
+          status: determineVisitStatus(visit),
+        }))
+
+        setVisits(updatedMockVisits)
         setLoading(false)
       })
   }
@@ -98,6 +143,18 @@ function ResidentVisitsDashboard({ showForm, setShowForm }) {
     setVisitForQR(null)
   }
 
+  // Función para mostrar el modal de compartir enlace
+  const handleShowShareLink = (visit) => {
+    setVisitForShareLink(visit)
+    setShowShareLinkModal(true)
+  }
+
+  // Función para cerrar el modal de compartir enlace
+  const handleCloseShareLinkModal = () => {
+    setShowShareLinkModal(false)
+    setVisitForShareLink(null)
+  }
+
   // Función para abrir el modal de confirmación de eliminación
   const handleDeleteClick = (visit) => {
     setVisitToDelete(visit)
@@ -130,6 +187,9 @@ function ResidentVisitsDashboard({ showForm, setShowForm }) {
       .catch((err) => {
         console.error("Error al eliminar la visita:", err)
         setError("Error al eliminar la visita")
+
+        // Para desarrollo, si la API falla, eliminar de la lista local
+        setVisits(visits.filter((v) => v.id !== visitToDelete.id))
         handleCloseDeleteModal()
       })
   }
@@ -155,6 +215,16 @@ function ResidentVisitsDashboard({ showForm, setShowForm }) {
       .catch((err) => {
         console.error("Error al cancelar la visita:", err)
         setError("Error al cancelar la visita")
+
+        // Para desarrollo, si la API falla, actualizar localmente
+        setVisits(
+          visits.map((v) => {
+            if (v.id === visit.id) {
+              return { ...v, status: "CANCELADO" }
+            }
+            return v
+          }),
+        )
       })
   }
 
@@ -174,19 +244,29 @@ function ResidentVisitsDashboard({ showForm, setShowForm }) {
           onUpdate={handleUpdate}
           onDelete={handleDeleteClick}
           onShowQR={handleShowQR}
+          onShowShareLink={handleShowShareLink}
           onCancelVisit={handleCancelVisit}
         />
       )}
 
-      {showForm && <VisitForm onClose={() => setShowForm(false)} onSuccess={loadVisits} />}
+      {showForm && <VisitForm onClose={() => setShowForm(false)} onSuccess={loadVisits} userData={userData} />}
 
       {visitToUpdate && (
-        <VisitUpdateModal visit={visitToUpdate} onClose={handleCloseUpdateModal} onSuccess={loadVisits} />
+        <VisitUpdateModal
+          visit={visitToUpdate}
+          onClose={handleCloseUpdateModal}
+          onSuccess={loadVisits}
+          userData={userData}
+        />
       )}
 
       {selectedVisit && <VisitDetailsModal visit={selectedVisit} onClose={closeDetailsModal} />}
 
       {showQRModal && visitForQR && <QRCodeModal visit={visitForQR} onClose={handleCloseQRModal} />}
+
+      {showShareLinkModal && visitForShareLink && (
+        <ShareLinkModal visit={visitForShareLink} onClose={handleCloseShareLinkModal} />
+      )}
 
       {showDeleteModal && visitToDelete && (
         <ConfirmDeleteVisit

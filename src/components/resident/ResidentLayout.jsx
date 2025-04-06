@@ -4,10 +4,10 @@ import ResidentSidebar from "./ResidentSidebar"
 import "../../styles/Layout.css"
 import { CirclePlus } from "lucide-react"
 
-function ResidentLayout({ children, title, subtitle, onOpenForm, viewType = "visits", onViewChange }) {
+function ResidentLayout({ children, title, subtitle, onOpenForm, viewType = "visits", onViewChange, userData }) {
   return (
     <div className="layout-container">
-      <ResidentSidebar onViewChange={onViewChange} activeView={viewType} />
+      <ResidentSidebar onViewChange={onViewChange} activeView={viewType} userData={userData} />
       <main className="main-content">
         <div className="content-header">
           {/* Left section - Title only */}
@@ -27,7 +27,8 @@ function ResidentLayout({ children, title, subtitle, onOpenForm, viewType = "vis
           {/* Right section - Search and Resident info */}
           <div className="header-right">
             <div className="admin-info">
-              <span className="admin-role">Residente</span>
+              <span className="admin-role">Residente: {userData?.name || "Usuario"}</span>
+              {userData?.house && <span className="admin-role"> - Casa #{userData.house.houseNumber}</span>}
             </div>
             <div className="search-container">
               <input

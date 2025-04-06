@@ -19,18 +19,20 @@ function Login() {
     try {
       const response = await axios.post("http://localhost:8080/auth/login", { email, password })
 
-      const { token, role, name } = response.data
+      const { token, role, name, userId } = response.data
 
-      // Guardar el token completo sin modificaciones
+      // Guardar el token completo sin modificaciones y el ID del usuario
       localStorage.setItem("token", token)
       localStorage.setItem("userRole", role)
       localStorage.setItem("name", name || "")
+      localStorage.setItem("userId", userId || "")
 
       // Imprimir información para depuración
       console.log("Login exitoso:", {
         token: token.substring(0, 20) + "...",
         role,
         name,
+        userId,
       })
 
       // Configurar el token para todas las solicitudes futuras

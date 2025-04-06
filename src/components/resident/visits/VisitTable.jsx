@@ -1,8 +1,8 @@
 "use client"
-import { FaEye, FaTrashAlt, FaUserPlus, FaPen, FaQrcode, FaBan } from "react-icons/fa"
+import { FaEye, FaTrashAlt, FaUserPlus, FaPen, FaQrcode, FaBan, FaShareAlt } from "react-icons/fa"
 import { determineVisitStatus, shouldShowQR, VISIT_STATUS } from "./VisitModel"
 
-function VisitTable({ visits, onView, onUpdate, onDelete, onOpenForm, onShowQR, onCancelVisit }) {
+function VisitTable({ visits, onView, onUpdate, onDelete, onOpenForm, onShowQR, onShowShareLink, onCancelVisit }) {
   // Si no hay visitas, mostrar mensaje centrado con botón
   if (!visits || visits.length === 0) {
     return (
@@ -68,6 +68,7 @@ function VisitTable({ visits, onView, onUpdate, onDelete, onOpenForm, onShowQR, 
           {visits.map((visit) => {
             const { text, bgColor } = getStatusDisplay(visit)
             const showQrButton = shouldShowQR(visit.dateTime) && visit.status !== VISIT_STATUS.CANCELLED
+            const showShareButton = visit.status === VISIT_STATUS.PENDING
             const isCancellable =
               visit.status !== VISIT_STATUS.CANCELLED &&
               visit.status !== VISIT_STATUS.EXPIRED &&
@@ -99,6 +100,15 @@ function VisitTable({ visits, onView, onUpdate, onDelete, onOpenForm, onShowQR, 
                     {showQrButton && (
                       <button className="btn btn-success btn-sm" onClick={() => onShowQR(visit)} title="Ver QR">
                         <FaQrcode />
+                      </button>
+                    )}
+                    {showShareButton && (
+                      <button
+                        className="btn btn-info btn-sm"
+                        onClick={() => onShowShareLink(visit)}
+                        title="Compartir enlace"
+                      >
+                        <FaShareAlt />
                       </button>
                     )}
                     {isCancellable && (

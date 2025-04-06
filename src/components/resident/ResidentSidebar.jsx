@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom"
 import "../../styles/Sidebar.css"
 import logo from "../../assets/logos/LogoCosevif-removed.png"
 
-function ResidentSidebar({ onViewChange, activeView }) {
+function ResidentSidebar({ onViewChange, activeView, userData }) {
   const [expanded, setExpanded] = useState(false)
   const navigate = useNavigate()
 
@@ -18,6 +18,8 @@ function ResidentSidebar({ onViewChange, activeView }) {
   const handleLogout = () => {
     localStorage.removeItem("token")
     localStorage.removeItem("userRole")
+    localStorage.removeItem("name")
+    localStorage.removeItem("userId")
     window.location.href = "/"
   }
 
@@ -76,6 +78,16 @@ function ResidentSidebar({ onViewChange, activeView }) {
           <span className={`nav-label ${expanded ? "visible" : "hidden"}`}>Notificaciones</span>
         </div>
       </nav>
+
+      {/* User info when expanded */}
+      {expanded && (
+        <div className="sidebar-user-info">
+          <div className="user-info-container">
+            <p className="user-name">{userData?.name || "Usuario"}</p>
+            {userData?.house && <p className="user-house">Casa #{userData.house.houseNumber}</p>}
+          </div>
+        </div>
+      )}
 
       {/* Logout at bottom */}
       <div className="sidebar-footer">

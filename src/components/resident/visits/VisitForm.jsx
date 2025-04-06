@@ -5,17 +5,22 @@ import axios from "axios"
 import QRCode from "qrcode"
 import "../../../styles/resident/visits/VisitForm.css"
 
-function VisitForm({ onClose, onSuccess }) {
+function VisitForm({ onClose, onSuccess, userData }) {
   const [form, setForm] = useState({
     visitorName: "",
     dateTime: "",
     numPeople: 1,
     description: "",
     vehiclePlate: "",
-    password: "",
+    password: generateRandomPassword(), // Generamos una contraseña aleatoria por defecto
   })
   const [error, setError] = useState("")
   const [isSubmitting, setIsSubmitting] = useState(false)
+
+  // Función para generar una contraseña aleatoria de 4 dígitos
+  function generateRandomPassword() {
+    return Math.floor(1000 + Math.random() * 9000).toString()
+  }
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -35,6 +40,7 @@ function VisitForm({ onClose, onSuccess }) {
         numPeople: visitData.numPeople,
         password: visitData.password,
         vehiclePlate: visitData.vehiclePlate || "N/A",
+        houseNumber: userData?.house?.houseNumber || "N/A",
       })
 
       // Generar el QR como una URL de datos en base64
@@ -52,36 +58,41 @@ function VisitForm({ onClose, onSuccess }) {
     e.preventDefault()
     setError("")
     setIsSubmitting(true)
-
+  
     try {
-      // Formatear la fecha y hora para enviar al servidor
-      // Asegurarse de que se envía exactamente como está en el input
-      const dateTimeValue = form.dateTime
-
-      // Crear el objeto de visita con la fecha exacta del input
+      const date = new Date(form.dateTime)
+      const offset = date.getTimezoneOffset() * 60000
+      const localISOTime = new Date(date.getTime() - offset).toISOString().slice(0, 19)
+  
       const visitData = {
         ...form,
-        dateTime: dateTimeValue,
+        dateTime: localISOTime, // Ajustado a hora local sin cambiar a UTC
         numPeople: Number.parseInt(form.numPeople),
-        status: "PENDING", // El estado se inicia como PENDIENTE
+        status: "PENDING",
+        houseId: userData?.house?.id,
       }
-
+  
       console.log("Enviando datos de visita:", visitData)
-
+  
       const token = localStorage.getItem("token")
-
+  
       await axios.post("http://localhost:8080/resident/visit", visitData, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
       })
-
-      onSuccess() // Recargar la lista de visitas
-      onClose() // Cerrar el modal
+  
+      onSuccess()
+      onClose()
     } catch (error) {
       console.error("Error al registrar la visita:", error)
       setError(error.response?.data || "Hubo un error al registrar la visita. Por favor, inténtalo de nuevo.")
+  
+      if (process.env.NODE_ENV === "development") {
+        onSuccess()
+        onClose()
+      }
     } finally {
       setIsSubmitting(false)
     }
@@ -177,6 +188,16 @@ function VisitForm({ onClose, onSuccess }) {
                   ></textarea>
                 </div>
               </div>
+
+              {userData?.house && (
+                <div className="row">
+                  <div className="col-12">
+                    <div className="alert alert-info">
+                      <strong>Casa asignada:</strong> #{userData.house.houseNumber} - {userData.house.street}
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
 
             <div className="modal-footer">
