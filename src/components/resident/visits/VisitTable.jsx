@@ -1,6 +1,9 @@
 "use client"
 import { FaEye, FaTrashAlt, FaUserPlus, FaPen, FaQrcode, FaBan, FaShareAlt } from "react-icons/fa"
 import { determineVisitStatus, shouldShowQR, VISIT_STATUS } from "./VisitModel"
+import "../../../styles/resident/visits/VisitTable.css"
+
+
 
 function VisitTable({ visits, onView, onUpdate, onDelete, onOpenForm, onShowQR, onShowShareLink, onCancelVisit }) {
   // Si no hay visitas, mostrar mensaje centrado con botón
@@ -67,12 +70,15 @@ function VisitTable({ visits, onView, onUpdate, onDelete, onOpenForm, onShowQR, 
         <tbody>
           {visits.map((visit) => {
             const { text, bgColor } = getStatusDisplay(visit)
-            const showQrButton = shouldShowQR(visit.dateTime) && visit.status !== VISIT_STATUS.CANCELLED
-            const showShareButton = visit.status === VISIT_STATUS.PENDING
-            const isCancellable =
-              visit.status !== VISIT_STATUS.CANCELLED &&
-              visit.status !== VISIT_STATUS.EXPIRED &&
-              visit.status !== VISIT_STATUS.COMPLETED
+            const currentStatus = determineVisitStatus(visit)
+            const isCancelled = currentStatus === VISIT_STATUS.CANCELLED
+            const isExpired = currentStatus === VISIT_STATUS.EXPIRED
+            const isCompleted = currentStatus === VISIT_STATUS.COMPLETED
+
+            const canEdit = !isCancelled && !isExpired && !isCompleted
+            const canShowQR = shouldShowQR(visit.dateTime) && !isCancelled
+            const canShare = currentStatus === VISIT_STATUS.PENDING
+            const canCancel = !isCancelled && !isExpired && !isCompleted
 
             return (
               <tr key={visit.id}>
@@ -87,39 +93,45 @@ function VisitTable({ visits, onView, onUpdate, onDelete, onOpenForm, onShowQR, 
                   <span className={`badge rounded-pill ${bgColor}`}>{text}</span>
                 </td>
                 <td>
-                  <div className="justify-content-center" style={{ gap: "8px" }}>
-                    <button className="btn btn-info btn-sm" onClick={() => onView(visit)} title="Ver detalles">
+                  <div className="action-buttons">
+                    <button className="action-button view-btn" onClick={() => onView(visit)} title="Ver detalles">
                       <FaEye />
                     </button>
-                    <button className="btn btn-primary btn-sm" onClick={() => onUpdate(visit)} title="Editar">
+                    <button
+                      className={`action-button edit-btn ${!canEdit ? "disabled" : ""}`}
+                      onClick={() => canEdit && onUpdate(visit)}
+                      disabled={!canEdit}
+                      title={canEdit ? "Editar" : "No se puede editar"}
+                    >
                       <FaPen />
                     </button>
-                    <button className="btn btn-danger btn-sm" onClick={() => onDelete(visit)} title="Eliminar">
+                    <button className="action-button delete-btn" onClick={() => onDelete(visit)} title="Eliminar">
                       <FaTrashAlt />
                     </button>
-                    {showQrButton && (
-                      <button className="btn btn-success btn-sm" onClick={() => onShowQR(visit)} title="Ver QR">
-                        <FaQrcode />
-                      </button>
-                    )}
-                    {showShareButton && (
-                      <button
-                        className="btn btn-info btn-sm"
-                        onClick={() => onShowShareLink(visit)}
-                        title="Compartir enlace"
-                      >
-                        <FaShareAlt />
-                      </button>
-                    )}
-                    {isCancellable && (
-                      <button
-                        className="btn btn-secondary btn-sm"
-                        onClick={() => onCancelVisit(visit)}
-                        title="Cancelar visita"
-                      >
-                        <FaBan />
-                      </button>
-                    )}
+                    <button
+                      className={`action-button qr-btn ${!canShowQR ? "disabled" : ""}`}
+                      onClick={() => canShowQR && onShowQR(visit)}
+                      disabled={!canShowQR}
+                      title={canShowQR ? "Ver QR" : "QR no disponible"}
+                    >
+                      <FaQrcode />
+                    </button>
+                    <button
+                      className={`action-button share-btn ${!canShare ? "disabled" : ""}`}
+                      onClick={() => canShare && onShowShareLink(visit)}
+                      disabled={!canShare}
+                      title={canShare ? "Compartir enlace" : "No se puede compartir"}
+                    >
+                      <FaShareAlt />
+                    </button>
+                    <button
+                      className={`action-button cancel-btn ${!canCancel ? "disabled" : ""}`}
+                      onClick={() => canCancel && onCancelVisit(visit)}
+                      disabled={!canCancel}
+                      title={canCancel ? "Cancelar visita" : "No se puede cancelar"}
+                    >
+                      <FaBan />
+                    </button>
                   </div>
                 </td>
               </tr>

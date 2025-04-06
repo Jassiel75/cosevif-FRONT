@@ -9,7 +9,14 @@ function VisitUpdateModal({ visit, onClose, onSuccess }) {
   const formatDateTimeForInput = (dateTimeStr) => {
     if (!dateTimeStr) return ""
     const date = new Date(dateTimeStr)
-    return date.toISOString().slice(0, 16) // Formato YYYY-MM-DDThh:mm
+  
+    const year = date.getFullYear()
+    const month = String(date.getMonth() + 1).padStart(2, "0")
+    const day = String(date.getDate()).padStart(2, "0")
+    const hours = String(date.getHours()).padStart(2, "0")
+    const minutes = String(date.getMinutes()).padStart(2, "0")
+  
+    return `${year}-${month}-${day}T${hours}:${minutes}`
   }
 
   const [form, setForm] = useState({
@@ -35,23 +42,25 @@ function VisitUpdateModal({ visit, onClose, onSuccess }) {
     e.preventDefault()
     setError("")
     setIsSubmitting(true)
-
+  
     try {
-      // Usar la fecha y hora exactamente como está en el input
-      const dateTimeValue = form.dateTime
-
+      // Ajustar zona horaria para que coincida con la hora seleccionada por el usuario
+      const date = new Date(form.dateTime)
+      const offset = date.getTimezoneOffset() * 60000
+      const localISOTime = new Date(date.getTime() - offset).toISOString().slice(0, 19)
+  
       const visitData = {
-        ...visit, // Mantener los campos originales que no se editan
+        ...visit, // Mantener los campos originales
         visitorName: form.visitorName,
-        dateTime: dateTimeValue,
+        dateTime: localISOTime, // Fecha ajustada
         numPeople: Number.parseInt(form.numPeople),
         description: form.description,
         vehiclePlate: form.vehiclePlate,
         password: form.password,
       }
-
+  
       console.log("Actualizando visita con datos:", visitData)
-
+  
       const token = localStorage.getItem("token")
       await axios.put(`http://localhost:8080/resident/visit/${visit.id}`, visitData, {
         headers: {
@@ -59,9 +68,9 @@ function VisitUpdateModal({ visit, onClose, onSuccess }) {
           "Content-Type": "application/json",
         },
       })
-
-      onSuccess() // Recargar la lista de visitas
-      onClose() // Cerrar el modal
+  
+      onSuccess()
+      onClose()
     } catch (error) {
       console.error("Error al actualizar la visita:", error)
       setError(error.response?.data || "Hubo un error al actualizar la visita. Por favor, inténtalo de nuevo.")
