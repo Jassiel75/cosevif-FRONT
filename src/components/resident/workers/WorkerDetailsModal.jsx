@@ -1,8 +1,25 @@
 "use client"
-import { FaUser, FaIdCard, FaCalendarAlt, FaPhone, FaCar, FaBriefcase, FaBuilding } from "react-icons/fa"
+import { FaUser, FaCalendarAlt, FaMapMarkerAlt } from "react-icons/fa"
 import "../../../styles/resident/workers/WorkerDetailsModal.css"
 
 function WorkerDetailsModal({ worker, onClose }) {
+  // Función para formatear la fecha
+  const formatDate = (dateString) => {
+    if (!dateString) return "N/A"
+
+    try {
+      const date = new Date(dateString)
+      return date.toLocaleDateString("es-MX", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+      })
+    } catch (error) {
+      console.error("Error formatting date:", error)
+      return dateString
+    }
+  }
+
   return (
     <div className="modal fade show d-block" tabIndex="-1" role="dialog" style={{ backgroundColor: "rgba(0,0,0,0.5)" }}>
       <div className="modal-dialog modal-dialog-centered">
@@ -15,7 +32,7 @@ function WorkerDetailsModal({ worker, onClose }) {
           <div className="modal-body">
             <div className="worker-details">
               <div className="worker-header">
-                <h4 className="worker-name">{worker.name}</h4>
+                <h4 className="worker-name">{worker.workerName}</h4>
                 <span className={`status-badge ${worker.status ? "status-active" : "status-inactive"}`}>
                   {worker.status ? "Activo" : "Inactivo"}
                 </span>
@@ -30,51 +47,7 @@ function WorkerDetailsModal({ worker, onClose }) {
                   </div>
                   <div className="detail-content">
                     <span className="detail-label">Nombre Completo</span>
-                    <span className="detail-value">{worker.name}</span>
-                  </div>
-                </div>
-
-                <div className="detail-item">
-                  <div className="detail-icon">
-                    <FaIdCard />
-                  </div>
-                  <div className="detail-content">
-                    <span className="detail-label">Identificación</span>
-                    <span className="detail-value">{worker.identification}</span>
-                  </div>
-                </div>
-
-                <div className="detail-item">
-                  <div className="detail-icon">
-                    <FaPhone />
-                  </div>
-                  <div className="detail-content">
-                    <span className="detail-label">Teléfono</span>
-                    <span className="detail-value">{worker.phone || "No disponible"}</span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="details-section">
-                <h6 className="section-title">Información Laboral</h6>
-
-                <div className="detail-item">
-                  <div className="detail-icon">
-                    <FaBriefcase />
-                  </div>
-                  <div className="detail-content">
-                    <span className="detail-label">Profesión</span>
-                    <span className="detail-value">{worker.profession}</span>
-                  </div>
-                </div>
-
-                <div className="detail-item">
-                  <div className="detail-icon">
-                    <FaBuilding />
-                  </div>
-                  <div className="detail-content">
-                    <span className="detail-label">Empresa</span>
-                    <span className="detail-value">{worker.company}</span>
+                    <span className="detail-value">{worker.workerName}</span>
                   </div>
                 </div>
 
@@ -83,8 +56,18 @@ function WorkerDetailsModal({ worker, onClose }) {
                     <FaCalendarAlt />
                   </div>
                   <div className="detail-content">
-                    <span className="detail-label">Fecha de Inicio</span>
-                    <span className="detail-value">{worker.startDate}</span>
+                    <span className="detail-label">Edad</span>
+                    <span className="detail-value">{worker.age} años</span>
+                  </div>
+                </div>
+
+                <div className="detail-item">
+                  <div className="detail-icon">
+                    <FaMapMarkerAlt />
+                  </div>
+                  <div className="detail-content">
+                    <span className="detail-label">Dirección</span>
+                    <span className="detail-value">{worker.address}</span>
                   </div>
                 </div>
 
@@ -93,39 +76,23 @@ function WorkerDetailsModal({ worker, onClose }) {
                     <FaCalendarAlt />
                   </div>
                   <div className="detail-content">
-                    <span className="detail-label">Fecha de Finalización</span>
-                    <span className="detail-value">{worker.endDate}</span>
+                    <span className="detail-label">Fecha</span>
+                    <span className="detail-value">{formatDate(worker.dateTime)}</span>
                   </div>
                 </div>
               </div>
 
-              {(worker.vehicle || worker.licensePlate) && (
+              {worker.inePhoto && (
                 <div className="details-section">
-                  <h6 className="section-title">Información del Vehículo</h6>
-
-                  {worker.vehicle && (
-                    <div className="detail-item">
-                      <div className="detail-icon">
-                        <FaCar />
-                      </div>
-                      <div className="detail-content">
-                        <span className="detail-label">Vehículo</span>
-                        <span className="detail-value">{worker.vehicle}</span>
-                      </div>
-                    </div>
-                  )}
-
-                  {worker.licensePlate && (
-                    <div className="detail-item">
-                      <div className="detail-icon">
-                        <FaCar />
-                      </div>
-                      <div className="detail-content">
-                        <span className="detail-label">Placa</span>
-                        <span className="detail-value">{worker.licensePlate}</span>
-                      </div>
-                    </div>
-                  )}
+                  <h6 className="section-title">Identificación</h6>
+                  <div className="text-center mt-3">
+                    <img
+                      src={`data:image/jpeg;base64,${worker.inePhoto}`}
+                      alt="Identificación"
+                      className="img-fluid ine-photo"
+                      style={{ maxHeight: "200px", border: "1px solid #ddd" }}
+                    />
+                  </div>
                 </div>
               )}
             </div>

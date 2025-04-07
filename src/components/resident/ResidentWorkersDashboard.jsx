@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import axios from "axios"
 import WorkerTable from "./workers/WorkerTable"
 import WorkerForm from "./workers/WorkerForm"
 import WorkerDetailsModal from "./workers/WorkerDetailsModal"
@@ -12,143 +13,93 @@ import "../../styles/resident/ResidentWorkersDashboard.css"
 function ResidentWorkersDashboard({ showForm, setShowForm }) {
   const [workers, setWorkers] = useState([])
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState("")
   const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [workerToDelete, setWorkerToDelete] = useState(null)
   const [workerToUpdate, setWorkerToUpdate] = useState(null)
   const [selectedWorker, setSelectedWorker] = useState(null)
 
-  // Obtener trabajadores desde la API
+  // 🔹 Obtener trabajadores desde la API y transformar los datos
   const loadWorkers = () => {
-    const token = localStorage.getItem("token")
     setLoading(true)
+    setError("")
+    const token = localStorage.getItem("token")
 
-    // Simulamos datos para demostración
-    setTimeout(() => {
-      const mockWorkers = [
-        {
-          id: 1,
-          name: "Roberto Sánchez",
-          identification: "12345678",
-          profession: "Plomero",
-          company: "Servicios Rápidos",
-          status: true,
-          startDate: "2025-04-15",
-          endDate: "2025-04-16",
-          phone: "555-1234",
-          vehicle: "Camioneta Ford",
-          licensePlate: "ABC-123",
-        },
-        {
-          id: 2,
-          name: "Laura Martínez",
-          identification: "87654321",
-          profession: "Electricista",
-          company: "Electro Soluciones",
-          status: true,
-          startDate: "2025-04-17",
-          endDate: "2025-04-17",
-          phone: "555-5678",
-          vehicle: "Motocicleta Honda",
-          licensePlate: "XYZ-789",
-        },
-        {
-          id: 3,
-          name: "Miguel Torres",
-          identification: "23456789",
-          profession: "Jardinero",
-          company: "Jardines Verdes",
-          status: false,
-          startDate: "2025-04-10",
-          endDate: "2025-04-12",
-          phone: "555-9012",
-          vehicle: "Sin vehículo",
-          licensePlate: "",
-        },
-      ]
-      setWorkers(mockWorkers)
-      setLoading(false)
-    }, 1000)
-
-    // En un entorno real, usaríamos axios:
-    /*
     axios
-      .get("http://localhost:8080/resident/workers", {
+      .get("http://localhost:8080/resident/workerVisits", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       })
       .then((res) => {
-        setWorkers(res.data)
+        console.log("Worker data from API:", res.data)
+
+        // ⚠️ Solo extraer los objetos `visit`
+        const formatted = res.data.map(item => item.visit)
+        setWorkers(formatted)
+
         setLoading(false)
       })
       .catch((err) => {
         console.error("Error al obtener los trabajadores:", err)
+        setError("Error al cargar los trabajadores. Por favor, intente nuevamente.")
         setWorkers([])
         setLoading(false)
       })
-    */
   }
 
   useEffect(() => {
     loadWorkers()
   }, [])
 
-  // Función para ver detalles del trabajador
-  const handleView = (worker) => {
-    setSelectedWorker(worker)
-  }
+  const handleView = (worker) => setSelectedWorker(worker)
+  const closeDetailsModal = () => setSelectedWorker(null)
 
-  // Función para cerrar el modal de detalles
-  const closeDetailsModal = () => {
-    setSelectedWorker(null)
-  }
+  const handleUpdate = (worker) => setWorkerToUpdate(worker)
+  const handleCloseUpdateModal = () => setWorkerToUpdate(null)
 
-  // Función para actualizar trabajador
-  const handleUpdate = (worker) => {
-    setWorkerToUpdate(worker)
-  }
-
-  // Función para cerrar el modal de actualización
-  const handleCloseUpdateModal = () => {
-    setWorkerToUpdate(null)
-  }
-
-  // Función para cambiar el estado del trabajador (activo/inactivo)
   const handleToggleStatus = (worker) => {
-    // En un entorno real, usaríamos axios para actualizar el estado
-    const updatedWorkers = workers.map((w) => (w.id === worker.id ? { ...w, status: !w.status } : w))
-    setWorkers(updatedWorkers)
+    const updated = workers.map((w) => (w.id === worker.id ? { ...w, status: !w.status } : w))
+    setWorkers(updated)
   }
 
-  // Función para abrir el formulario de agregar trabajador desde la tabla
-  const handleOpenFormFromTable = () => {
-    setShowForm(true)
-  }
+  const handleOpenFormFromTable = () => setShowForm(true)
 
-  // Función para abrir el modal de confirmación de eliminación
   const handleDeleteClick = (worker) => {
     setWorkerToDelete(worker)
     setShowDeleteModal(true)
   }
 
-  // Función para cerrar el modal de confirmación
   const handleCloseDeleteModal = () => {
     setShowDeleteModal(false)
     setWorkerToDelete(null)
   }
 
-  // Función para eliminar el trabajador
   const handleConfirmDelete = () => {
     if (!workerToDelete) return
+    const token = localStorage.getItem("token")
 
-    // En un entorno real, usaríamos axios para eliminar
-    const updatedWorkers = workers.filter((w) => w.id !== workerToDelete.id)
-    setWorkers(updatedWorkers)
-    handleCloseDeleteModal()
+    axios
+      .delete(`http://localhost:8080/resident/workerVisits/${workerToDelete.id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then(() => {
+        loadWorkers()
+        handleCloseDeleteModal()
+      })
+      .catch((err) => {
+        console.error("Error al eliminar el trabajador:", err)
+        setError("Error al eliminar el trabajador. Por favor, intente nuevamente.")
+        handleCloseDeleteModal()
+      })
   }
 
   return (
     <div className="resident-workers-dashboard">
+      {error && <div className="alert alert-danger">{error}</div>}
+
       <div className="row mt-3">
         {loading ? (
           <div className="loading-container">
@@ -169,19 +120,14 @@ function ResidentWorkersDashboard({ showForm, setShowForm }) {
       </div>
 
       {showForm && <WorkerForm onClose={() => setShowForm(false)} onSuccess={loadWorkers} />}
-
-      {workerToUpdate && (
-        <WorkerUpdateModal worker={workerToUpdate} onClose={handleCloseUpdateModal} onSuccess={loadWorkers} />
-      )}
-
+      {workerToUpdate && <WorkerUpdateModal worker={workerToUpdate} onClose={handleCloseUpdateModal} onSuccess={loadWorkers} />}
       {selectedWorker && <WorkerDetailsModal worker={selectedWorker} onClose={closeDetailsModal} />}
-
       {showDeleteModal && workerToDelete && (
         <ConfirmDeleteWorker
           show={showDeleteModal}
           handleClose={handleCloseDeleteModal}
           handleConfirm={handleConfirmDelete}
-          workerName={workerToDelete.name}
+          workerName={workerToDelete.workerName}
         />
       )}
     </div>
@@ -189,4 +135,3 @@ function ResidentWorkersDashboard({ showForm, setShowForm }) {
 }
 
 export default ResidentWorkersDashboard
-
