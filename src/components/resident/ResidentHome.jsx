@@ -36,7 +36,7 @@ function ResidentHome() {
     // Obtener información de la casa del residente
     if (userId) {
       axios
-        .get(`http://localhost:8080/resident/profile`, {
+        .get(`http://localhost:8080/auth/resident/profile`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

@@ -2,7 +2,6 @@
 import { useState, useEffect } from "react"
 import { FaCopy, FaWhatsapp, FaEnvelope, FaCheck } from "react-icons/fa"
 import "../../../styles/resident/visits/ShareLinkModal.css"
-import { generateRegistrationLink } from "./VisitModel"
 
 function ShareLinkModal({ visit, onClose }) {
   const [registrationLink, setRegistrationLink] = useState("")
@@ -36,6 +35,7 @@ function ShareLinkModal({ visit, onClose }) {
     if (!dateTimeStr) return "N/A"
 
     // Si la fecha viene en formato ISO 8601 (con T), convertirla a objeto Date
+    // Si viene en formato ISO 8601 (con T), convertirla a objeto Date
     // Si viene en formato YYYY-MM-DDThh:mm (del input), mantenerla como está
     let date
     if (dateTimeStr.includes("T")) {
@@ -53,11 +53,20 @@ function ShareLinkModal({ visit, onClose }) {
     })
   }
 
-  useEffect(() => {
-    if (!visit || !visit.id) return
+  // Actualizar la función para generar el enlace correcto
+  const generateRegistrationLink = (residentId) => {
+    const baseUrl = window.location.origin
+    return `${baseUrl}/register-visit/${residentId}`
+  }
 
-    // Generar el enlace de registro
-    const link = generateRegistrationLink(visit.id)
+  useEffect(() => {
+    if (!visit) return
+
+    // Get the resident's ID from localStorage
+    const userId = localStorage.getItem("userId")
+
+    // Generate the link using the resident's ID
+    const link = generateRegistrationLink(userId)
     setRegistrationLink(link)
 
     // Actualizar el tiempo restante cada minuto

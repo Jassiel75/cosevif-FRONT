@@ -13,45 +13,57 @@ function Login() {
   const [password, setPassword] = useState("")
   const [error, setError] = useState("")
 
-  // Modificar la función handleLogin para asegurar que el token se envíe correctamente
   const handleLogin = async (e) => {
     e.preventDefault()
+    setError("")
+
     try {
-      const response = await axios.post("http://localhost:8080/auth/login", { email, password })
-
-      const { token, role, name, userId } = response.data
-
-      // Guardar el token completo sin modificaciones y el ID del usuario
-      localStorage.setItem("token", token)
-      localStorage.setItem("userRole", role)
-      localStorage.setItem("name", name || "")
-      localStorage.setItem("userId", userId || "")
-
-      // Imprimir información para depuración
-      console.log("Login exitoso:", {
-        token: token.substring(0, 20) + "...",
-        role,
-        name,
-        userId,
+      // Primero intentamos login como RESIDENTE
+      const residentRes = await axios.post("http://localhost:8080/auth/resident/login", {
+        email,
+        password,
       })
 
-      // Configurar el token para todas las solicitudes futuras
-      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`
+      const data = residentRes.data
 
-      const userRole = role.toUpperCase()
+      localStorage.setItem("token", data.token)
+      localStorage.setItem("userId", data.id)
+      localStorage.setItem("name", data.name)
+      localStorage.setItem("surnames", data.surnames)
+      localStorage.setItem("email", data.email)
+      localStorage.setItem("phone", data.phone)
+      localStorage.setItem("address", data.address)
+      localStorage.setItem("birthDate", data.birthDate)
+      localStorage.setItem("age", data.age)
+      localStorage.setItem("role", "RESIDENT")
 
-      if (userRole === "ADMIN") {
-        navigate("/dashboard")
-      } else if (userRole === "RESIDENT") {
-        navigate("/resident/dashboard")
-      } else if (userRole === "GUARDIA") {
-        navigate("/guards")
-      } else {
-        setError("⚠ Rol no reconocido")
-      }
+      if (data.houseId) localStorage.setItem("houseId", data.houseId)
+      if (data.houseNumber) localStorage.setItem("houseNumber", data.houseNumber)
+      if (data.street) localStorage.setItem("street", data.street)
+
+      console.log("✅ Datos del RESIDENTE:", data)
+      navigate("/resident/dashboard")
     } catch (err) {
-      console.error("Error en login:", err.response?.data || err)
-      setError("⚠ Usuario no encontrado, verifica tus datos.")
+      // Si falla como RESIDENT, intentamos como ADMIN
+      try {
+        const adminRes = await axios.post("http://localhost:8080/auth/login", {
+          email,
+          password,
+        })
+
+        const { token, role, id, name } = adminRes.data
+
+        localStorage.setItem("token", token)
+        localStorage.setItem("userId", id)
+        localStorage.setItem("role", role)
+        localStorage.setItem("name", name || "")
+
+        console.log("✅ Acceso ADMIN:", adminRes.data)
+        navigate("/dashboard")
+      } catch (adminError) {
+        console.error("❌ Error al iniciar sesión:", adminError.response?.data || adminError)
+        setError("⚠ Usuario no encontrado, verifica tus datos.")
+      }
     }
   }
 
@@ -100,4 +112,3 @@ function Login() {
 }
 
 export default Login
-

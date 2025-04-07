@@ -4,6 +4,8 @@ import Dashboard from "./components/Dashboard"
 import ResidentDashboard from "./components/ResidentDashboard"
 import GuardDashboard from "./components/GuardDashboard"
 import ResidentHome from "./components/resident/ResidentHome"
+import RegisterVisit from "./components/public/RegisterVisit"
+
 import "bootstrap/dist/css/bootstrap.min.css"
 
 function App() {
@@ -17,7 +19,12 @@ function App() {
       
       <Route path="/guards" element={<GuardDashboard />} />
       <Route path="/resident/dashboard" element={<ResidentHome />} />
+
+      <Route path="/register-visit/:residentId" element={<RegisterVisit />} />
+
       </Routes>
+
+      
   )
 }
 

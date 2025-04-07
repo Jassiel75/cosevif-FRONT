@@ -1,8 +1,7 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import axios from "axios"
-import QRCode from "qrcode"
 import "../../../styles/resident/visits/VisitForm.css"
 
 function VisitForm({ onClose, onSuccess, userData }) {
@@ -12,91 +11,73 @@ function VisitForm({ onClose, onSuccess, userData }) {
     numPeople: 1,
     description: "",
     vehiclePlate: "",
-    password: generateRandomPassword(), // Generamos una contraseña aleatoria por defecto
+    password: "", // ahora queda en blanco para que el residente la escriba
   })
+
   const [error, setError] = useState("")
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  // Función para generar una contraseña aleatoria de 4 dígitos
-  function generateRandomPassword() {
-    return Math.floor(1000 + Math.random() * 9000).toString()
-  }
+  // Estados para mostrar el link
+  const [shareableLink, setShareableLink] = useState("")
+  const [linkCopied, setLinkCopied] = useState(false)
 
   const handleChange = (e) => {
     const { name, value } = e.target
-    setForm({
-      ...form,
-      [name]: value,
-    })
-  }
-
-  // Función para generar el código QR en base64
-  const generateQRCode = async (visitData) => {
-    try {
-      // Crear un objeto con la información relevante para el QR
-      const qrData = JSON.stringify({
-        visitorName: visitData.visitorName,
-        dateTime: visitData.dateTime,
-        numPeople: visitData.numPeople,
-        password: visitData.password,
-        vehiclePlate: visitData.vehiclePlate || "N/A",
-        houseNumber: userData?.house?.houseNumber || "N/A",
-      })
-
-      // Generar el QR como una URL de datos en base64
-      const qrCodeBase64 = await QRCode.toDataURL(qrData)
-
-      // Extraer solo la parte base64 (sin el prefijo "data:image/png;base64,")
-      return qrCodeBase64.split(",")[1]
-    } catch (error) {
-      console.error("Error al generar el código QR:", error)
-      return null
-    }
+    setForm({ ...form, [name]: value })
   }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
     setError("")
     setIsSubmitting(true)
-  
+
     try {
       const date = new Date(form.dateTime)
       const offset = date.getTimezoneOffset() * 60000
       const localISOTime = new Date(date.getTime() - offset).toISOString().slice(0, 19)
-  
+
       const visitData = {
         ...form,
-        dateTime: localISOTime, // Ajustado a hora local sin cambiar a UTC
+        dateTime: localISOTime,
         numPeople: Number.parseInt(form.numPeople),
         status: "PENDING",
         houseId: userData?.house?.id,
       }
-  
-      console.log("Enviando datos de visita:", visitData)
-  
+
       const token = localStorage.getItem("token")
-  
+
       await axios.post("http://localhost:8080/resident/visit", visitData, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
       })
-  
+
       onSuccess()
       onClose()
     } catch (error) {
       console.error("Error al registrar la visita:", error)
-      setError(error.response?.data || "Hubo un error al registrar la visita. Por favor, inténtalo de nuevo.")
-  
-      if (process.env.NODE_ENV === "development") {
-        onSuccess()
-        onClose()
-      }
+      setError(error.response?.data || "Hubo un error al registrar la visita.")
     } finally {
       setIsSubmitting(false)
     }
   }
+
+  const copyLinkToClipboard = () => {
+    navigator.clipboard.writeText(shareableLink).then(() => {
+      setLinkCopied(true)
+      setTimeout(() => setLinkCopied(false), 2000)
+    })
+  }
+
+  // ⚠️ Al montar el componente, generar el link automáticamente
+  useEffect(() => {
+    const domain = window.location.origin
+    const ResidentId = localStorage.getItem("userId")
+    // Asegurarse de que el enlace tenga el formato correcto
+    const link = `${domain}/register-visit/${ResidentId}`
+    setShareableLink(link)
+  }, [])
 
   return (
     <div className="modal fade show d-block" tabIndex="-1" role="dialog" style={{ backgroundColor: "rgba(0,0,0,0.5)" }}>
@@ -111,6 +92,7 @@ function VisitForm({ onClose, onSuccess, userData }) {
 
           <form onSubmit={handleSubmit}>
             <div className="modal-body">
+              {/* Campos de formulario */}
               <div className="row">
                 <div className="col-md-6 mb-3">
                   <label className="form-label">Nombre del Visitante</label>
@@ -123,7 +105,6 @@ function VisitForm({ onClose, onSuccess, userData }) {
                     required
                   />
                 </div>
-
                 <div className="col-md-6 mb-3">
                   <label className="form-label">Fecha y Hora de Visita</label>
                   <input
@@ -150,7 +131,6 @@ function VisitForm({ onClose, onSuccess, userData }) {
                     required
                   />
                 </div>
-
                 <div className="col-md-6 mb-3">
                   <label className="form-label">Contraseña para Acceso</label>
                   <input
@@ -175,7 +155,6 @@ function VisitForm({ onClose, onSuccess, userData }) {
                     onChange={handleChange}
                   />
                 </div>
-
                 <div className="col-md-6 mb-3">
                   <label className="form-label">Descripción</label>
                   <textarea
@@ -195,6 +174,19 @@ function VisitForm({ onClose, onSuccess, userData }) {
                     <div className="alert alert-info">
                       <strong>Casa asignada:</strong> #{userData.house.houseNumber} - {userData.house.street}
                     </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Link para compartir */}
+              {shareableLink && (
+                <div className="alert alert-success mt-3">
+                  <strong>Enlace para compartir con tu visita:</strong>
+                  <div className="input-group mt-2">
+                    <input type="text" className="form-control" value={shareableLink} readOnly />
+                    <button className="btn btn-outline-primary" type="button" onClick={copyLinkToClipboard}>
+                      {linkCopied ? "¡Copiado!" : "Copiar"}
+                    </button>
                   </div>
                 </div>
               )}
