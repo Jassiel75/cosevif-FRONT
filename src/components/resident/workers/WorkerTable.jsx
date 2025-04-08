@@ -66,14 +66,14 @@ function WorkerTable({ workers, onView, onUpdate, onToggleStatus, onDelete, onOp
               <td>{formatDate(worker.dateTime)}</td>
               <td>{formatTime(worker.dateTime)}</td> {/* 🔸 Hora separada */}
               <td>
-                <div className="justify-content-center" style={{ gap: "8px" }}>
-                  <button className="btn btn-info btn-sm" onClick={() => onView(worker)}>
+                <div className="action-buttons">
+                  <button className="action-button view-btn" onClick={() => onView(worker)} title="Ver detalles">
                     <FaEye />
                   </button>
-                  <button className="btn btn-primary btn-sm" onClick={() => onUpdate(worker)}>
+                  <button className="action-button edit-btn" onClick={() => onUpdate(worker)} title="Editar">
                     <FaPen />
                   </button>
-                  <button className="btn btn-danger btn-sm" onClick={() => onDelete(worker)}>
+                  <button className="action-button delete-btn" onClick={() => onDelete(worker)} title="Eliminar">
                     <FaTrashAlt />
                   </button>
                 </div>
@@ -87,3 +87,4 @@ function WorkerTable({ workers, onView, onUpdate, onToggleStatus, onDelete, onOp
 }
 
 export default WorkerTable
+

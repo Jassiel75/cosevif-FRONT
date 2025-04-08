@@ -12,16 +12,27 @@ function ResidentLayout({ children, title, subtitle, onOpenForm, viewType = "vis
         <div className="content-header">
           {/* Left section - Title only */}
           <div className="header-titles">
-            <h1 className="page-title">{title || (viewType === "visits" ? "Mis Visitas" : "Mis Trabajadores")}</h1>
+            <h1 className="page-title">
+              {title ||
+                (viewType === "visits"
+                  ? "Mis Visitas"
+                  : viewType === "workers"
+                    ? "Mis Trabajadores"
+                    : viewType === "profile"
+                      ? "Mi Perfil"
+                      : "")}
+            </h1>
             <p className="header-subtitle">{subtitle}</p>
           </div>
 
           {/* Middle section - Add button */}
           <div className="header-center">
-            <button className="add-button" onClick={onOpenForm}>
-              <CirclePlus className="add-icon" size={18} />
-              {viewType === "visits" ? "Agregar Visita" : "Agregar Trabajador"}
-            </button>
+            {viewType !== "profile" && (
+              <button className="add-button" onClick={onOpenForm}>
+                <CirclePlus className="add-icon" size={18} />
+                {viewType === "visits" ? "Agregar Visita" : "Agregar Trabajador"}
+              </button>
+            )}
           </div>
 
           {/* Right section - Search and Resident info */}
@@ -31,12 +42,16 @@ function ResidentLayout({ children, title, subtitle, onOpenForm, viewType = "vis
               {userData?.house && <span className="admin-role"> - Casa #{userData.house.houseNumber}</span>}
             </div>
             <div className="search-container">
-              <input
-                type="text"
-                placeholder={viewType === "visits" ? "Buscar Visita" : "Buscar Trabajador"}
-                className="search-input"
-              />
-              <button className="filter-button">Filtrar</button>
+              {viewType !== "profile" && (
+                <>
+                  <input
+                    type="text"
+                    placeholder={viewType === "visits" ? "Buscar Visita" : "Buscar Trabajador"}
+                    className="search-input"
+                  />
+                  <button className="filter-button">Filtrar</button>
+                </>
+              )}
             </div>
           </div>
         </div>
@@ -47,4 +62,3 @@ function ResidentLayout({ children, title, subtitle, onOpenForm, viewType = "vis
 }
 
 export default ResidentLayout
-

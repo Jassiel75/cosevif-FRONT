@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { ChevronLeft, ChevronRight, Home, Users, Briefcase, LogOut, Bell } from "lucide-react"
+import { ChevronLeft, ChevronRight, Home, Users, Briefcase, LogOut, User } from "lucide-react"
 import { useNavigate } from "react-router-dom"
 import "../../styles/Sidebar.css"
 import logo from "../../assets/logos/LogoCosevif-removed.png"
@@ -50,7 +50,13 @@ function ResidentSidebar({ onViewChange, activeView, userData }) {
         </div>
 
         <div
-          onClick={() => onViewChange("visits")}
+          onClick={() => {
+            if (onViewChange) {
+              onViewChange("visits")
+            } else {
+              navigate("/resident/dashboard")
+            }
+          }}
           className={`nav-item ${activeView === "visits" ? "active" : ""}`}
           style={{ cursor: "pointer" }}
         >
@@ -61,7 +67,13 @@ function ResidentSidebar({ onViewChange, activeView, userData }) {
         </div>
 
         <div
-          onClick={() => onViewChange("workers")}
+          onClick={() => {
+            if (onViewChange) {
+              onViewChange("workers")
+            } else {
+              navigate("/resident/dashboard")
+            }
+          }}
           className={`nav-item ${activeView === "workers" ? "active" : ""}`}
           style={{ cursor: "pointer" }}
         >
@@ -71,11 +83,15 @@ function ResidentSidebar({ onViewChange, activeView, userData }) {
           <span className={`nav-label ${expanded ? "visible" : "hidden"}`}>Trabajadores</span>
         </div>
 
-        <div className={`nav-item`} style={{ cursor: "pointer" }}>
+        <div
+          onClick={() => navigate("/resident/profile")}
+          className={`nav-item ${activeView === "profile" ? "active" : ""}`}
+          style={{ cursor: "pointer" }}
+        >
           <span className="nav-icon">
-            <Bell size={20} />
+            <User size={20} />
           </span>
-          <span className={`nav-label ${expanded ? "visible" : "hidden"}`}>Notificaciones</span>
+          <span className={`nav-label ${expanded ? "visible" : "hidden"}`}>Mi Perfil</span>
         </div>
       </nav>
 
@@ -103,4 +119,3 @@ function ResidentSidebar({ onViewChange, activeView, userData }) {
 }
 
 export default ResidentSidebar
-
