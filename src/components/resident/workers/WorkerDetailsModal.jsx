@@ -33,9 +33,6 @@ function WorkerDetailsModal({ worker, onClose }) {
             <div className="worker-details">
               <div className="worker-header">
                 <h4 className="worker-name">{worker.workerName}</h4>
-                <span className={`status-badge ${worker.status ? "status-active" : "status-inactive"}`}>
-                  {worker.status ? "Activo" : "Inactivo"}
-                </span>
               </div>
 
               <div className="details-section">

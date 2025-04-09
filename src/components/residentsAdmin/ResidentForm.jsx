@@ -6,9 +6,7 @@ import { User, Mail, Lock, Phone, Calendar, MapPin, Building } from "lucide-reac
 import "../../styles/residentsAdmin/ResidentForm.css"
 
 function ResidentForm({ onClose, onSuccess }) {
-  const [houses, setHouses] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState("")
+  // Asegurarse de que el estado inicial incluya status: true
   const [form, setForm] = useState({
     name: "",
     surnames: "",
@@ -20,7 +18,11 @@ function ResidentForm({ onClose, onSuccess }) {
     address: "",
     street: "",
     house: { id: "" },
+    status: true, // Siempre activo por defecto
   })
+  const [houses, setHouses] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState("")
 
   // Cargar las casas disponibles
   useEffect(() => {
@@ -62,14 +64,21 @@ function ResidentForm({ onClose, onSuccess }) {
     }
   }
 
+  // En el handleSubmit, asegurarse de que se envía el status
   const handleSubmit = async (e) => {
     e.preventDefault()
     setError("")
 
     const token = localStorage.getItem("token")
 
+    // Asegurarse de que el status siempre sea true al registrar
+    const formData = {
+      ...form,
+      status: true, // Forzar que siempre sea true
+    }
+
     try {
-      await axios.post("http://localhost:8080/admin/residents", form, {
+      await axios.post("http://localhost:8080/admin/residents", formData, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",

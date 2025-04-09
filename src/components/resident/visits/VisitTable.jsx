@@ -132,14 +132,7 @@ function VisitTable({
                     >
                       <FaQrcode />
                     </button>
-                    <button
-                      className={`action-button share-btn ${!canShare ? "disabled" : ""}`}
-                      onClick={() => canShare && onShowShareLink(visit)}
-                      disabled={!canShare}
-                      title={canShare ? "Compartir enlace" : "No se puede compartir"}
-                    >
-                      <FaShareAlt />
-                    </button>
+                    
                     <button
                       className={`action-button cancel-btn ${!canCancel ? "disabled" : ""}`}
                       onClick={() => canCancel && onCancelVisit(visit)}

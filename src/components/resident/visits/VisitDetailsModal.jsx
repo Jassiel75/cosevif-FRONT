@@ -1,5 +1,21 @@
 "use client"
-import { FaUser, FaIdCard, FaCalendarAlt, FaClock, FaUsers, FaCar, FaClipboardList, FaKey } from "react-icons/fa"
+import {
+  FaUser,
+  FaIdCard,
+  FaCalendarAlt,
+  FaClock,
+  FaUsers,
+  FaCar,
+  FaClipboardList,
+  FaKey,
+  FaCheck,
+  FaClock as FaClockIcon,
+  FaTimesCircle,
+  FaQuestion,
+  FaBan,
+  FaCheckDouble,
+  FaSpinner,
+} from "react-icons/fa"
 import { QRCodeCanvas } from "qrcode.react"
 import "../../../styles/resident/visits/VisitDetailsModal.css"
 
@@ -73,6 +89,63 @@ function VisitDetailsModal({ visit, onClose }) {
 👥 Personas: ${visit.numPeople}`
   }
 
+  const getStatusClass = (status) => {
+    switch (status) {
+      case "PENDIENTE":
+        return "status-pending"
+      case "EN_PROGRESO":
+        return "status-in-progress"
+      case "ACTIVA":
+        return "status-active"
+      case "COMPLETADO":
+        return "status-completed"
+      case "CANCELADO":
+        return "status-cancelled"
+      case "CADUCADO":
+        return "status-expired"
+      default:
+        return "status-inactive"
+    }
+  }
+
+  const getStatusText = (status) => {
+    switch (status) {
+      case "PENDIENTE":
+        return "Pendiente"
+      case "EN_PROGRESO":
+        return "En Progreso"
+      case "ACTIVA":
+        return "Activa"
+      case "COMPLETADO":
+        return "Completada"
+      case "CANCELADO":
+        return "Cancelada"
+      case "CADUCADO":
+        return "Caducada"
+      default:
+        return status || "Desconocido"
+    }
+  }
+
+  const getStatusIcon = (status) => {
+    switch (status) {
+      case "PENDIENTE":
+        return <FaClockIcon className="status-icon" />
+      case "EN_PROGRESO":
+        return <FaSpinner className="status-icon fa-spin" />
+      case "ACTIVA":
+        return <FaCheck className="status-icon" />
+      case "COMPLETADO":
+        return <FaCheckDouble className="status-icon" />
+      case "CANCELADO":
+        return <FaBan className="status-icon" />
+      case "CADUCADO":
+        return <FaTimesCircle className="status-icon" />
+      default:
+        return <FaQuestion className="status-icon" />
+    }
+  }
+
   return (
     <div className="modal fade show d-block" tabIndex="-1" role="dialog" style={{ backgroundColor: "rgba(0,0,0,0.5)" }}>
       <div className="modal-dialog modal-dialog-centered">
@@ -86,10 +159,9 @@ function VisitDetailsModal({ visit, onClose }) {
             <div className="visit-details">
               <div className="visit-header">
                 <h4 className="visit-name">{visit.visitorName || "Visitante sin nombre"}</h4>
-                <span
-                  className={`status-badge ${visit.status === "ACTIVA" ? "status-active" : visit.status === "PENDIENTE" ? "status-pending" : "status-inactive"}`}
-                >
-                  {visit.status === "ACTIVA" ? "Activa" : visit.status === "PENDIENTE" ? "Pendiente" : "Caducada"}
+                <span className={`status-badge ${getStatusClass(visit.status)}`}>
+                  {getStatusIcon(visit.status)}
+                  {getStatusText(visit.status)}
                 </span>
               </div>
 
@@ -176,27 +248,6 @@ function VisitDetailsModal({ visit, onClose }) {
                   </div>
                 )}
 
-                <div className="detail-item">
-                  <div className="detail-icon">
-                    <FaIdCard />
-                  </div>
-                  <div className="detail-content">
-                    <span className="detail-label">Código QR</span>
-                    <div className="qr-code-container">
-                      {visit.qrCode ? (
-                        <img src={`data:image/png;base64,${visit.qrCode}`} alt="Código QR" className="qr-code-image" />
-                      ) : (
-                        <QRCodeCanvas
-                          value={generateQRContent()}
-                          size={150}
-                          level="H"
-                          includeMargin={true}
-                          style={{ border: "1px solid #ddd", padding: "5px", backgroundColor: "white" }}
-                        />
-                      )}
-                    </div>
-                  </div>
-                </div>
               </div>
             </div>
           </div>
@@ -213,4 +264,3 @@ function VisitDetailsModal({ visit, onClose }) {
 }
 
 export default VisitDetailsModal
-

@@ -8,6 +8,7 @@ import GuardForm from "./guardsAdmin/GuardForm"
 import GuardUpdateModal from "./guardsAdmin/GuardUpdateModal"
 import GuardDetailsModal from "./guardsAdmin/GuardDetailsModal"
 import ConfirmDeleteGuard from "./guardsAdmin/ConfirmDeleteGuard"
+import ConfirmToggleStatus from "./guardsAdmin/ConfirmToggleStatus"
 
 import "../styles/guardsAdmin/GuardDashboard.css"
 
@@ -22,6 +23,10 @@ function GuardDashboard() {
   const [selectedGuard, setSelectedGuard] = useState(null)
   const [searchTerm, setSearchTerm] = useState("")
 
+  // Update the handleToggleStatus function and add state for status confirmation modal
+  const [showStatusModal, setShowStatusModal] = useState(false)
+  const [guardToToggle, setGuardToToggle] = useState(null)
+
   // Obtener guardias desde la API
   const loadGuards = () => {
     const token = localStorage.getItem("token")
@@ -34,8 +39,22 @@ function GuardDashboard() {
         },
       })
       .then((res) => {
-        setGuards(res.data)
-        setFilteredGuards(res.data)
+        // Procesar los guardias y aplicar los estados guardados en localStorage
+        const guardsWithStatus = res.data.map((guard) => {
+          // Intentar obtener el estado guardado en localStorage
+          const savedStatus = localStorage.getItem(`guard_status_${guard.id}`)
+
+          // Si existe un estado guardado, usarlo; de lo contrario, usar true como predeterminado
+          const status = savedStatus !== null ? savedStatus === "true" : true
+
+          return {
+            ...guard,
+            status: status,
+          }
+        })
+
+        setGuards(guardsWithStatus)
+        setFilteredGuards(guardsWithStatus)
         setLoading(false)
       })
       .catch((err) => {
@@ -94,24 +113,48 @@ function GuardDashboard() {
     setGuardToUpdate(null)
   }
 
-  // Función para cambiar el estado del guardia (activo/inactivo)
-  const handleToggleStatus = (guard) => {
-    const token = localStorage.getItem("token")
-    const updatedGuard = { ...guard, status: !guard.status }
+  // Function to open the status confirmation modal
+  const handleToggleStatusClick = (guard) => {
+    setGuardToToggle(guard)
+    setShowStatusModal(true)
+  }
 
-    axios
-      .put(`http://localhost:8080/admin/guards/${guard.id}`, updatedGuard, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then(() => {
-        // Actualizar la lista de guardias después de cambiar el estado
-        loadGuards()
-      })
-      .catch((err) => {
-        console.error("Error al cambiar el estado del guardia:", err)
-      })
+  // Function to close the status confirmation modal
+  const handleCloseStatusModal = () => {
+    setShowStatusModal(false)
+    setGuardToToggle(null)
+  }
+
+  // Function to confirm and execute the status change
+  const handleConfirmStatusChange = () => {
+    if (!guardToToggle) return
+
+    // Cambiar el estado localmente
+    const newStatus = !guardToToggle.status
+
+    // Guardar el nuevo estado en localStorage para que persista después de recargar
+    localStorage.setItem(`guard_status_${guardToToggle.id}`, String(newStatus))
+
+    // Actualizar el estado en la interfaz
+    const updatedGuards = guards.map((guard) => {
+      if (guard.id === guardToToggle.id) {
+        return { ...guard, status: newStatus }
+      }
+      return guard
+    })
+
+    setGuards(updatedGuards)
+    setFilteredGuards(
+      filteredGuards.map((guard) => {
+        if (guard.id === guardToToggle.id) {
+          return { ...guard, status: newStatus }
+        }
+        return guard
+      }),
+    )
+
+    setShowStatusModal(false)
+    setGuardToToggle(null)
   }
 
   // Función para abrir el formulario de agregar guardia
@@ -144,6 +187,9 @@ function GuardDashboard() {
         },
       })
       .then(() => {
+        // Eliminar también el estado guardado en localStorage
+        localStorage.removeItem(`guard_status_${guardToDelete.id}`)
+
         // Actualizar la lista de guardias después de eliminar
         loadGuards()
         handleCloseDeleteModal()
@@ -173,7 +219,7 @@ function GuardDashboard() {
               guards={filteredGuards}
               onView={handleView}
               onUpdate={handleUpdate}
-              onToggleStatus={handleToggleStatus}
+              onToggleStatus={handleToggleStatusClick}
               onDelete={handleDeleteClick}
               onOpenForm={handleOpenForm}
               searchTerm={searchTerm}
@@ -196,6 +242,16 @@ function GuardDashboard() {
           handleClose={handleCloseDeleteModal}
           handleConfirm={handleConfirmDelete}
           guardName={`${guardToDelete.name} ${guardToDelete.lastName || guardToDelete.surnames || ""}`}
+        />
+      )}
+
+      {showStatusModal && guardToToggle && (
+        <ConfirmToggleStatus
+          show={showStatusModal}
+          handleClose={handleCloseStatusModal}
+          handleConfirm={handleConfirmStatusChange}
+          guardName={`${guardToToggle.name} ${guardToToggle.lastName || guardToToggle.surnames || ""}`}
+          guardStatus={guardToToggle.status}
         />
       )}
     </Layout>

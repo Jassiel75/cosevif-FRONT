@@ -39,7 +39,7 @@ function ResidentTable({ residents, onView, onUpdate, onToggleStatus, onDelete, 
         </thead>
         <tbody>
           {residents.map((residente) => (
-            <tr key={residente._id}>
+            <tr key={residente._id || residente.id}>
               <td>
                 {residente.name} {residente.lastName || residente.surnames}
               </td>

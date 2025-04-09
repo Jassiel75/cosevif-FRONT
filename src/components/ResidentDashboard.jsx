@@ -8,6 +8,7 @@ import ResidentForm from "../components/residentsAdmin/ResidentForm"
 import ResidentUpdateModal from "../components/residentsAdmin/ResidentUpdateModal"
 import ResidentDetailsModal from "../components/residentsAdmin/ResidentDetailsModal"
 import ConfirmDeleteResident from "../components/residentsAdmin/ConfirmDeleteResident"
+import ConfirmStatusChange from "../components/alerts/ConfirmStatusChange"
 
 import "../styles/residentsAdmin/ResidentDashboard.css"
 
@@ -22,7 +23,12 @@ function ResidentDashboard() {
   const [selectedResident, setSelectedResident] = useState(null)
   const [searchTerm, setSearchTerm] = useState("")
 
+  // Update the handleToggleStatus function and add state for status confirmation modal
+  const [showStatusModal, setShowStatusModal] = useState(false)
+  const [residentToToggle, setResidentToToggle] = useState(null)
+
   // Obtener residentes desde la API
+  // Modificar la función loadResidents para asegurarse de que todos los residentes tengan status true
   const loadResidents = () => {
     const token = localStorage.getItem("token")
     setLoading(true)
@@ -34,8 +40,22 @@ function ResidentDashboard() {
         },
       })
       .then((res) => {
-        setResidents(res.data)
-        setFilteredResidents(res.data)
+        // Procesar los residentes y aplicar los estados guardados en localStorage
+        const residentsWithStatus = res.data.map((resident) => {
+          // Intentar obtener el estado guardado en localStorage
+          const savedStatus = localStorage.getItem(`resident_status_${resident.id}`)
+
+          // Si existe un estado guardado, usarlo; de lo contrario, usar true como predeterminado
+          const status = savedStatus !== null ? savedStatus === "true" : true
+
+          return {
+            ...resident,
+            status: status,
+          }
+        })
+
+        setResidents(residentsWithStatus)
+        setFilteredResidents(residentsWithStatus)
         setLoading(false)
       })
       .catch((err) => {
@@ -93,27 +113,52 @@ function ResidentDashboard() {
     setResidentToUpdate(null)
   }
 
+  // Function to open the status confirmation modal
+  const handleToggleStatusClick = (resident) => {
+    setResidentToToggle(resident)
+    setShowStatusModal(true)
+  }
+
+  // Function to close the status confirmation modal
+  const handleCloseStatusModal = () => {
+    setShowStatusModal(false)
+    setResidentToToggle(null)
+  }
+
+  // Function to confirm and execute the status change
+  const handleConfirmStatusChange = () => {
+    if (!residentToToggle) return
+
+    // Cambiar el estado localmente
+    const newStatus = !residentToToggle.status
+
+    // Guardar el nuevo estado en localStorage para que persista después de recargar
+    localStorage.setItem(`resident_status_${residentToToggle.id}`, String(newStatus))
+
+    // Actualizar el estado en la interfaz
+    const updatedResidents = residents.map((resident) => {
+      if (resident.id === residentToToggle.id) {
+        return { ...resident, status: newStatus }
+      }
+      return resident
+    })
+
+    setResidents(updatedResidents)
+    setFilteredResidents(
+      filteredResidents.map((resident) => {
+        if (resident.id === residentToToggle.id) {
+          return { ...resident, status: newStatus }
+        }
+        return resident
+      }),
+    )
+
+    setShowStatusModal(false)
+    setResidentToToggle(null)
+  }
+
   const handleToggleStatus = (resident) => {
-    console.log("Cambiar estado:", resident)
-
-    // Implementación básica para cambiar el estado
-    const token = localStorage.getItem("token")
-    const updatedResident = { ...resident, status: !resident.status }
-
-    axios
-      .put(`http://localhost:8080/admin/residents/${resident.id}`, updatedResident, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then(() => {
-        // Actualizar la lista de residentes después de cambiar el estado
-        loadResidents()
-      })
-      .catch((err) => {
-        console.error("Error al cambiar el estado del residente:", err)
-        alert("Error al cambiar el estado del residente")
-      })
+    handleToggleStatusClick(resident)
   }
 
   // Función para abrir el formulario de agregar residente
@@ -146,6 +191,9 @@ function ResidentDashboard() {
         },
       })
       .then(() => {
+        // Eliminar también el estado guardado en localStorage
+        localStorage.removeItem(`resident_status_${residentToDelete.id}`)
+
         // Actualizar la lista de residentes después de eliminar
         loadResidents()
         handleCloseDeleteModal()
@@ -176,7 +224,7 @@ function ResidentDashboard() {
               residents={filteredResidents}
               onView={handleView}
               onUpdate={handleUpdate}
-              onToggleStatus={handleToggleStatus}
+              onToggleStatus={handleToggleStatusClick}
               onDelete={handleDeleteClick}
               onOpenForm={handleOpenForm}
               searchTerm={searchTerm}
@@ -199,6 +247,16 @@ function ResidentDashboard() {
           handleClose={handleCloseDeleteModal}
           handleConfirm={handleConfirmDelete}
           residentName={`${residentToDelete.name} ${residentToDelete.lastName || residentToDelete.surnames}`}
+        />
+      )}
+
+      {showStatusModal && residentToToggle && (
+        <ConfirmStatusChange
+          show={showStatusModal}
+          handleClose={handleCloseStatusModal}
+          handleConfirm={handleConfirmStatusChange}
+          userName={`${residentToToggle.name} ${residentToToggle.lastName || residentToToggle.surnames}`}
+          currentStatus={residentToToggle.status}
         />
       )}
     </Layout>

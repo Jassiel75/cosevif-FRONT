@@ -1,0 +1,75 @@
+/* Estilos para el modal de confirmación de cambio de estado */
+.modal-content {
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  
+  .modal-header {
+    padding: 15px 20px;
+  }
+  
+  .modal-header .modal-title {
+    display: flex;
+    align-items: center;
+    font-size: 1.1rem;
+  }
+  
+  .modal-body {
+    padding: 20px;
+  }
+  
+  .modal-body p {
+    margin-bottom: 10px;
+  }
+  
+  .modal-body .fw-bold {
+    font-size: 1.1rem;
+  }
+  
+  .alert-warning {
+    background-color: #fff3cd;
+    border-color: #ffeeba;
+    color: #856404;
+    display: flex;
+    align-items: flex-start;
+  }
+  
+  .alert-warning small {
+    display: flex;
+    align-items: center;
+  }
+  
+  .btn-close-white {
+    filter: brightness(0) invert(1);
+  }
+  
+  .modal-footer {
+    padding: 15px 20px;
+    border-top: 1px solid #dee2e6;
+  }
+  
+  .btn-secondary {
+    background-color: #6c757d;
+    border-color: #6c757d;
+  }
+  
+  .btn-danger {
+    background-color: #862d26;
+    border-color: #862d26;
+  }
+  
+  .btn-danger:hover {
+    background-color: #6b1f1a;
+    border-color: #6b1f1a;
+  }
+  
+  .btn-success {
+    background-color: #28a745;
+    border-color: #28a745;
+  }
+  
+  .btn-success:hover {
+    background-color: #218838;
+    border-color: #1e7e34;
+  }
+  
