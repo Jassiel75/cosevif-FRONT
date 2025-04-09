@@ -6,6 +6,8 @@ import axios from "axios"
 import "../App.css"
 import logo from "../assets/logos/LogoCosevif-removed.png"
 import portada from "../assets/images/cosevif-portada.jpg"
+import { API_URL } from "../auth/IP"
+
 
 function Login() {
   const navigate = useNavigate()

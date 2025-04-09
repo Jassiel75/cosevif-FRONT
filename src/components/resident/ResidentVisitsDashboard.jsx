@@ -9,7 +9,10 @@ import VisitDetailsModal from "./visits/VisitDetailsModal"
 import QRCodeModal from "./visits/QRCodeModal"
 import ShareLinkModal from "./visits/ShareLinkModal"
 import ConfirmDeleteVisit from "./visits/ConfirmDeleteVisit"
+import ConfirmCancelVisit from "./visits/ConfirmCancelVisit"
 import { determineVisitStatus } from "./visits/VisitModel"
+import { API_URL } from "../../auth/IP";  // Asegúrate de que la ruta sea correcta
+
 
 const ResidentVisitsDashboard = forwardRef(({ showForm, setShowForm, userData }, ref) => {
   const [visits, setVisits] = useState([])
@@ -25,6 +28,10 @@ const ResidentVisitsDashboard = forwardRef(({ showForm, setShowForm, userData },
   const [visitForQR, setVisitForQR] = useState(null)
   const [visitForShareLink, setVisitForShareLink] = useState(null)
   const [searchTerm, setSearchTerm] = useState("")
+
+  // Nuevos estados para el modal de cancelación
+  const [showCancelModal, setShowCancelModal] = useState(false)
+  const [visitToCancel, setVisitToCancel] = useState(null)
 
   // Cargar visitas desde la API
   const loadVisits = () => {
@@ -252,13 +259,27 @@ const ResidentVisitsDashboard = forwardRef(({ showForm, setShowForm, userData },
       })
   }
 
+  // Función para abrir el modal de confirmación de cancelación
+  const handleCancelClick = (visit) => {
+    setVisitToCancel(visit)
+    setShowCancelModal(true)
+  }
+
+  // Función para cerrar el modal de confirmación de cancelación
+  const handleCloseCancelModal = () => {
+    setShowCancelModal(false)
+    setVisitToCancel(null)
+  }
+
   // Función para cancelar una visita
-  const handleCancelVisit = (visit) => {
+  const handleConfirmCancel = () => {
+    if (!visitToCancel) return
+
     const token = localStorage.getItem("token")
 
     axios
       .put(
-        `http://localhost:8080/resident/visit/${visit.id}/cancel`,
+        `http://localhost:8080/resident/visit/${visitToCancel.id}/cancel`,
         {},
         {
           headers: {
@@ -269,6 +290,7 @@ const ResidentVisitsDashboard = forwardRef(({ showForm, setShowForm, userData },
       .then(() => {
         // Actualizar la lista de visitas después de cancelar
         loadVisits()
+        handleCloseCancelModal()
       })
       .catch((err) => {
         console.error("Error al cancelar la visita:", err)
@@ -276,13 +298,14 @@ const ResidentVisitsDashboard = forwardRef(({ showForm, setShowForm, userData },
 
         // Para desarrollo, si la API falla, actualizar localmente
         const updatedVisits = visits.map((v) => {
-          if (v.id === visit.id) {
+          if (v.id === visitToCancel.id) {
             return { ...v, status: "CANCELADO" }
           }
           return v
         })
         setVisits(updatedVisits)
         setFilteredVisits(filterVisits(updatedVisits, searchTerm))
+        handleCloseCancelModal()
       })
   }
 
@@ -303,7 +326,7 @@ const ResidentVisitsDashboard = forwardRef(({ showForm, setShowForm, userData },
           onDelete={handleDeleteClick}
           onShowQR={handleShowQR}
           onShowShareLink={handleShowShareLink}
-          onCancelVisit={handleCancelVisit}
+          onCancelVisit={handleCancelClick}
           searchTerm={searchTerm}
         />
       )}
@@ -333,6 +356,15 @@ const ResidentVisitsDashboard = forwardRef(({ showForm, setShowForm, userData },
           handleClose={handleCloseDeleteModal}
           handleConfirm={handleConfirmDelete}
           visitName={visitToDelete.visitorName || "esta visita"}
+        />
+      )}
+
+      {showCancelModal && visitToCancel && (
+        <ConfirmCancelVisit
+          show={showCancelModal}
+          handleClose={handleCloseCancelModal}
+          handleConfirm={handleConfirmCancel}
+          visitName={visitToCancel.visitorName || "esta visita"}
         />
       )}
     </div>

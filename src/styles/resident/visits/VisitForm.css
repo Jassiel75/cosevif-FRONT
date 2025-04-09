@@ -13,6 +13,9 @@
   padding: 20px;
 }
 
+/* Ajustar el modal para eliminar el scroll y mejorar la distribución */
+
+/* Modificar el tamaño del modal para que sea más alto */
 .visit-form-modal {
   background-color: white;
   border-radius: 12px;
@@ -23,6 +26,7 @@
   flex-direction: column;
   position: relative;
   margin: auto;
+  max-height: none; /* Eliminar altura máxima para evitar scroll */
 }
 
 @keyframes modalFadeIn {
@@ -82,23 +86,24 @@
   font-size: 0.9rem;
 }
 
+/* Eliminar el scroll del cuerpo del formulario */
 .visit-form-body {
   padding: 15px 20px;
-  overflow-y: auto; /* Permite scroll vertical */
   flex: 1;
-  max-height: calc(90vh - 120px); /* Altura máxima ajustada */
+  overflow-y: visible; /* Cambiar de auto a visible para eliminar scroll */
+  max-height: none; /* Eliminar altura máxima */
+}
+
+/* Reducir el espaciado vertical para que todo quepa mejor */
+.form-group {
+  flex: 1;
+  margin-bottom: 15px; /* Reducido de 20px */
 }
 
 .form-row {
   display: flex;
-  gap: 15px;
-  margin-bottom: 15px;
-}
-
-.form-group {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
+  gap: 15px; /* Reducido de 20px */
+  margin-bottom: 15px; /* Reducido de 20px */
 }
 
 .form-group label {
@@ -137,21 +142,24 @@
   min-height: 80px; /* Reducido de 100px */
 }
 
+/* Ajustar el contenedor del enlace para compartir */
 .shareable-link-container {
   background-color: #f0f9f0;
   border-radius: 8px;
-  padding: 12px;
-  margin: 15px 0;
+  padding: 10px; /* Reducido de 12px */
+  margin: 10px 0; /* Reducido de 15px 0 */
   border-left: 4px solid #28a745;
 }
 
+/* Hacer el enlace más compacto */
 .link-header {
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-bottom: 10px;
+  margin-bottom: 8px; /* Reducido de 10px */
   font-weight: 500;
   color: #28a745;
+  font-size: 0.9rem; /* Reducido el tamaño de fuente */
 }
 
 .link-icon {
@@ -166,7 +174,7 @@
 
 .link-input-group input {
   flex: 1;
-  padding: 8px 10px;
+  padding: 6px 10px; /* Reducido de 8px 10px */
   border: 1px solid #ddd;
   border-radius: 6px;
   font-size: 0.85rem;
@@ -182,12 +190,14 @@
   color: white;
   border: none;
   border-radius: 6px;
-  padding: 0 12px;
+  padding: 0 10px; /* Reducido de 0 12px */
   cursor: pointer;
   font-weight: 500;
   transition: background-color 0.2s;
   white-space: nowrap;
   min-width: 80px;
+  font-size: 0.85rem; /* Reducido el tamaño de fuente */
+  height: 30px; /* Altura fija para alinear con el input */
 }
 
 .copy-button:hover {

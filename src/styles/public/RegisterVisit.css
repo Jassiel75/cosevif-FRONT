@@ -1,158 +1,283 @@
+/* Estilos mejorados para el formulario de registro de visitas */
 .register-visit-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    background-color: #f5f5f5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f5f7fa 0%, #e4e8eb 100%);
+  padding: 20px;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.register-visit-card {
+  background-color: white;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 700px;
+  overflow: hidden;
+  animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.register-visit-header {
+  padding: 30px;
+  text-align: center;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.register-visit-logo {
+  max-width: 150px;
+  margin-bottom: 20px;
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
+}
+
+.register-visit-header h2 {
+  color: #333;
+  font-size: 28px;
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+
+.resident-info {
+  background-color: #f8f9fa;
+  border-radius: 10px;
+  padding: 15px;
+  margin-top: 15px;
+  border-left: 4px solid #862d26;
+}
+
+.resident-info p {
+  margin: 5px 0;
+  color: #555;
+}
+
+.resident-name,
+.house-number {
+  font-weight: 600;
+  color: #333;
+}
+
+/* Formulario */
+.visit-form {
+  padding: 30px;
+}
+
+.form-section {
+  margin-bottom: 30px;
+  background-color: #f9f9f9;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.section-title {
+  font-size: 18px;
+  color: #862d26;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #e0e0e0;
+  font-weight: 600;
+}
+
+.form-row {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.form-group {
+  flex: 1;
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: #444;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+  width: 100%;
+  padding: 12px 15px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 16px;
+  transition: all 0.3s;
+  background-color: white;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+  border-color: #862d26;
+  box-shadow: 0 0 0 2px rgba(134, 45, 38, 0.1);
+  outline: none;
+}
+
+.form-hint {
+  display: block;
+  margin-top: 6px;
+  font-size: 13px;
+  color: #666;
+}
+
+/* Botones de acción */
+.form-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 30px;
+  gap: 15px;
+}
+
+.cancel-button,
+.back-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s;
+  background-color: #f0f0f0;
+  color: #555;
+  border: none;
+}
+
+.cancel-button:hover,
+.back-button:hover {
+  background-color: #e0e0e0;
+}
+
+.submit-button {
+  /* Eliminado flex: 1 para mantener el tamaño original */
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s;
+  background-color: #862d26;
+  color: white;
+  border: none;
+  box-shadow: 0 4px 6px rgba(134, 45, 38, 0.2);
+}
+
+.submit-button:hover {
+  background-color: #6b1f1a;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 10px rgba(134, 45, 38, 0.3);
+}
+
+.submit-button:disabled {
+  background-color: #a17c78;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Alertas y mensajes */
+.alert-error {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background-color: #fff5f5;
+  color: #e53e3e;
+  padding: 15px 20px;
+  margin: 20px 30px 0;
+  border-radius: 8px;
+  border-left: 4px solid #e53e3e;
+}
+
+/* Contenedor de éxito */
+.success-container {
+  padding: 40px 30px;
+  text-align: center;
+  animation: fadeIn 0.5s ease;
+}
+
+.success-icon {
+  color: #38a169;
+  margin-bottom: 20px;
+}
+
+.success-container h3 {
+  color: #38a169;
+  font-size: 24px;
+  margin-bottom: 15px;
+}
+
+.success-container p {
+  color: #555;
+  margin-bottom: 20px;
+  font-size: 16px;
+}
+
+.password-reminder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background-color: #f0fff4;
+  padding: 15px;
+  border-radius: 8px;
+  margin: 20px 0;
+  color: #2f855a;
+  border: 1px solid #c6f6d5;
+}
+
+.back-button {
+  margin: 20px auto 0;
+  display: flex;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .form-row {
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .register-visit-card {
+    border-radius: 12px;
+  }
+
+  .register-visit-header {
     padding: 20px;
   }
-  
-  .register-visit-card {
-    background-color: white;
-    border-radius: 10px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    max-width: 600px;
-    padding: 30px;
+
+  .visit-form {
+    padding: 20px;
   }
-  
-  .register-visit-header {
-    text-align: center;
-    margin-bottom: 30px;
-  }
-  
-  .register-visit-logo {
-    max-width: 150px;
-    margin-bottom: 20px;
-  }
-  
-  .register-visit-header h2 {
-    color: #862d26;
-    margin-bottom: 10px;
-  }
-  
-  .resident-info {
-    color: #6c757d;
-    font-size: 16px;
-    margin-bottom: 0;
-  }
-  
-  .form-group {
-    margin-bottom: 20px;
-  }
-  
-  .form-row {
-    display: flex;
-    gap: 15px;
-    margin-bottom: 20px;
-  }
-  
-  .form-row .form-group {
-    flex: 1;
-    margin-bottom: 0;
-  }
-  
-  label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: 500;
-    color: #495057;
-  }
-  
-  .form-control {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ced4da;
-    border-radius: 5px;
-    font-size: 16px;
-  }
-  
-  .form-control:focus {
-    border-color: #862d26;
-    box-shadow: 0 0 0 0.2rem rgba(134, 45, 38, 0.25);
-  }
-  
-  .form-text {
-    font-size: 12px;
-    margin-top: 5px;
-  }
-  
-  .form-actions {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 30px;
-  }
-  
-  .btn {
-    padding: 10px 20px;
-    border-radius: 5px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-  
-  .btn-primary {
-    background-color: #862d26;
-    border: none;
-    color: white;
-  }
-  
-  .btn-primary:hover {
-    background-color: #6b1f1a;
-  }
-  
-  .btn-primary:disabled {
-    background-color: #a17c78;
-    cursor: not-allowed;
-  }
-  
-  .btn-secondary {
-    background-color: #6c757d;
-    border: none;
-    color: white;
-  }
-  
-  .btn-secondary:hover {
-    background-color: #5a6268;
-  }
-  
-  .alert {
+
+  .form-section {
     padding: 15px;
-    margin-bottom: 20px;
-    border-radius: 5px;
   }
-  
-  .alert-danger {
-    background-color: #f8d7da;
-    border: 1px solid #f5c6cb;
-    color: #721c24;
+
+  .form-actions {
+    flex-direction: column;
   }
-  
-  .alert-success {
-    background-color: #d4edda;
-    border: 1px solid #c3e6cb;
-    color: #155724;
+
+  .cancel-button,
+  .submit-button {
+    width: 100%;
   }
-  
-  /* Responsive adjustments */
-  @media (max-width: 768px) {
-    .register-visit-card {
-      padding: 20px;
-    }
-  
-    .form-row {
-      flex-direction: column;
-      gap: 20px;
-    }
-  
-    .form-actions {
-      flex-direction: column-reverse;
-      gap: 10px;
-    }
-  
-    .btn {
-      width: 100%;
-    }
-  }
-  
-  
+}

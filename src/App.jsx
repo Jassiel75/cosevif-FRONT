@@ -6,32 +6,75 @@ import GuardDashboard from "./components/GuardDashboard"
 import ResidentHome from "./components/resident/ResidentHome"
 import RegisterVisit from "./components/public/RegisterVisit"
 import ResidentProfile from "./components/resident/ResidentProfile"
+import ProtectedRoute from "./components/auth/ProtectedRoute"
+import UnauthorizedAccess from "./components/auth/UnauthorizedAccess"
 
 import "bootstrap/dist/css/bootstrap.min.css"
 
 function App() {
   return (
     <Routes>
+      {/* Rutas públicas */}
       <Route path="/" element={<Login />} />
-      <Route path="/admin/dashboard" element={<Dashboard />} />
-
-      <Route path="/dashboard" element={<Dashboard />} /> {/* Mantener para compatibilidad */}
-      <Route path="/residents" element={<ResidentDashboard />} />
-      
-      <Route path="/guards" element={<GuardDashboard />} />
-      <Route path="/resident/dashboard" element={<ResidentHome />} />
-
-      <Route path="/resident/profile" element={<ResidentProfile />} />
-
       <Route path="/register-visit/:residentId" element={<RegisterVisit />} />
+      <Route path="/unauthorized" element={<UnauthorizedAccess />} />
 
-      
+      {/* Rutas de administrador */}
+      <Route
+        path="/admin/dashboard"
+        element={
+          <ProtectedRoute allowedRoles={["ADMIN"]}>
+            <Dashboard />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/dashboard"
+        element={
+          <ProtectedRoute allowedRoles={["ADMIN"]}>
+            <Dashboard />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/residents"
+        element={
+          <ProtectedRoute allowedRoles={["ADMIN"]}>
+            <ResidentDashboard />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/guards"
+        element={
+          <ProtectedRoute allowedRoles={["ADMIN"]}>
+            <GuardDashboard />
+          </ProtectedRoute>
+        }
+      />
 
-      </Routes>
+      {/* Rutas de residente */}
+      <Route
+        path="/resident/dashboard"
+        element={
+          <ProtectedRoute allowedRoles={["RESIDENT"]}>
+            <ResidentHome />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/resident/profile"
+        element={
+          <ProtectedRoute allowedRoles={["RESIDENT"]}>
+            <ResidentProfile />
+          </ProtectedRoute>
+        }
+      />
 
-      
+      {/* Ruta de fallback para cualquier otra ruta no definida */}
+      <Route path="*" element={<UnauthorizedAccess message="Página no encontrada" />} />
+    </Routes>
   )
 }
 
 export default App
-
