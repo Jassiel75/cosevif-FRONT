@@ -2,9 +2,29 @@
 
 import ResidentSidebar from "./ResidentSidebar"
 import "../../styles/Layout.css"
-import { CirclePlus } from "lucide-react"
+import { CirclePlus, Search } from "lucide-react"
+import { useState } from "react"
 
-function ResidentLayout({ children, title, subtitle, onOpenForm, viewType = "visits", onViewChange, userData }) {
+function ResidentLayout({
+  children,
+  title,
+  subtitle,
+  onOpenForm,
+  viewType = "visits",
+  onViewChange,
+  userData,
+  onSearch,
+}) {
+  const [searchTerm, setSearchTerm] = useState("")
+
+  const handleSearchChange = (e) => {
+    const value = e.target.value
+    setSearchTerm(value)
+    if (onSearch) {
+      onSearch(value)
+    }
+  }
+
   return (
     <div className="layout-container">
       <ResidentSidebar onViewChange={onViewChange} activeView={viewType} userData={userData} />
@@ -22,7 +42,7 @@ function ResidentLayout({ children, title, subtitle, onOpenForm, viewType = "vis
                       ? "Mi Perfil"
                       : "")}
             </h1>
-            <p className="header-subtitle">{subtitle}</p>
+            {/* Removed the subtitle */}
           </div>
 
           {/* Middle section - Add button */}
@@ -38,19 +58,26 @@ function ResidentLayout({ children, title, subtitle, onOpenForm, viewType = "vis
           {/* Right section - Search and Resident info */}
           <div className="header-right">
             <div className="admin-info">
-              <span className="admin-role">Residente: {userData?.name || "Usuario"}</span>
-              {userData?.house && <span className="admin-role"> - Casa #{userData.house.houseNumber}</span>}
+              <div className="user-profile-info">
+                <span className="user-name">{userData?.name || "Usuario"}</span>
+                {userData?.house && <span className="house-badge">Casa #{userData.house.houseNumber}</span>}
+              </div>
             </div>
             <div className="search-container">
               {viewType !== "profile" && (
-                <>
+                <div className="search-input-wrapper">
                   <input
                     type="text"
                     placeholder={viewType === "visits" ? "Buscar Visita" : "Buscar Trabajador"}
                     className="search-input"
+                    value={searchTerm}
+                    onChange={handleSearchChange}
+                    aria-label="Buscar"
                   />
-                  <button className="filter-button">Filtrar</button>
-                </>
+                  <span className="search-icon">
+                    <Search size={16} />
+                  </span>
+                </div>
               )}
             </div>
           </div>

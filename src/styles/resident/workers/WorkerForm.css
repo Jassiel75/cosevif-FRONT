@@ -1,74 +1,254 @@
-.modal-content {
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+/* Estilos para el modal de registro de trabajadores */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1050;
+  padding: 20px;
+}
+
+.worker-form-modal {
+  background-color: white;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 650px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  margin: auto;
+}
+
+.worker-form-header {
+  background-color: #862d26;
+  color: white;
+  padding: 12px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px 12px 0 0;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.worker-form-header h3 {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.close-button {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+  opacity: 0.8;
+  transition: opacity 0.2s;
+}
+
+.close-button:hover {
+  opacity: 1;
+}
+
+.error-alert {
+  background-color: #f8d7da;
+  color: #721c24;
+  padding: 10px 14px;
+  margin: 12px;
+  border-radius: 6px;
+  border-left: 4px solid #f5c6cb;
+  font-size: 0.9rem;
+}
+
+.worker-form-body {
+  padding: 15px 20px;
+  flex: 1;
+}
+
+.form-row {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+.form-group {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 6px;
+  font-weight: 500;
+  color: #444;
+  font-size: 0.9rem;
+}
+
+.field-icon {
+  color: #862d26;
+}
+
+.form-group input,
+.form-group textarea {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  border-color: #862d26;
+  box-shadow: 0 0 0 2px rgba(134, 45, 38, 0.2);
+  outline: none;
+}
+
+/* Estilos para el área de carga de imágenes */
+.image-upload-row {
+  justify-content: center;
+}
+
+.image-upload-container {
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.image-upload-area {
+  border: 2px dashed #ddd;
+  border-radius: 8px;
+  padding: 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  background-color: #f9f9f9;
+  height: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.image-upload-area:hover {
+  border-color: #862d26;
+  background-color: #f5f5f5;
+}
+
+.file-input {
+  position: absolute;
+  width: 0.1px;
+  height: 0.1px;
+  opacity: 0;
+  overflow: hidden;
+  z-index: -1;
+}
+
+.upload-label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+  color: #666;
+}
+
+.upload-label svg {
+  margin-bottom: 10px;
+  color: #862d26;
+}
+
+.image-preview {
+  max-width: 100%;
+  max-height: 180px;
+  object-fit: contain;
+  border-radius: 4px;
+}
+
+.worker-form-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 12px 20px;
+  background-color: #f8f9fa;
+  border-top: 1px solid #eee;
+  border-radius: 0 0 12px 12px;
+  position: sticky;
+  bottom: 0;
+  z-index: 10;
+}
+
+.cancel-button {
+  background-color: #f8f9fa;
+  color: #6c757d;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 8px 16px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.cancel-button:hover {
+  background-color: #e9ecef;
+}
+
+.submit-button {
+  background-color: #862d26;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 16px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.2s;
+}
+
+.submit-button:hover {
+  background-color: #6b1f1a;
+}
+
+.submit-button:disabled {
+  background-color: #a17c78;
+  cursor: not-allowed;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .form-row {
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 12px;
   }
-  
-  .modal-header {
-    border-bottom: 1px solid #ddd;
-    background-color: #fff;
+
+  .worker-form-modal {
+    width: 95%;
   }
-  
-  .modal-title {
-    color: #862d26;
-    font-weight: bold;
+
+  .worker-form-body {
+    padding: 12px;
   }
-  
-  .modal-body {
-    padding: 20px;
+
+  .worker-form-footer {
+    padding: 10px 12px;
   }
-  
-  .form-label {
-    color: #555;
-    font-weight: 500;
-    margin-bottom: 5px;
+
+  .image-upload-area {
+    height: 150px;
   }
-  
-  .form-control,
-  .form-select {
-    border-radius: 5px;
-    border: 1px solid #ddd;
-    padding: 8px 12px;
-    transition: border-color 0.2s;
-  }
-  
-  .form-control:focus,
-  .form-select:focus {
-    border-color: #862d26;
-    box-shadow: 0 0 0 0.2rem rgba(134, 45, 38, 0.25);
-  }
-  
-  .btn-danger {
-    background-color: #862d26;
-    border-color: #862d26;
-  }
-  
-  .btn-danger:hover {
-    background-color: #6b1f1a;
-    border-color: #6b1f1a;
-  }
-  
-  .btn-secondary {
-    background-color: #6c757d;
-    border-color: #6c757d;
-  }
-  
-  .btn-secondary:hover {
-    background-color: #5a6268;
-    border-color: #545b62;
-  }
-  
-  .modal-footer {
-    border-top: 1px solid #ddd;
-    padding: 15px;
-  }
-  
-  .alert-danger {
-    background-color: #f8d7da;
-    border-color: #f5c6cb;
-    color: #721c24;
-    padding: 10px 15px;
-    border-radius: 5px;
-    margin-bottom: 15px;
-  }
-  
-  
+}

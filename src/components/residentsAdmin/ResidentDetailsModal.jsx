@@ -1,5 +1,5 @@
 "use client"
-import { FaEnvelope, FaPhone, FaCalendarAlt, FaMapMarkerAlt, FaHome } from "react-icons/fa"
+import { User, Mail, Phone, Calendar, MapPin, Home, UserCircle, CalendarIcon, X } from "lucide-react"
 import "../../styles/residentsAdmin/ResidentDetailsModal.css"
 
 function ResidentDetailsModal({ resident, onClose }) {
@@ -19,32 +19,59 @@ function ResidentDetailsModal({ resident, onClose }) {
     }
   }
 
+  // Generar iniciales para el avatar
+  const getInitials = () => {
+    const nameInitial = resident.name ? resident.name.charAt(0) : ""
+    const surnameInitial =
+      resident.lastName || resident.surnames ? (resident.lastName || resident.surnames).charAt(0) : ""
+    return (nameInitial + surnameInitial).toUpperCase()
+  }
+
   return (
     <div className="modal fade show d-block" tabIndex="-1" role="dialog" style={{ backgroundColor: "rgba(0,0,0,0.5)" }}>
       <div className="modal-dialog modal-dialog-centered">
-        <div className="modal-content p-4">
+        <div className="modal-content">
           <div className="modal-header">
             <h5 className="modal-title">Detalles del Residente</h5>
-            <button type="button" className="btn-close" onClick={onClose}></button>
+            <button type="button" className="btn-close" onClick={onClose}>
+              <X size={24} />
+            </button>
           </div>
 
           <div className="modal-body">
             <div className="resident-details">
               <div className="resident-header">
-                <h4 className="resident-name">
-                  {resident.name} {resident.lastName || resident.surnames}
-                </h4>
-                <span className={`status-badge ${resident.status ? "status-active" : "status-inactive"}`}>
-                  {resident.status ? "Activo" : "Inactivo"}
-                </span>
+                <div className="resident-avatar">
+                  <div className="avatar-circle">
+                    <span>{getInitials()}</span>
+                  </div>
+                </div>
+                <div className="resident-header-info">
+                  <h4 className="resident-name">
+                    {resident.name} {resident.lastName || resident.surnames}
+                  </h4>
+                  <div className="resident-badges">
+                    <span className={`status-badge ${resident.status ? "status-active" : "status-inactive"}`}>
+                      {resident.status ? "Activo" : "Inactivo"}
+                    </span>
+                    {resident.house && (
+                      <span className="house-badge">
+                        <Home size={14} /> Casa #{resident.house.houseNumber}
+                      </span>
+                    )}
+                  </div>
+                </div>
               </div>
 
               <div className="details-section">
-                <h6 className="section-title">Información Personal</h6>
+                <h6 className="section-title">
+                  <UserCircle size={18} className="section-icon" />
+                  Información Personal
+                </h6>
 
                 <div className="detail-item">
                   <div className="detail-icon">
-                    <FaEnvelope />
+                    <Mail />
                   </div>
                   <div className="detail-content">
                     <span className="detail-label">Correo Electrónico</span>
@@ -54,7 +81,7 @@ function ResidentDetailsModal({ resident, onClose }) {
 
                 <div className="detail-item">
                   <div className="detail-icon">
-                    <FaPhone />
+                    <Phone />
                   </div>
                   <div className="detail-content">
                     <span className="detail-label">Teléfono</span>
@@ -64,7 +91,7 @@ function ResidentDetailsModal({ resident, onClose }) {
 
                 <div className="detail-item">
                   <div className="detail-icon">
-                    <FaCalendarAlt />
+                    <User />
                   </div>
                   <div className="detail-content">
                     <span className="detail-label">Edad</span>
@@ -74,7 +101,7 @@ function ResidentDetailsModal({ resident, onClose }) {
 
                 <div className="detail-item">
                   <div className="detail-icon">
-                    <FaCalendarAlt />
+                    <CalendarIcon />
                   </div>
                   <div className="detail-content">
                     <span className="detail-label">Fecha de Nacimiento</span>
@@ -84,11 +111,14 @@ function ResidentDetailsModal({ resident, onClose }) {
               </div>
 
               <div className="details-section">
-                <h6 className="section-title">Dirección</h6>
+                <h6 className="section-title">
+                  <MapPin size={18} className="section-icon" />
+                  Dirección
+                </h6>
 
                 <div className="detail-item">
                   <div className="detail-icon">
-                    <FaMapMarkerAlt />
+                    <MapPin />
                   </div>
                   <div className="detail-content">
                     <span className="detail-label">Dirección</span>
@@ -98,7 +128,7 @@ function ResidentDetailsModal({ resident, onClose }) {
 
                 <div className="detail-item">
                   <div className="detail-icon">
-                    <FaMapMarkerAlt />
+                    <MapPin />
                   </div>
                   <div className="detail-content">
                     <span className="detail-label">Calle</span>
@@ -108,7 +138,7 @@ function ResidentDetailsModal({ resident, onClose }) {
 
                 <div className="detail-item">
                   <div className="detail-icon">
-                    <FaHome />
+                    <Home />
                   </div>
                   <div className="detail-content">
                     <span className="detail-label">Casa Asignada</span>
@@ -118,11 +148,30 @@ function ResidentDetailsModal({ resident, onClose }) {
                   </div>
                 </div>
               </div>
+
+              {resident.createdAt && (
+                <div className="details-section">
+                  <h6 className="section-title">
+                    <Calendar size={18} className="section-icon" />
+                    Información Adicional
+                  </h6>
+
+                  <div className="detail-item">
+                    <div className="detail-icon">
+                      <Calendar />
+                    </div>
+                    <div className="detail-content">
+                      <span className="detail-label">Fecha de Registro</span>
+                      <span className="detail-value">{formatDate(resident.createdAt)}</span>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
 
           <div className="modal-footer">
-            <button type="button" className="btn btn-secondary" onClick={onClose}>
+            <button type="button" className="btn-close-modal" onClick={onClose}>
               Cerrar
             </button>
           </div>
@@ -133,4 +182,3 @@ function ResidentDetailsModal({ resident, onClose }) {
 }
 
 export default ResidentDetailsModal
-

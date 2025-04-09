@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import axios from "axios"
+import { Calendar, Users, Key, Car, FileText, User, Link } from "lucide-react"
 import "../../../styles/resident/visits/VisitForm.css"
 
 function VisitForm({ onClose, onSuccess, userData }) {
@@ -11,13 +12,11 @@ function VisitForm({ onClose, onSuccess, userData }) {
     numPeople: 1,
     description: "",
     vehiclePlate: "",
-    password: "", // ahora queda en blanco para que el residente la escriba
+    password: "",
   })
 
   const [error, setError] = useState("")
   const [isSubmitting, setIsSubmitting] = useState(false)
-
-  // Estados para mostrar el link
   const [shareableLink, setShareableLink] = useState("")
   const [linkCopied, setLinkCopied] = useState(false)
 
@@ -70,142 +69,136 @@ function VisitForm({ onClose, onSuccess, userData }) {
     })
   }
 
-  // ⚠️ Al montar el componente, generar el link automáticamente
   useEffect(() => {
     const domain = window.location.origin
     const ResidentId = localStorage.getItem("userId")
-    // Asegurarse de que el enlace tenga el formato correcto
     const link = `${domain}/register-visit/${ResidentId}`
     setShareableLink(link)
   }, [])
 
   return (
-    <div className="modal fade show d-block" tabIndex="-1" role="dialog" style={{ backgroundColor: "rgba(0,0,0,0.5)" }}>
-      <div className="modal-dialog modal-dialog-centered modal-lg">
-        <div className="modal-content p-3">
-          <div className="modal-header">
-            <h5 className="modal-title">Registrar Visita</h5>
-            <button type="button" className="btn-close" onClick={onClose}></button>
+    <div className="modal-overlay">
+      <div className="visit-form-modal">
+        <div className="visit-form-header">
+          <h3>Registrar Nueva Visita</h3>
+          <button type="button" className="close-button" onClick={onClose}>
+            &times;
+          </button>
+        </div>
+
+        <form onSubmit={handleSubmit}>
+          <div className="visit-form-body">
+            {error && <div className="error-alert">{error}</div>}
+
+            <div className="form-row">
+              <div className="form-group">
+                <label>
+                  <User size={16} className="field-icon" />
+                  Nombre del Visitante
+                </label>
+                <input
+                  type="text"
+                  name="visitorName"
+                  value={form.visitorName}
+                  onChange={handleChange}
+                  placeholder="Nombre completo del visitante"
+                  required
+                />
+              </div>
+
+              <div className="form-group">
+                <label>
+                  <Calendar size={16} className="field-icon" />
+                  Fecha y Hora de Visita
+                </label>
+                <input type="datetime-local" name="dateTime" value={form.dateTime} onChange={handleChange} required />
+              </div>
+            </div>
+
+            <div className="form-row">
+              <div className="form-group">
+                <label>
+                  <Users size={16} className="field-icon" />
+                  Número de Personas
+                </label>
+                <input type="number" name="numPeople" value={form.numPeople} onChange={handleChange} min="1" required />
+              </div>
+
+              <div className="form-group">
+                <label>
+                  <Key size={16} className="field-icon" />
+                  Contraseña para Acceso
+                </label>
+                <input
+                  type="text"
+                  name="password"
+                  value={form.password}
+                  onChange={handleChange}
+                  placeholder="Contraseña de acceso"
+                  required
+                />
+              </div>
+            </div>
+
+            <div className="form-row">
+              <div className="form-group">
+                <label>
+                  <Car size={16} className="field-icon" />
+                  Placas del Vehículo (opcional)
+                </label>
+                <input
+                  type="text"
+                  name="vehiclePlate"
+                  value={form.vehiclePlate}
+                  onChange={handleChange}
+                  placeholder="Ej: ABC-123"
+                />
+              </div>
+
+              <div className="form-group">
+                <label>
+                  <FileText size={16} className="field-icon" />
+                  Descripción
+                </label>
+                <textarea
+                  name="description"
+                  value={form.description}
+                  onChange={handleChange}
+                  placeholder="Motivo de la visita"
+                  required
+                  rows="3"
+                ></textarea>
+              </div>
+            </div>
+
+            {shareableLink && (
+              <div className="shareable-link-container">
+                <div className="link-header">
+                  <Link size={16} className="link-icon" />
+                  <span>Enlace para compartir con tu visita:</span>
+                </div>
+                <div className="link-input-group">
+                  <input type="text" value={shareableLink} readOnly />
+                  <button type="button" className="copy-button" onClick={copyLinkToClipboard}>
+                    {linkCopied ? "¡Copiado!" : "Copiar"}
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
 
-          {error && <div className="alert alert-danger mx-3 mt-3">{error}</div>}
-
-          <form onSubmit={handleSubmit}>
-            <div className="modal-body">
-              {/* Campos de formulario */}
-              <div className="row">
-                <div className="col-md-6 mb-3">
-                  <label className="form-label">Nombre del Visitante</label>
-                  <input
-                    type="text"
-                    name="visitorName"
-                    className="form-control"
-                    value={form.visitorName}
-                    onChange={handleChange}
-                    required
-                  />
-                </div>
-                <div className="col-md-6 mb-3">
-                  <label className="form-label">Fecha y Hora de Visita</label>
-                  <input
-                    type="datetime-local"
-                    name="dateTime"
-                    className="form-control"
-                    value={form.dateTime}
-                    onChange={handleChange}
-                    required
-                  />
-                </div>
-              </div>
-
-              <div className="row">
-                <div className="col-md-6 mb-3">
-                  <label className="form-label">Número de Personas</label>
-                  <input
-                    type="number"
-                    name="numPeople"
-                    className="form-control"
-                    value={form.numPeople}
-                    onChange={handleChange}
-                    min="1"
-                    required
-                  />
-                </div>
-                <div className="col-md-6 mb-3">
-                  <label className="form-label">Contraseña para Acceso</label>
-                  <input
-                    type="text"
-                    name="password"
-                    className="form-control"
-                    value={form.password}
-                    onChange={handleChange}
-                    required
-                  />
-                </div>
-              </div>
-
-              <div className="row">
-                <div className="col-md-6 mb-3">
-                  <label className="form-label">Placas del Vehículo (opcional)</label>
-                  <input
-                    type="text"
-                    name="vehiclePlate"
-                    className="form-control"
-                    value={form.vehiclePlate}
-                    onChange={handleChange}
-                  />
-                </div>
-                <div className="col-md-6 mb-3">
-                  <label className="form-label">Descripción</label>
-                  <textarea
-                    name="description"
-                    className="form-control"
-                    value={form.description}
-                    onChange={handleChange}
-                    required
-                    rows="3"
-                  ></textarea>
-                </div>
-              </div>
-
-              {userData?.house && (
-                <div className="row">
-                  <div className="col-12">
-                    <div className="alert alert-info">
-                      <strong>Casa asignada:</strong> #{userData.house.houseNumber} - {userData.house.street}
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {/* Link para compartir */}
-              {shareableLink && (
-                <div className="alert alert-success mt-3">
-                  <strong>Enlace para compartir con tu visita:</strong>
-                  <div className="input-group mt-2">
-                    <input type="text" className="form-control" value={shareableLink} readOnly />
-                    <button className="btn btn-outline-primary" type="button" onClick={copyLinkToClipboard}>
-                      {linkCopied ? "¡Copiado!" : "Copiar"}
-                    </button>
-                  </div>
-                </div>
-              )}
-            </div>
-
-            <div className="modal-footer">
-              <button type="button" className="btn btn-secondary" onClick={onClose}>
-                Cancelar
-              </button>
-              <button type="submit" className="btn btn-danger" disabled={isSubmitting}>
-                {isSubmitting ? "Registrando..." : "Registrar Visita"}
-              </button>
-            </div>
-          </form>
-        </div>
+          <div className="visit-form-footer">
+            <button type="button" className="cancel-button" onClick={onClose}>
+              Cancelar
+            </button>
+            <button type="submit" className="submit-button" disabled={isSubmitting}>
+              {isSubmitting ? "Registrando..." : "Registrar Visita"}
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   )
 }
 
 export default VisitForm
-

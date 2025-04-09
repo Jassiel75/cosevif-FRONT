@@ -1,128 +1,159 @@
-/* Estilos generales para el modal */
+/* Estilos para el modal de detalles de casa */
 .modal-content {
   border-radius: 12px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  max-width: 600px; /* Ajustar el ancho del modal */
-  margin: auto; /* Centrar el modal */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  border: none;
 }
 
 .modal-header {
-  border-bottom: 1px solid #ddd;
-  background-color: #fff;
-  justify-content: center; /* Centra el título */
+  background-color: #862d26;
+  color: white;
+  padding: 15px 20px;
+  border-bottom: none;
 }
 
 .modal-title {
-  color: #9b2d20; /* Color del título */
-  font-weight: bold;
-  text-align: center; /* Centra el texto del título */
+  font-size: 1.25rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-close {
+  background: none;
+  border: none;
+  color: white;
+  padding: 0;
+  opacity: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .modal-body {
+  padding: 0;
+}
+
+.house-details {
+  padding: 0;
+}
+
+.house-image-container {
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
   display: flex;
-  flex-direction: column; /* Muestra los elementos en una columna */
-  align-items: stretch; /* Asegura que los inputs y labels estén alineados */
+  justify-content: center;
+  align-items: center;
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #eee;
+}
+
+.house-image {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.details-section {
+  padding: 20px;
+  border-bottom: 1px solid #eee;
+}
+
+.section-title {
+  margin: 0 0 15px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #495057;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.section-icon {
+  color: #862d26;
+}
+
+.detail-item {
+  display: flex;
+  margin-bottom: 15px;
+}
+
+.detail-item:last-child {
+  margin-bottom: 0;
+}
+
+.detail-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  background-color: #f1f3f5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 15px;
+  color: #862d26;
+  flex-shrink: 0;
+}
+
+.detail-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.detail-label {
+  font-size: 0.75rem;
+  color: #6c757d;
+  margin-bottom: 3px;
+}
+
+.detail-value {
+  font-size: 0.95rem;
+  color: #212529;
+  font-weight: 500;
 }
 
 .modal-footer {
-  display: flex;
-  justify-content: center; /* Centra el contenido dentro del footer */
-  padding: 1rem 0;
-  width: 100%; /* Asegura que el pie de modal ocupe el 100% del ancho */
+  padding: 15px 20px;
+  border-top: none;
+  justify-content: center;
 }
 
-.modal-footer button {
-  width: auto; /* Ajusta el tamaño del botón al contenido */
-  background-color: #9b2d20; /* Color del fondo del botón */
-  color: white; /* Color del texto del botón */
-  border-radius: 5px; /* Bordes redondeados */
-  padding: 10px 20px; /* Tamaño del botón */
-  border: none; /* Elimina el borde */
+.btn-close-modal {
+  background-color: #862d26;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 20px;
+  font-weight: 500;
+  transition: all 0.2s;
 }
 
-.modal-footer button:hover {
-  background-color: #7a1d13; /* Color del botón cuando se pasa el ratón */
+.btn-close-modal:hover {
+  background-color: #6b1f1a;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(134, 45, 38, 0.3);
 }
 
-/* Eliminar el borde y el fondo en los datos mostrados (p) */
-.modal-body .mb-3 p {
-  background-color: transparent; /* Elimina el fondo */
-  border: none; /* Elimina el borde */
-  padding: 0; /* Elimina el padding extra */
-}
-
-/* Eliminar el borde y el fondo en los datos mostrados (p) */
-.modal-body .mb-4 p {
-  background-color: transparent; /* Elimina el fondo */
-  border: none; /* Elimina el borde */
-  padding: 0; /* Elimina el padding extra */
-}
-
-.form-label {
-  color: #9b2d20;
-  font-weight: bold;
-  margin-bottom: 5px; /* Asegura que el label no esté pegado al input */
-}
-
-.mb-3 {
-  margin-bottom: 1.5rem;
-  display: flex;
-  flex-direction: column; /* Asegura que el label y el input estén uno debajo del otro */
-}
-
-input,
-textarea,
-p {
-  width: 100%; /* Asegura que los inputs y los párrafos tengan el mismo tamaño */
-  box-sizing: border-box; /* Ajusta el tamaño de los campos */
-  padding: 10px;
-  margin-bottom: 5px;
-  border-radius: 5px;
-  background-color: #f8f8f8;
-  border: 1px solid #ddd;
-}
-
-textarea {
-  height: 100px; /* Ajuste de tamaño para el área de texto */
-  resize: none; /* Desactiva el redimensionamiento */
-}
-
-p {
-  margin: 0;
-  padding: 5px;
-  background-color: #f8f8f8;
-  border-radius: 5px;
-}
-
-/* Para alinear los campos en una sola columna */
-.modal-body .mb-3 {
-  display: flex;
-  flex-direction: column; /* Asegura que el label y el input estén uno debajo del otro */
-  margin-bottom: 1.5rem; /* Ajuste para separación */
-}
-
-.modal-body .mb-3 label,
-.modal-body .mb-3 p,
-.modal-body .mb-3 input,
-.modal-body .mb-3 textarea {
-  width: 100%; /* Ajusta el ancho a toda la fila */
-}
-
-/* Ajustes para el diseño móvil */
-@media (max-width: 768px) {
-  .modal-content {
-    max-width: 100%;
+/* Responsive adjustments */
+@media (max-width: 576px) {
+  .modal-dialog {
+    margin: 0.5rem;
   }
 
-  .modal-body .mb-3 {
-    flex-direction: column;
-    align-items: flex-start;
+  .house-image-container {
+    height: 150px;
   }
 
-  .modal-body .mb-3 label,
-  .modal-body .mb-3 p,
-  .modal-body .mb-3 input {
-    width: 100%; /* Campos de una sola columna */
+  .details-section {
+    padding: 15px;
+  }
+
+  .detail-icon {
+    width: 36px;
+    height: 36px;
   }
 }
-

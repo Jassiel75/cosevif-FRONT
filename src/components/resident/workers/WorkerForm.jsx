@@ -1,8 +1,9 @@
 "use client"
 
 import { useState } from "react"
-import "../../../styles/resident/workers/WorkerForm.css"
 import axios from "axios"
+import { User, Calendar, MapPin, Upload, Clock } from "lucide-react"
+import "../../../styles/resident/workers/WorkerForm.css"
 
 function WorkerForm({ onClose, onSuccess }) {
   const [form, setForm] = useState({
@@ -14,6 +15,7 @@ function WorkerForm({ onClose, onSuccess }) {
   })
   const [error, setError] = useState("")
   const [loading, setLoading] = useState(false)
+  const [previewImage, setPreviewImage] = useState(null)
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -24,10 +26,20 @@ function WorkerForm({ onClose, onSuccess }) {
   }
 
   const handleFileChange = (e) => {
-    setForm({
-      ...form,
-      inePhoto: e.target.files[0],
-    })
+    const file = e.target.files[0]
+    if (file) {
+      setForm({
+        ...form,
+        inePhoto: file,
+      })
+
+      // Crear vista previa de la imagen
+      const reader = new FileReader()
+      reader.onloadend = () => {
+        setPreviewImage(reader.result)
+      }
+      reader.readAsDataURL(file)
+    }
   }
 
   const handleSubmit = async (e) => {
@@ -71,95 +83,118 @@ function WorkerForm({ onClose, onSuccess }) {
   }
 
   return (
-    <div className="modal fade show d-block" tabIndex="-1" role="dialog" style={{ backgroundColor: "rgba(0,0,0,0.5)" }}>
-      <div className="modal-dialog modal-dialog-centered modal-lg">
-        <div className="modal-content p-3">
-          <div className="modal-header">
-            <h5 className="modal-title">Registrar Trabajador</h5>
-            <button type="button" className="btn-close" onClick={onClose}></button>
-          </div>
+    <div className="modal-overlay">
+      <div className="worker-form-modal">
+        <div className="worker-form-header">
+          <h3>Registrar Nuevo Trabajador</h3>
+          <button type="button" className="close-button" onClick={onClose}>
+            &times;
+          </button>
+        </div>
 
-          {error && <div className="alert alert-danger mx-3 mt-3">{error}</div>}
+        <form onSubmit={handleSubmit}>
+          <div className="worker-form-body">
+            {error && <div className="error-alert">{error}</div>}
 
-          <form onSubmit={handleSubmit}>
-            <div className="modal-body">
-              <div className="row">
-                <div className="col-md-6 mb-3">
-                  <label className="form-label">Nombre Completo</label>
-                  <input
-                    type="text"
-                    name="workerName"
-                    className="form-control"
-                    value={form.workerName}
-                    onChange={handleChange}
-                    required
-                  />
-                </div>
-
-                <div className="col-md-6 mb-3">
-                  <label className="form-label">Edad</label>
-                  <input
-                    type="number"
-                    name="age"
-                    className="form-control"
-                    value={form.age}
-                    onChange={handleChange}
-                    required
-                  />
-                </div>
+            <div className="form-row">
+              <div className="form-group">
+                <label>
+                  <User size={16} className="field-icon" />
+                  Nombre Completo
+                </label>
+                <input
+                  type="text"
+                  name="workerName"
+                  value={form.workerName}
+                  onChange={handleChange}
+                  placeholder="Nombre del trabajador"
+                  required
+                />
               </div>
 
-              <div className="row">
-                <div className="col-md-6 mb-3">
-                  <label className="form-label">Dirección</label>
-                  <input
-                    type="text"
-                    name="address"
-                    className="form-control"
-                    value={form.address}
-                    onChange={handleChange}
-                    required
-                  />
-                </div>
+              <div className="form-group">
+                <label>
+                  <User size={16} className="field-icon" />
+                  Edad
+                </label>
+                <input
+                  type="number"
+                  name="age"
+                  value={form.age}
+                  onChange={handleChange}
+                  placeholder="Edad del trabajador"
+                  required
+                />
+              </div>
+            </div>
 
-                <div className="col-md-6 mb-3">
-  <label className="form-label">Fecha y Hora</label>
-  <input
-    type="datetime-local"
-    name="dateTime"
-    className="form-control"
-    value={form.dateTime}
-    onChange={handleChange}
-    required
-  />
-</div>
-
+            <div className="form-row">
+              <div className="form-group">
+                <label>
+                  <MapPin size={16} className="field-icon" />
+                  Dirección
+                </label>
+                <input
+                  type="text"
+                  name="address"
+                  value={form.address}
+                  onChange={handleChange}
+                  placeholder="Dirección del trabajador"
+                  required
+                />
               </div>
 
-              <div className="row">
-                <div className="col-md-12 mb-3">
-                  <label className="form-label">Foto de Identificación (INE)</label>
+              <div className="form-group">
+                <label>
+                  <Calendar size={16} className="field-icon" />
+                  <Clock size={16} className="field-icon" />
+                  Fecha y Hora
+                </label>
+                <input type="datetime-local" name="dateTime" value={form.dateTime} onChange={handleChange} required />
+              </div>
+            </div>
+
+            <div className="form-row image-upload-row">
+              <div className="form-group image-upload-container">
+                <label>
+                  <Upload size={16} className="field-icon" />
+                  Foto de Identificación (INE)
+                </label>
+
+                <div className="image-upload-area">
                   <input
                     type="file"
                     name="inePhoto"
-                    className="form-control"
+                    id="inePhoto"
                     onChange={handleFileChange}
                     accept="image/*"
+                    className="file-input"
                   />
+
+                  <label htmlFor="inePhoto" className="upload-label">
+                    {!previewImage ? (
+                      <>
+                        <Upload size={32} />
+                        <span>Haga clic para subir imagen</span>
+                      </>
+                    ) : (
+                      <img src={previewImage || "/placeholder.svg"} alt="Vista previa" className="image-preview" />
+                    )}
+                  </label>
                 </div>
               </div>
             </div>
+          </div>
 
-            <div className="modal-footer">
-              <button type="button" className="btn btn-secondary" onClick={onClose}>
-                Cancelar
-              </button>
-              <button type="submit" className="btn btn-danger" disabled={loading}>
-                {loading ? "Registrando..." : "Registrar Trabajador"}
-              </button>
-            </div>
-          </form>
-        </div>
+          <div className="worker-form-footer">
+            <button type="button" className="cancel-button" onClick={onClose}>
+              Cancelar
+            </button>
+            <button type="submit" className="submit-button" disabled={loading}>
+              {loading ? "Registrando..." : "Registrar Trabajador"}
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   )

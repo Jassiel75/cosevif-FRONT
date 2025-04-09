@@ -1,0 +1,53 @@
+/* Estilos para los resultados de búsqueda */
+.search-results-container {
+    margin-top: 20px;
+  }
+  
+  .search-results-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 15px;
+    color: #333;
+  }
+  
+  .search-highlight {
+    background-color: #fff3cd;
+    padding: 2px 4px;
+    border-radius: 3px;
+  }
+  
+  .no-results {
+    text-align: center;
+    padding: 30px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    margin-top: 20px;
+  }
+  
+  .no-results h3 {
+    color: #6c757d;
+    font-size: 18px;
+    margin-bottom: 10px;
+  }
+  
+  .search-term {
+    font-weight: bold;
+    color: #862d26;
+  }
+  
+  /* Animación para los resultados de búsqueda */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .search-result-item {
+    animation: fadeIn 0.3s ease-out;
+  }
+  

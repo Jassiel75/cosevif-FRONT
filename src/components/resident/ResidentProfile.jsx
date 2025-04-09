@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import ResidentLayout from "./ResidentLayout"
-import { User, Mail, Phone, Calendar, MapPin, Home } from "lucide-react"
+import { User, Mail, Phone, Calendar, MapPin, Home, Edit, Shield, UserCircle } from "lucide-react"
 import ResidentUpdateModal from "./ResidentUpdateModal"
 import "../../styles/resident/ResidentProfile.css"
 
@@ -94,6 +94,13 @@ function ResidentProfile() {
     setShowUpdateModal(false)
   }
 
+  // Generar iniciales para el avatar
+  const getInitials = () => {
+    const nameInitial = userData.name ? userData.name.charAt(0) : ""
+    const surnameInitial = userData.surnames ? userData.surnames.charAt(0) : ""
+    return (nameInitial + surnameInitial).toUpperCase()
+  }
+
   if (loading) {
     return (
       <ResidentLayout
@@ -120,104 +127,108 @@ function ResidentProfile() {
     >
       <div className="profile-container">
         <div className="profile-header">
-          <h2 className="profile-name">
-            {userData.name} {userData.surnames}
-          </h2>
-          <p className="profile-role">Residente</p>
+          <div className="profile-avatar">
+            <div className="avatar-circle">
+              <span>{getInitials()}</span>
+            </div>
+          </div>
+          <div className="profile-title">
+            <h2 className="profile-name">
+              {userData.name} {userData.surnames}
+            </h2>
+            <div className="profile-badges">
+              <span className="profile-role">
+                <Shield size={14} /> Residente
+              </span>
+              {userData.house?.houseNumber && (
+                <span className="profile-house">
+                  <Home size={14} /> Casa #{userData.house.houseNumber}
+                </span>
+              )}
+            </div>
+          </div>
           <button className="update-profile-btn" onClick={handleOpenUpdateModal}>
-            Actualizar Información
+            <Edit size={16} /> Editar Perfil
           </button>
         </div>
 
         <div className="profile-content">
-          <div className="profile-section">
-            <h3 className="section-title">Información Personal</h3>
-
-            <div className="profile-info-item">
-              <div className="info-icon">
-                <User size={20} />
-              </div>
-              <div className="info-content">
-                <span className="info-label">Nombre Completo</span>
-                <span className="info-value">
-                  {userData.name} {userData.surnames}
-                </span>
-              </div>
+          <div className="profile-card">
+            <div className="card-header">
+              <UserCircle size={20} />
+              <h3>Información Personal</h3>
             </div>
+            <div className="card-body">
+              <div className="info-grid">
+                <div className="info-item">
+                  <div className="info-label">
+                    <User size={16} /> Nombre Completo
+                  </div>
+                  <div className="info-value">
+                    {userData.name} {userData.surnames}
+                  </div>
+                </div>
 
-            <div className="profile-info-item">
-              <div className="info-icon">
-                <Mail size={20} />
-              </div>
-              <div className="info-content">
-                <span className="info-label">Correo Electrónico</span>
-                <span className="info-value">{userData.email}</span>
-              </div>
-            </div>
+                <div className="info-item">
+                  <div className="info-label">
+                    <Mail size={16} /> Correo Electrónico
+                  </div>
+                  <div className="info-value">{userData.email}</div>
+                </div>
 
-            <div className="profile-info-item">
-              <div className="info-icon">
-                <Phone size={20} />
-              </div>
-              <div className="info-content">
-                <span className="info-label">Teléfono</span>
-                <span className="info-value">{userData.phone || "No disponible"}</span>
-              </div>
-            </div>
+                <div className="info-item">
+                  <div className="info-label">
+                    <Phone size={16} /> Teléfono
+                  </div>
+                  <div className="info-value">{userData.phone || "No disponible"}</div>
+                </div>
 
-            <div className="profile-info-item">
-              <div className="info-icon">
-                <Calendar size={20} />
-              </div>
-              <div className="info-content">
-                <span className="info-label">Edad</span>
-                <span className="info-value">{userData.age || "No disponible"} años</span>
-              </div>
-            </div>
+                <div className="info-item">
+                  <div className="info-label">
+                    <Calendar size={16} /> Edad
+                  </div>
+                  <div className="info-value">{userData.age || "No disponible"} años</div>
+                </div>
 
-            <div className="profile-info-item">
-              <div className="info-icon">
-                <Calendar size={20} />
-              </div>
-              <div className="info-content">
-                <span className="info-label">Fecha de Nacimiento</span>
-                <span className="info-value">{formatDate(userData.birthDate)}</span>
+                <div className="info-item">
+                  <div className="info-label">
+                    <Calendar size={16} /> Fecha de Nacimiento
+                  </div>
+                  <div className="info-value">{formatDate(userData.birthDate)}</div>
+                </div>
               </div>
             </div>
           </div>
 
-          <div className="profile-section">
-            <h3 className="section-title">Dirección</h3>
-
-            <div className="profile-info-item">
-              <div className="info-icon">
-                <MapPin size={20} />
-              </div>
-              <div className="info-content">
-                <span className="info-label">Dirección</span>
-                <span className="info-value">{userData.address || "No disponible"}</span>
-              </div>
+          <div className="profile-card">
+            <div className="card-header">
+              <MapPin size={20} />
+              <h3>Dirección</h3>
             </div>
+            <div className="card-body">
+              <div className="info-grid">
+                <div className="info-item">
+                  <div className="info-label">
+                    <MapPin size={16} /> Dirección
+                  </div>
+                  <div className="info-value">{userData.address || "No disponible"}</div>
+                </div>
 
-            <div className="profile-info-item">
-              <div className="info-icon">
-                <MapPin size={20} />
-              </div>
-              <div className="info-content">
-                <span className="info-label">Calle</span>
-                <span className="info-value">{userData.street || "No disponible"}</span>
-              </div>
-            </div>
+                <div className="info-item">
+                  <div className="info-label">
+                    <MapPin size={16} /> Calle
+                  </div>
+                  <div className="info-value">{userData.street || "No disponible"}</div>
+                </div>
 
-            <div className="profile-info-item">
-              <div className="info-icon">
-                <Home size={20} />
-              </div>
-              <div className="info-content">
-                <span className="info-label">Casa</span>
-                <span className="info-value">
-                  {userData.house?.houseNumber ? `#${userData.house.houseNumber}` : "No asignada"}
-                </span>
+                <div className="info-item">
+                  <div className="info-label">
+                    <Home size={16} /> Casa
+                  </div>
+                  <div className="info-value">
+                    {userData.house?.houseNumber ? `#${userData.house.houseNumber}` : "No asignada"}
+                  </div>
+                </div>
               </div>
             </div>
           </div>

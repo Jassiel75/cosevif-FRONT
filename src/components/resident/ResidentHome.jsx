@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef } from "react"
 import { useNavigate } from "react-router-dom"
 import ResidentLayout from "./ResidentLayout"
 import ResidentVisitsDashboard from "./ResidentVisitsDashboard"
@@ -22,8 +22,15 @@ function ResidentHome() {
     const token = localStorage.getItem("token")
     const userId = localStorage.getItem("userId")
     const userName = localStorage.getItem("name")
+    const userRole = localStorage.getItem("role")
 
     if (!token) {
+      navigate("/")
+      return
+    }
+
+    // Verificar que el usuario sea un residente
+    if (userRole !== "RESIDENT") {
       navigate("/")
       return
     }
@@ -67,6 +74,24 @@ function ResidentHome() {
     }
   }
 
+  // Función para manejar la búsqueda
+  const handleSearch = (term) => {
+    // This function is called when the search input changes in ResidentLayout
+    console.log("Search term:", term)
+
+    // Call the appropriate child component's search method based on the active view
+    if (activeView === "visits" && visitsDashboardRef.current) {
+      visitsDashboardRef.current.handleSearch(term)
+    } else if (activeView === "workers" && workersDashboardRef.current) {
+      workersDashboardRef.current.handleSearch(term)
+    }
+  }
+
+  // Agregar referencias para acceder a los métodos de los componentes hijos
+  const visitsDashboardRef = useRef(null)
+  const workersDashboardRef = useRef(null)
+
+  // En el return, modificar cómo se renderizan los componentes hijos
   return (
     <ResidentLayout
       title={activeView === "visits" ? "Mis Visitas" : "Mis Trabajadores"}
@@ -75,15 +100,25 @@ function ResidentHome() {
       viewType={activeView}
       onViewChange={handleViewChange}
       userData={userData}
+      onSearch={handleSearch}
     >
       {activeView === "visits" ? (
-        <ResidentVisitsDashboard showForm={showVisitForm} setShowForm={setShowVisitForm} userData={userData} />
+        <ResidentVisitsDashboard
+          ref={visitsDashboardRef}
+          showForm={showVisitForm}
+          setShowForm={setShowVisitForm}
+          userData={userData}
+        />
       ) : (
-        <ResidentWorkersDashboard showForm={showWorkerForm} setShowForm={setShowWorkerForm} userData={userData} />
+        <ResidentWorkersDashboard
+          ref={workersDashboardRef}
+          showForm={showWorkerForm}
+          setShowForm={setShowWorkerForm}
+          userData={userData}
+        />
       )}
     </ResidentLayout>
   )
 }
 
 export default ResidentHome
-

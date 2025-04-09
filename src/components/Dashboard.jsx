@@ -8,12 +8,14 @@ import HouseDetailsModal from "./HouseDetailsModal"
 import HouseUpdateModal from "./houses/HouseUpdateModal"
 import ConfirmDeleteHouse from "./alerts/ConfirmDeleteHouse"
 import Layout from "./Layout"
-import { FaHome, FaPlus } from "react-icons/fa" // Importamos los iconos
+import { FaHome } from "react-icons/fa" // Importamos los iconos
 
 import "../styles/Dashboard.css"
 
 function Dashboard() {
   const [houses, setHouses] = useState([])
+  const [filteredHouses, setFilteredHouses] = useState([])
+  const [searchTerm, setSearchTerm] = useState("")
   const [showForm, setShowForm] = useState(false)
   const [selectedHouse, setSelectedHouse] = useState(null)
   const [houseToUpdate, setHouseToUpdate] = useState(null)
@@ -33,12 +35,14 @@ function Dashboard() {
       })
       .then((res) => {
         setHouses(res.data)
+        setFilteredHouses(res.data)
         setLoading(false)
       })
       .catch((err) => {
         console.error("Error al obtener las casas:", err)
         // Para propósitos de demostración, crear casas de ejemplo
         setHouses([])
+        setFilteredHouses([])
         setLoading(false)
       })
   }
@@ -46,6 +50,29 @@ function Dashboard() {
   useEffect(() => {
     loadHouses()
   }, [])
+
+  // Función para filtrar casas basado en el término de búsqueda
+  const handleSearch = (term) => {
+    setSearchTerm(term)
+
+    if (!term.trim()) {
+      setFilteredHouses(houses)
+      return
+    }
+
+    const filtered = houses.filter((house) => {
+      const searchableFields = [
+        house.houseNumber?.toString() || "",
+        house.street || "",
+        house.address || "",
+        house.description || "",
+      ]
+
+      return searchableFields.some((field) => field.toLowerCase().includes(term.toLowerCase()))
+    })
+
+    setFilteredHouses(filtered)
+  }
 
   // Función para abrir el modal con los detalles de la casa
   const openHouseDetails = (house) => {
@@ -79,6 +106,7 @@ function Dashboard() {
       .then(() => {
         const updatedHouses = houses.filter((house) => house.id !== id)
         setHouses(updatedHouses)
+        setFilteredHouses(updatedHouses)
         setShowDeleteModal(false)
       })
       .catch((err) => {
@@ -102,22 +130,28 @@ function Dashboard() {
   }
 
   return (
-    <Layout title="Todas las Casas" onOpenForm={handleOpenForm} viewType="houses">
+    <Layout title="Todas las Casas" onOpenForm={handleOpenForm} viewType="houses" onSearch={handleSearch}>
       {loading ? (
         <div className="loading-container">
           <div className="spinner"></div>
         </div>
       ) : (
         <div className="houses-grid">
-          {houses.length === 0 ? (
+          {filteredHouses.length === 0 ? (
             <div className="no-houses">
-              <h3>No hay casas registradas</h3>
-              <button className="add-house-btn" onClick={handleOpenForm}>
-                <FaHome className="me-1" /> Agregar Casa
-              </button>
+              {searchTerm ? (
+                <h3>No se encontraron casas con "{searchTerm}"</h3>
+              ) : (
+                <>
+                  <h3>No hay casas registradas</h3>
+                  <button className="add-house-btn" onClick={handleOpenForm}>
+                    <FaHome className="me-1" /> Agregar Casa
+                  </button>
+                </>
+              )}
             </div>
           ) : (
-            houses.map((house) => (
+            filteredHouses.map((house) => (
               <div key={house._id} className="house-grid-item">
                 <HouseCard
                   number={house.houseNumber}
@@ -148,4 +182,3 @@ function Dashboard() {
 }
 
 export default Dashboard
-

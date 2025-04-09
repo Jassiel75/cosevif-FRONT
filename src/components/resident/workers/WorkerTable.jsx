@@ -2,14 +2,23 @@
 import { FaEye, FaTrashAlt, FaUserPlus, FaPen } from "react-icons/fa"
 import "../../../styles/resident/workers/WorkerTable.css"
 
-function WorkerTable({ workers, onView, onUpdate, onToggleStatus, onDelete, onOpenForm }) {
+function WorkerTable({ workers, onView, onUpdate, onToggleStatus, onDelete, onOpenForm, searchTerm }) {
   if (!workers || workers.length === 0) {
     return (
       <div className="no-workers">
-        <h3>No hay trabajadores registrados</h3>
-        <button className="add-worker-btn" onClick={onOpenForm}>
-          <FaUserPlus className="me-2" /> Agregar Trabajador
-        </button>
+        {searchTerm ? (
+          <h3>
+            No se encontraron trabajadores con "<span className="search-term">{searchTerm}</span>"
+          </h3>
+        ) : (
+          <>
+            <h3>No hay trabajadores registrados</h3>
+            <button className="add-worker-btn" onClick={onOpenForm}>
+              <FaUserPlus className="me-2" /> Agregar Trabajador
+            </button>
+          </>
+        )}
+        {searchTerm && <p className="search-tip">Puedes buscar por nombre, dirección, edad, fecha o hora.</p>}
       </div>
     )
   }
@@ -87,4 +96,3 @@ function WorkerTable({ workers, onView, onUpdate, onToggleStatus, onDelete, onOp
 }
 
 export default WorkerTable
-

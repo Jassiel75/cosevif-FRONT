@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import axios from "axios"
+import { Building, MapPin, FileText, Upload, Hash } from "lucide-react"
 import "../styles/HouseForm.css"
 
 function HouseForm({ onClose, onSuccess }) {
@@ -15,6 +16,7 @@ function HouseForm({ onClose, onSuccess }) {
   const [error, setError] = useState("")
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [existingHouses, setExistingHouses] = useState([])
+  const [previewImage, setPreviewImage] = useState(null)
 
   // Cargar las casas existentes al montar el componente
   useEffect(() => {
@@ -53,7 +55,17 @@ function HouseForm({ onClose, onSuccess }) {
   }
 
   const handleFileChange = (e) => {
-    setForm({ ...form, photo: e.target.files[0] })
+    const file = e.target.files[0]
+    if (file) {
+      setForm({ ...form, photo: file })
+
+      // Crear vista previa de la imagen
+      const reader = new FileReader()
+      reader.onloadend = () => {
+        setPreviewImage(reader.result)
+      }
+      reader.readAsDataURL(file)
+    }
   }
 
   const handleSubmit = async (e) => {
@@ -103,79 +115,128 @@ function HouseForm({ onClose, onSuccess }) {
   }
 
   return (
-    <div className="modal fade show d-block" tabIndex="-1" role="dialog" style={{ backgroundColor: "rgba(0,0,0,0.5)" }}>
-      <div className="modal-dialog modal-dialog-centered">
-        <div className="modal-content p-3">
-          <div className="modal-header">
-            <h5 className="modal-title">Registrar Casa</h5>
-            <button type="button" className="btn-close" onClick={onClose}></button>
-          </div>
-          {error && <div className="alert alert-danger mx-3 mt-3">{error}</div>}
-          <form onSubmit={handleSubmit}>
-            <div className="modal-body">
-              <div className="mb-3">
-                <label className="form-label">Dirección</label>
+    <div className="modal-overlay">
+      <div className="house-form-modal">
+        <div className="house-form-header">
+          <h3>Registrar Nueva Casa</h3>
+          <button type="button" className="close-button" onClick={onClose}>
+            &times;
+          </button>
+        </div>
+
+        <form onSubmit={handleSubmit}>
+          <div className="house-form-body">
+            {error && <div className="error-alert">{error}</div>}
+
+            <div className="form-row">
+              <div className="form-group">
+                <label>
+                  <MapPin size={16} className="field-icon" />
+                  Dirección
+                </label>
                 <input
                   type="text"
                   name="address"
-                  className="form-control"
                   value={form.address}
                   onChange={handleChange}
+                  placeholder="Dirección de la casa"
                   required
                 />
               </div>
-              <div className="mb-3">
-                <label className="form-label">Calle</label>
+
+              <div className="form-group">
+                <label>
+                  <MapPin size={16} className="field-icon" />
+                  Calle
+                </label>
                 <input
                   type="text"
                   name="street"
-                  className="form-control"
                   value={form.street}
                   onChange={handleChange}
+                  placeholder="Nombre de la calle"
                   required
                 />
               </div>
-              <div className="mb-3">
-                <label className="form-label">Número de casa</label>
+            </div>
+
+            <div className="form-row">
+              <div className="form-group">
+                <label>
+                  <Hash size={16} className="field-icon" />
+                  Número de Casa
+                </label>
                 <input
                   type="number"
                   name="houseNumber"
-                  className="form-control"
                   value={form.houseNumber}
                   onChange={handleChange}
+                  placeholder="Número de la casa"
                   required
                 />
               </div>
-              <div className="mb-3">
-                <label className="form-label">Descripción</label>
+
+              <div className="form-group">
+                <label>
+                  <FileText size={16} className="field-icon" />
+                  Descripción
+                </label>
                 <textarea
                   name="description"
-                  className="form-control"
-                  rows="2"
                   value={form.description}
                   onChange={handleChange}
+                  placeholder="Descripción de la casa"
                   required
+                  rows="3"
                 ></textarea>
               </div>
-              <div className="mb-3">
-                <label className="form-label">Imagen de la casa</label>
-                <input type="file" accept="image/*" className="form-control" onChange={handleFileChange} required />
+            </div>
+
+            <div className="form-row image-upload-row">
+              <div className="form-group image-upload-container">
+                <label>
+                  <Building size={16} className="field-icon" />
+                  Imagen de la Casa
+                </label>
+
+                <div className="image-upload-area">
+                  <input
+                    type="file"
+                    name="photo"
+                    id="housePhoto"
+                    onChange={handleFileChange}
+                    accept="image/*"
+                    className="file-input"
+                    required
+                  />
+
+                  <label htmlFor="housePhoto" className="upload-label">
+                    {!previewImage ? (
+                      <>
+                        <Upload size={32} />
+                        <span>Haga clic para subir imagen</span>
+                      </>
+                    ) : (
+                      <img src={previewImage || "/placeholder.svg"} alt="Vista previa" className="image-preview" />
+                    )}
+                  </label>
+                </div>
               </div>
             </div>
-            <div className="modal-footer">
-              <button type="button" className="btn btn-secondary" onClick={onClose}>
-                Cancelar
-              </button>
-              <button type="submit" className="btn btn-danger" disabled={isSubmitting}>
-                {isSubmitting ? "Registrando..." : "Registrar"}
-              </button>
-            </div>
-          </form>
-        </div>
+          </div>
+
+          <div className="house-form-footer">
+            <button type="button" className="cancel-button" onClick={onClose}>
+              Cancelar
+            </button>
+            <button type="submit" className="submit-button" disabled={isSubmitting}>
+              {isSubmitting ? "Registrando..." : "Registrar Casa"}
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   )
 }
 
 export default HouseForm
-

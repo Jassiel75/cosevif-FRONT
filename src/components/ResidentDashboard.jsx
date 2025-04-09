@@ -13,12 +13,14 @@ import "../styles/residentsAdmin/ResidentDashboard.css"
 
 function ResidentDashboard() {
   const [residents, setResidents] = useState([])
+  const [filteredResidents, setFilteredResidents] = useState([])
   const [loading, setLoading] = useState(true)
   const [showForm, setShowForm] = useState(false)
   const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [residentToDelete, setResidentToDelete] = useState(null)
   const [residentToUpdate, setResidentToUpdate] = useState(null)
   const [selectedResident, setSelectedResident] = useState(null)
+  const [searchTerm, setSearchTerm] = useState("")
 
   // Obtener residentes desde la API
   const loadResidents = () => {
@@ -33,11 +35,13 @@ function ResidentDashboard() {
       })
       .then((res) => {
         setResidents(res.data)
+        setFilteredResidents(res.data)
         setLoading(false)
       })
       .catch((err) => {
         console.error("Error al obtener los residentes:", err)
         setResidents([])
+        setFilteredResidents([])
         setLoading(false)
       })
   }
@@ -45,6 +49,31 @@ function ResidentDashboard() {
   useEffect(() => {
     loadResidents()
   }, [])
+
+  // Función para filtrar residentes basado en el término de búsqueda
+  const handleSearch = (term) => {
+    setSearchTerm(term)
+
+    if (!term.trim()) {
+      setFilteredResidents(residents)
+      return
+    }
+
+    const filtered = residents.filter((resident) => {
+      const searchableFields = [
+        resident.name || "",
+        resident.lastName || resident.surnames || "",
+        resident.email || "",
+        resident.phone || "",
+        resident.house?.houseNumber?.toString() || "",
+        resident.house?.street || resident.street || "",
+      ]
+
+      return searchableFields.some((field) => field.toLowerCase().includes(term.toLowerCase()))
+    })
+
+    setFilteredResidents(filtered)
+  }
 
   // Función para ver detalles del residente
   const handleView = (resident) => {
@@ -129,7 +158,13 @@ function ResidentDashboard() {
   }
 
   return (
-    <Layout title="Residentes" subtitle="Mostrar Residentes" onOpenForm={handleOpenForm} viewType="residents">
+    <Layout
+      title="Residentes"
+      subtitle="Mostrar Residentes"
+      onOpenForm={handleOpenForm}
+      viewType="residents"
+      onSearch={handleSearch}
+    >
       <div className="row mt-3">
         {loading ? (
           <div className="loading-container">
@@ -138,12 +173,13 @@ function ResidentDashboard() {
         ) : (
           <div className="col-12">
             <ResidentTable
-              residents={residents}
+              residents={filteredResidents}
               onView={handleView}
               onUpdate={handleUpdate}
               onToggleStatus={handleToggleStatus}
               onDelete={handleDeleteClick}
               onOpenForm={handleOpenForm}
+              searchTerm={searchTerm}
             />
           </div>
         )}
@@ -170,4 +206,3 @@ function ResidentDashboard() {
 }
 
 export default ResidentDashboard
-

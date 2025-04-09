@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import axios from "axios"
+import { Calendar, Users, Key, Car, FileText, User } from "lucide-react"
 import "../../../styles/resident/visits/VisitUpdateModal.css"
 
 function VisitUpdateModal({ visit, onClose, onSuccess }) {
@@ -9,13 +10,13 @@ function VisitUpdateModal({ visit, onClose, onSuccess }) {
   const formatDateTimeForInput = (dateTimeStr) => {
     if (!dateTimeStr) return ""
     const date = new Date(dateTimeStr)
-  
+
     const year = date.getFullYear()
     const month = String(date.getMonth() + 1).padStart(2, "0")
     const day = String(date.getDate()).padStart(2, "0")
     const hours = String(date.getHours()).padStart(2, "0")
     const minutes = String(date.getMinutes()).padStart(2, "0")
-  
+
     return `${year}-${month}-${day}T${hours}:${minutes}`
   }
 
@@ -42,13 +43,13 @@ function VisitUpdateModal({ visit, onClose, onSuccess }) {
     e.preventDefault()
     setError("")
     setIsSubmitting(true)
-  
+
     try {
       // Ajustar zona horaria para que coincida con la hora seleccionada por el usuario
       const date = new Date(form.dateTime)
       const offset = date.getTimezoneOffset() * 60000
       const localISOTime = new Date(date.getTime() - offset).toISOString().slice(0, 19)
-  
+
       const visitData = {
         ...visit, // Mantener los campos originales
         visitorName: form.visitorName,
@@ -58,9 +59,9 @@ function VisitUpdateModal({ visit, onClose, onSuccess }) {
         vehiclePlate: form.vehiclePlate,
         password: form.password,
       }
-  
+
       console.log("Actualizando visita con datos:", visitData)
-  
+
       const token = localStorage.getItem("token")
       await axios.put(`http://localhost:8080/resident/visit/${visit.id}`, visitData, {
         headers: {
@@ -68,7 +69,7 @@ function VisitUpdateModal({ visit, onClose, onSuccess }) {
           "Content-Type": "application/json",
         },
       })
-  
+
       onSuccess()
       onClose()
     } catch (error) {
@@ -80,111 +81,113 @@ function VisitUpdateModal({ visit, onClose, onSuccess }) {
   }
 
   return (
-    <div className="modal fade show d-block" tabIndex="-1" role="dialog" style={{ backgroundColor: "rgba(0,0,0,0.5)" }}>
-      <div className="modal-dialog modal-dialog-centered modal-lg">
-        <div className="modal-content p-3">
-          <div className="modal-header">
-            <h5 className="modal-title">Actualizar Visita</h5>
-            <button type="button" className="btn-close" onClick={onClose}></button>
+    <div className="modal-overlay">
+      <div className="visit-update-modal">
+        <div className="visit-update-header">
+          <h3>Actualizar Visita</h3>
+          <button type="button" className="close-button" onClick={onClose}>
+            &times;
+          </button>
+        </div>
+
+        <form onSubmit={handleSubmit}>
+          <div className="visit-update-body">
+            {error && <div className="error-alert">{error}</div>}
+
+            <div className="form-row">
+              <div className="form-group">
+                <label>
+                  <User size={16} className="field-icon" />
+                  Nombre del Visitante
+                </label>
+                <input
+                  type="text"
+                  name="visitorName"
+                  value={form.visitorName}
+                  onChange={handleChange}
+                  placeholder="Nombre completo del visitante"
+                  required
+                />
+              </div>
+
+              <div className="form-group">
+                <label>
+                  <Calendar size={16} className="field-icon" />
+                  Fecha y Hora de Visita
+                </label>
+                <input type="datetime-local" name="dateTime" value={form.dateTime} onChange={handleChange} required />
+              </div>
+            </div>
+
+            <div className="form-row">
+              <div className="form-group">
+                <label>
+                  <Users size={16} className="field-icon" />
+                  Número de Personas
+                </label>
+                <input type="number" name="numPeople" value={form.numPeople} onChange={handleChange} min="1" required />
+              </div>
+
+              <div className="form-group">
+                <label>
+                  <Key size={16} className="field-icon" />
+                  Contraseña para Acceso
+                </label>
+                <input
+                  type="text"
+                  name="password"
+                  value={form.password}
+                  onChange={handleChange}
+                  placeholder="Contraseña para el guardia"
+                  required
+                />
+              </div>
+            </div>
+
+            <div className="form-row">
+              <div className="form-group">
+                <label>
+                  <Car size={16} className="field-icon" />
+                  Placas del Vehículo (opcional)
+                </label>
+                <input
+                  type="text"
+                  name="vehiclePlate"
+                  value={form.vehiclePlate}
+                  onChange={handleChange}
+                  placeholder="Ej: ABC-123"
+                />
+              </div>
+
+              <div className="form-group">
+                <label>
+                  <FileText size={16} className="field-icon" />
+                  Descripción
+                </label>
+                <textarea
+                  name="description"
+                  value={form.description}
+                  onChange={handleChange}
+                  placeholder="Motivo de la visita"
+                  required
+                  rows="3"
+                ></textarea>
+              </div>
+            </div>
           </div>
 
-          {error && <div className="alert alert-danger mx-3 mt-3">{error}</div>}
-
-          <form onSubmit={handleSubmit}>
-            <div className="modal-body">
-              <div className="row">
-                <div className="col-md-6 mb-3">
-                  <label className="form-label">Nombre del Visitante</label>
-                  <input
-                    type="text"
-                    name="visitorName"
-                    className="form-control"
-                    value={form.visitorName}
-                    onChange={handleChange}
-                    required
-                  />
-                </div>
-
-                <div className="col-md-6 mb-3">
-                  <label className="form-label">Fecha y Hora de Visita</label>
-                  <input
-                    type="datetime-local"
-                    name="dateTime"
-                    className="form-control"
-                    value={form.dateTime}
-                    onChange={handleChange}
-                    required
-                  />
-                </div>
-              </div>
-
-              <div className="row">
-                <div className="col-md-6 mb-3">
-                  <label className="form-label">Número de Personas</label>
-                  <input
-                    type="number"
-                    name="numPeople"
-                    className="form-control"
-                    value={form.numPeople}
-                    onChange={handleChange}
-                    min="1"
-                    required
-                  />
-                </div>
-
-                <div className="col-md-6 mb-3">
-                  <label className="form-label">Contraseña para Acceso</label>
-                  <input
-                    type="text"
-                    name="password"
-                    className="form-control"
-                    value={form.password}
-                    onChange={handleChange}
-                    required
-                  />
-                </div>
-              </div>
-
-              <div className="row">
-                <div className="col-md-6 mb-3">
-                  <label className="form-label">Placas del Vehículo (opcional)</label>
-                  <input
-                    type="text"
-                    name="vehiclePlate"
-                    className="form-control"
-                    value={form.vehiclePlate}
-                    onChange={handleChange}
-                  />
-                </div>
-
-                <div className="col-md-6 mb-3">
-                  <label className="form-label">Descripción</label>
-                  <textarea
-                    name="description"
-                    className="form-control"
-                    value={form.description}
-                    onChange={handleChange}
-                    required
-                    rows="3"
-                  ></textarea>
-                </div>
-              </div>
-            </div>
-
-            <div className="modal-footer">
-              <button type="button" className="btn btn-secondary" onClick={onClose}>
-                Cancelar
-              </button>
-              <button type="submit" className="btn btn-primary" disabled={isSubmitting}>
-                {isSubmitting ? "Actualizando..." : "Actualizar Visita"}
-              </button>
-            </div>
-          </form>
-        </div>
+          <div className="visit-update-footer">
+            <button type="button" className="cancel-button" onClick={onClose}>
+              Cancelar
+            </button>
+            <button type="submit" className="submit-button" disabled={isSubmitting}>
+              {isSubmitting ? "Actualizando..." : "Actualizar Visita"}
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   )
 }
 
 export default VisitUpdateModal
-

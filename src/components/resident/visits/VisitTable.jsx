@@ -3,17 +3,33 @@ import { FaEye, FaTrashAlt, FaUserPlus, FaPen, FaQrcode, FaBan, FaShareAlt } fro
 import { determineVisitStatus, shouldShowQR, VISIT_STATUS } from "./VisitModel"
 import "../../../styles/resident/visits/VisitTable.css"
 
-
-
-function VisitTable({ visits, onView, onUpdate, onDelete, onOpenForm, onShowQR, onShowShareLink, onCancelVisit }) {
+function VisitTable({
+  visits,
+  onView,
+  onUpdate,
+  onDelete,
+  onOpenForm,
+  onShowQR,
+  onShowShareLink,
+  onCancelVisit,
+  searchTerm,
+}) {
   // Si no hay visitas, mostrar mensaje centrado con botón
   if (!visits || visits.length === 0) {
     return (
       <div className="no-visits">
-        <h3>No hay visitas registradas</h3>
-        <button className="add-visit-btn" onClick={onOpenForm}>
-          <FaUserPlus className="me-2" /> Agregar Visita
-        </button>
+        {searchTerm ? (
+          <h3>
+            No se encontraron visitas con "<span className="search-term">{searchTerm}</span>"
+          </h3>
+        ) : (
+          <>
+            <h3>No hay visitas registradas</h3>
+            <button className="add-visit-btn" onClick={onOpenForm}>
+              <FaUserPlus className="me-2" /> Agregar Visita
+            </button>
+          </>
+        )}
       </div>
     )
   }
@@ -144,4 +160,3 @@ function VisitTable({ visits, onView, onUpdate, onDelete, onOpenForm, onShowQR, 
 }
 
 export default VisitTable
-

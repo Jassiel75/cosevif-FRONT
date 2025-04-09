@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, forwardRef, useImperativeHandle } from "react"
 import axios from "axios"
 import VisitTable from "./visits/VisitTable"
 import VisitForm from "./visits/VisitForm"
@@ -11,8 +11,9 @@ import ShareLinkModal from "./visits/ShareLinkModal"
 import ConfirmDeleteVisit from "./visits/ConfirmDeleteVisit"
 import { determineVisitStatus } from "./visits/VisitModel"
 
-function ResidentVisitsDashboard({ showForm, setShowForm, userData }) {
+const ResidentVisitsDashboard = forwardRef(({ showForm, setShowForm, userData }, ref) => {
   const [visits, setVisits] = useState([])
+  const [filteredVisits, setFilteredVisits] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState("")
   const [selectedVisit, setSelectedVisit] = useState(null)
@@ -23,6 +24,7 @@ function ResidentVisitsDashboard({ showForm, setShowForm, userData }) {
   const [showShareLinkModal, setShowShareLinkModal] = useState(false)
   const [visitForQR, setVisitForQR] = useState(null)
   const [visitForShareLink, setVisitForShareLink] = useState(null)
+  const [searchTerm, setSearchTerm] = useState("")
 
   // Cargar visitas desde la API
   const loadVisits = () => {
@@ -44,6 +46,7 @@ function ResidentVisitsDashboard({ showForm, setShowForm, userData }) {
           }
         })
         setVisits(updatedVisits)
+        setFilteredVisits(updatedVisits)
         setLoading(false)
       })
       .catch((err) => {
@@ -91,6 +94,7 @@ function ResidentVisitsDashboard({ showForm, setShowForm, userData }) {
         }))
 
         setVisits(updatedMockVisits)
+        setFilteredVisits(updatedMockVisits)
         setLoading(false)
       })
   }
@@ -100,16 +104,68 @@ function ResidentVisitsDashboard({ showForm, setShowForm, userData }) {
 
     // Actualizar el estado de las visitas cada minuto
     const interval = setInterval(() => {
-      setVisits((prevVisits) =>
-        prevVisits.map((visit) => ({
+      setVisits((prevVisits) => {
+        const updated = prevVisits.map((visit) => ({
           ...visit,
           status: determineVisitStatus(visit),
-        })),
-      )
+        }))
+        setFilteredVisits(filterVisits(updated, searchTerm))
+        return updated
+      })
     }, 60000)
 
     return () => clearInterval(interval)
   }, [])
+
+  // Función para filtrar visitas basado en el término de búsqueda
+  const filterVisits = (visitsToFilter, term) => {
+    if (!term || !term.trim()) {
+      return visitsToFilter
+    }
+
+    const normalizedTerm = term.toLowerCase().trim()
+
+    return visitsToFilter.filter((visit) => {
+      // Campos en los que buscar (incluyendo todos los campos numéricos)
+      const searchableFields = [
+        visit.visitorName || "",
+        visit.description || "",
+        visit.vehiclePlate || "",
+        visit.password || "",
+        visit.status || "",
+        // Convertir la fecha a un formato legible para búsqueda
+        new Date(visit.dateTime).toLocaleDateString("es-MX") || "",
+        new Date(visit.dateTime).toLocaleTimeString("es-MX", { hour: "2-digit", minute: "2-digit" }) || "",
+        // Campos numéricos convertidos a string para búsqueda
+        visit.numPeople?.toString() || "",
+        visit.id?.toString() || "",
+      ]
+
+      // Buscar en todos los campos
+      return searchableFields.some((field) => field.toLowerCase().includes(normalizedTerm))
+    })
+  }
+
+  // Función para manejar la búsqueda
+  const handleSearch = (term) => {
+    setSearchTerm(term)
+    setFilteredVisits(filterVisits(visits, term))
+  }
+
+  // Exponer el método de búsqueda al componente padre
+  useImperativeHandle(
+    ref,
+    () => ({
+      handleSearch: (term) => {
+        console.log("Searching visits for:", term)
+        setSearchTerm(term)
+        const filtered = filterVisits(visits, term)
+        console.log("Filtered visits:", filtered.length)
+        setFilteredVisits(filtered)
+      },
+    }),
+    [visits],
+  ) // Add visits as a dependency
 
   // Función para ver detalles de la visita
   const handleView = (visit) => {
@@ -189,7 +245,9 @@ function ResidentVisitsDashboard({ showForm, setShowForm, userData }) {
         setError("Error al eliminar la visita")
 
         // Para desarrollo, si la API falla, eliminar de la lista local
-        setVisits(visits.filter((v) => v.id !== visitToDelete.id))
+        const updatedVisits = visits.filter((v) => v.id !== visitToDelete.id)
+        setVisits(updatedVisits)
+        setFilteredVisits(filterVisits(updatedVisits, searchTerm))
         handleCloseDeleteModal()
       })
   }
@@ -217,14 +275,14 @@ function ResidentVisitsDashboard({ showForm, setShowForm, userData }) {
         setError("Error al cancelar la visita")
 
         // Para desarrollo, si la API falla, actualizar localmente
-        setVisits(
-          visits.map((v) => {
-            if (v.id === visit.id) {
-              return { ...v, status: "CANCELADO" }
-            }
-            return v
-          }),
-        )
+        const updatedVisits = visits.map((v) => {
+          if (v.id === visit.id) {
+            return { ...v, status: "CANCELADO" }
+          }
+          return v
+        })
+        setVisits(updatedVisits)
+        setFilteredVisits(filterVisits(updatedVisits, searchTerm))
       })
   }
 
@@ -238,7 +296,7 @@ function ResidentVisitsDashboard({ showForm, setShowForm, userData }) {
         </div>
       ) : (
         <VisitTable
-          visits={visits}
+          visits={filteredVisits}
           onOpenForm={() => setShowForm(true)}
           onView={handleView}
           onUpdate={handleUpdate}
@@ -246,6 +304,7 @@ function ResidentVisitsDashboard({ showForm, setShowForm, userData }) {
           onShowQR={handleShowQR}
           onShowShareLink={handleShowShareLink}
           onCancelVisit={handleCancelVisit}
+          searchTerm={searchTerm}
         />
       )}
 
@@ -278,7 +337,6 @@ function ResidentVisitsDashboard({ showForm, setShowForm, userData }) {
       )}
     </div>
   )
-}
+})
 
 export default ResidentVisitsDashboard
-

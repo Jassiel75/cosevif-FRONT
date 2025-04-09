@@ -2,15 +2,21 @@
 import { FaEye, FaTrashAlt, FaShieldAlt, FaPen } from "react-icons/fa"
 //import "../../styles/guardsAdmin/GuardTable.css"
 
-function GuardTable({ guards, onView, onUpdate, onToggleStatus, onDelete, onOpenForm }) {
+function GuardTable({ guards, onView, onUpdate, onToggleStatus, onDelete, onOpenForm, searchTerm }) {
   // Si no hay guardias, mostrar mensaje centrado con botón para agregar
   if (!guards || guards.length === 0) {
     return (
       <div className="no-guards">
-        <h3>No hay guardias registrados</h3>
-        <button className="add-guard-btn" onClick={onOpenForm}>
-          <FaShieldAlt className="me-2" /> Agregar Guardia
-        </button>
+        {searchTerm ? (
+          <h3>No se encontraron guardias con "{searchTerm}"</h3>
+        ) : (
+          <>
+            <h3>No hay guardias registrados</h3>
+            <button className="add-guard-btn" onClick={onOpenForm}>
+              <FaShieldAlt className="me-2" /> Agregar Guardia
+            </button>
+          </>
+        )}
       </div>
     )
   }
@@ -87,4 +93,3 @@ function GuardTable({ guards, onView, onUpdate, onToggleStatus, onDelete, onOpen
 }
 
 export default GuardTable
-

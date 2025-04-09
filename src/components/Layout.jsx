@@ -3,8 +3,19 @@
 import Sidebar from "./Sidebar"
 import "../styles/Layout.css"
 import { CirclePlus } from "lucide-react"
+import { useState } from "react"
 
-function Layout({ children, title, subtitle, onOpenForm, viewType = "houses" }) {
+function Layout({ children, title, subtitle, onOpenForm, viewType = "houses", onSearch }) {
+  const [searchTerm, setSearchTerm] = useState("")
+
+  const handleSearchChange = (e) => {
+    const value = e.target.value
+    setSearchTerm(value)
+    if (onSearch) {
+      onSearch(value)
+    }
+  }
+
   return (
     <div className="layout-container">
       <Sidebar />
@@ -26,7 +37,7 @@ function Layout({ children, title, subtitle, onOpenForm, viewType = "houses" }) 
           {/* Right section - Search and Admin info */}
           <div className="header-right">
             <div className="admin-info">
-              <span className="admin-role">Admin</span>
+              <span className="admin-role"></span>
             </div>
             <div className="search-container">
               <input
@@ -35,8 +46,9 @@ function Layout({ children, title, subtitle, onOpenForm, viewType = "houses" }) 
                   viewType === "houses" ? "Buscar Casa" : viewType === "guards" ? "Buscar Guardia" : "Buscar Residente"
                 }
                 className="search-input"
+                value={searchTerm}
+                onChange={handleSearchChange}
               />
-              <button className="filter-button">Filter</button>
             </div>
           </div>
         </div>
@@ -47,4 +59,3 @@ function Layout({ children, title, subtitle, onOpenForm, viewType = "houses" }) 
 }
 
 export default Layout
-

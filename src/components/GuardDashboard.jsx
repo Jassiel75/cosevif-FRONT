@@ -13,12 +13,14 @@ import "../styles/guardsAdmin/GuardDashboard.css"
 
 function GuardDashboard() {
   const [guards, setGuards] = useState([])
+  const [filteredGuards, setFilteredGuards] = useState([])
   const [loading, setLoading] = useState(true)
   const [showForm, setShowForm] = useState(false)
   const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [guardToDelete, setGuardToDelete] = useState(null)
   const [guardToUpdate, setGuardToUpdate] = useState(null)
   const [selectedGuard, setSelectedGuard] = useState(null)
+  const [searchTerm, setSearchTerm] = useState("")
 
   // Obtener guardias desde la API
   const loadGuards = () => {
@@ -33,11 +35,13 @@ function GuardDashboard() {
       })
       .then((res) => {
         setGuards(res.data)
+        setFilteredGuards(res.data)
         setLoading(false)
       })
       .catch((err) => {
         console.error("Error al obtener los guardias:", err)
         setGuards([])
+        setFilteredGuards([])
         setLoading(false)
       })
   }
@@ -45,6 +49,30 @@ function GuardDashboard() {
   useEffect(() => {
     loadGuards()
   }, [])
+
+  // Función para filtrar guardias basado en el término de búsqueda
+  const handleSearch = (term) => {
+    setSearchTerm(term)
+
+    if (!term.trim()) {
+      setFilteredGuards(guards)
+      return
+    }
+
+    const filtered = guards.filter((guard) => {
+      const searchableFields = [
+        guard.name || "",
+        guard.lastName || guard.surnames || "",
+        guard.username || "",
+        guard.email || "",
+        guard.phone || "",
+      ]
+
+      return searchableFields.some((field) => field.toLowerCase().includes(term.toLowerCase()))
+    })
+
+    setFilteredGuards(filtered)
+  }
 
   // Función para ver detalles del guardia
   const handleView = (guard) => {
@@ -127,7 +155,13 @@ function GuardDashboard() {
   }
 
   return (
-    <Layout title="Guardias" subtitle="Gestión de Guardias" onOpenForm={handleOpenForm} viewType="guards">
+    <Layout
+      title="Guardias"
+      subtitle="Gestión de Guardias"
+      onOpenForm={handleOpenForm}
+      viewType="guards"
+      onSearch={handleSearch}
+    >
       <div className="row mt-3">
         {loading ? (
           <div className="loading-container">
@@ -136,12 +170,13 @@ function GuardDashboard() {
         ) : (
           <div className="col-12">
             <GuardTable
-              guards={guards}
+              guards={filteredGuards}
               onView={handleView}
               onUpdate={handleUpdate}
               onToggleStatus={handleToggleStatus}
               onDelete={handleDeleteClick}
               onOpenForm={handleOpenForm}
+              searchTerm={searchTerm}
             />
           </div>
         )}
@@ -168,4 +203,3 @@ function GuardDashboard() {
 }
 
 export default GuardDashboard
-

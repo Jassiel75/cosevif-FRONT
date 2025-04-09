@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from "react"
 import axios from "axios"
-import "../../../styles/resident/workers/WorkerForm.css"
+import { User, Calendar, MapPin, Upload, Clock } from "lucide-react"
+import "../../../styles/resident/workers/WorkerUpdateModal.css"
 
 function WorkerUpdateModal({ worker, onClose, onSuccess }) {
   const [form, setForm] = useState({
@@ -22,9 +23,7 @@ function WorkerUpdateModal({ worker, onClose, onSuccess }) {
     if (worker) {
       const parsedDate = new Date(worker.dateTime)
       const offset = parsedDate.getTimezoneOffset() * 60000
-      const localDateTime = new Date(parsedDate.getTime() - offset)
-        .toISOString()
-        .slice(0, 16) // formato datetime-local
+      const localDateTime = new Date(parsedDate.getTime() - offset).toISOString().slice(0, 16) // formato datetime-local
 
       setForm({
         workerName: worker.workerName || "",
@@ -47,9 +46,10 @@ function WorkerUpdateModal({ worker, onClose, onSuccess }) {
 
   const handleFileChange = (e) => {
     const file = e.target.files[0]
-    setForm({ ...form, inePhoto: file })
-
     if (file) {
+      setForm({ ...form, inePhoto: file })
+
+      // Crear vista previa de la imagen
       const reader = new FileReader()
       reader.onloadend = () => setPreviewImage(reader.result)
       reader.readAsDataURL(file)
@@ -95,92 +95,118 @@ function WorkerUpdateModal({ worker, onClose, onSuccess }) {
   }
 
   return (
-    <div className="modal fade show d-block" tabIndex="-1" role="dialog" style={{ backgroundColor: "rgba(0,0,0,0.5)" }}>
-      <div className="modal-dialog modal-dialog-centered modal-lg">
-        <div className="modal-content p-3">
-          <div className="modal-header">
-            <h5 className="modal-title">Actualizar Trabajador</h5>
-            <button type="button" className="btn-close" onClick={onClose}></button>
+    <div className="modal-overlay">
+      <div className="worker-update-modal">
+        <div className="worker-update-header">
+          <h3>Actualizar Trabajador</h3>
+          <button type="button" className="close-button" onClick={onClose}>
+            &times;
+          </button>
+        </div>
+
+        <form onSubmit={handleSubmit}>
+          <div className="worker-update-body">
+            {error && <div className="error-alert">{error}</div>}
+
+            <div className="form-row">
+              <div className="form-group">
+                <label>
+                  <User size={16} className="field-icon" />
+                  Nombre Completo
+                </label>
+                <input
+                  type="text"
+                  name="workerName"
+                  value={form.workerName}
+                  onChange={handleChange}
+                  placeholder="Nombre del trabajador"
+                  required
+                />
+              </div>
+
+              <div className="form-group">
+                <label>
+                  <User size={16} className="field-icon" />
+                  Edad
+                </label>
+                <input
+                  type="number"
+                  name="age"
+                  value={form.age}
+                  onChange={handleChange}
+                  placeholder="Edad del trabajador"
+                  required
+                />
+              </div>
+            </div>
+
+            <div className="form-row">
+              <div className="form-group">
+                <label>
+                  <MapPin size={16} className="field-icon" />
+                  Dirección
+                </label>
+                <input
+                  type="text"
+                  name="address"
+                  value={form.address}
+                  onChange={handleChange}
+                  placeholder="Dirección del trabajador"
+                  required
+                />
+              </div>
+
+              <div className="form-group">
+                <label>
+                  <Calendar size={16} className="field-icon" />
+                  <Clock size={16} className="field-icon" />
+                  Fecha y Hora
+                </label>
+                <input type="datetime-local" name="dateTime" value={form.dateTime} onChange={handleChange} required />
+              </div>
+            </div>
+
+            <div className="form-row image-upload-row">
+              <div className="form-group image-upload-container">
+                <label>
+                  <Upload size={16} className="field-icon" />
+                  Foto de Identificación (INE)
+                </label>
+
+                <div className="image-upload-area">
+                  <input
+                    type="file"
+                    name="inePhoto"
+                    id="inePhotoUpdate"
+                    onChange={handleFileChange}
+                    accept="image/*"
+                    className="file-input"
+                  />
+
+                  <label htmlFor="inePhotoUpdate" className="upload-label">
+                    {!previewImage ? (
+                      <>
+                        <Upload size={32} />
+                        <span>Haga clic para subir imagen</span>
+                      </>
+                    ) : (
+                      <img src={previewImage || "/placeholder.svg"} alt="Vista previa" className="image-preview" />
+                    )}
+                  </label>
+                </div>
+              </div>
+            </div>
           </div>
 
-          {error && <div className="alert alert-danger mx-3 mt-2">{error}</div>}
-
-          <form onSubmit={handleSubmit}>
-            <div className="modal-body">
-              <div className="row">
-                <div className="col-md-6 mb-3">
-                  <label className="form-label">Nombre Completo</label>
-                  <input
-                    type="text"
-                    name="workerName"
-                    className="form-control"
-                    value={form.workerName}
-                    onChange={handleChange}
-                    required
-                  />
-                </div>
-                <div className="col-md-6 mb-3">
-                  <label className="form-label">Edad</label>
-                  <input
-                    type="number"
-                    name="age"
-                    className="form-control"
-                    value={form.age}
-                    onChange={handleChange}
-                    required
-                  />
-                </div>
-              </div>
-
-              <div className="row">
-                <div className="col-md-6 mb-3">
-                  <label className="form-label">Dirección</label>
-                  <input
-                    type="text"
-                    name="address"
-                    className="form-control"
-                    value={form.address}
-                    onChange={handleChange}
-                    required
-                  />
-                </div>
-                <div className="col-md-6 mb-3">
-                  <label className="form-label">Fecha y Hora</label>
-                  <input
-                    type="datetime-local"
-                    name="dateTime"
-                    className="form-control"
-                    value={form.dateTime}
-                    onChange={handleChange}
-                    required
-                  />
-                </div>
-              </div>
-
-              <div className="mb-3">
-                <label className="form-label">Foto INE (opcional)</label>
-                <input
-                  type="file"
-                  className="form-control"
-                  accept="image/*"
-                  onChange={handleFileChange}
-                />
-                {previewImage && (
-                  <div className="mt-2 text-center">
-                    <img src={previewImage} alt="INE previa" style={{ maxHeight: "150px", border: "1px solid #ccc" }} />
-                  </div>
-                )}
-              </div>
-            </div>
-
-            <div className="modal-footer">
-              <button type="button" className="btn btn-secondary" onClick={onClose}>Cancelar</button>
-              <button type="submit" className="btn btn-primary" disabled={loading}>
-                {loading ? "Actualizando..." : "Actualizar Trabajador"}
-              </button>
-            </div>
-          </form>
-        </div>
+          <div className="worker-update-footer">
+            <button type="button" className="cancel-button" onClick={onClose}>
+              Cancelar
+            </button>
+            <button type="submit" className="submit-button" disabled={loading}>
+              {loading ? "Actualizando..." : "Actualizar Trabajador"}
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   )

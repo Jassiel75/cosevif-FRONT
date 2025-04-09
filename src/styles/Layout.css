@@ -8,12 +8,12 @@
   flex: 1;
   transition: margin-left 0.3s ease;
   background-color: #fff;
-  margin-left: 64px; /* Default margin for collapsed sidebar */
+  margin-left: 70px; /* Default margin for collapsed sidebar */
   display: flex;
   flex-direction: column;
   height: 100vh;
   overflow: hidden; /* Prevent scrolling on the container itself */
-  width: calc(100% - 64px); /* Ensure full width minus sidebar */
+  width: calc(100% - 70px); /* Ensure full width minus sidebar */
 }
 
 /* Adjust the margin of the main content based on the sidebar state */
@@ -23,8 +23,8 @@
 }
 
 .sidebar.collapsed ~ .main-content {
-  margin-left: 64px; /* Must match the width of the collapsed sidebar */
-  width: calc(100% - 64px); /* Adjust width based on sidebar width */
+  margin-left: 70px; /* Must match the width of the collapsed sidebar */
+  width: calc(100% - 70px); /* Adjust width based on sidebar width */
 }
 
 .content-header {
@@ -36,10 +36,10 @@
   border-bottom: 1px solid #e9ecef;
   position: sticky;
   top: 0;
-  z-index: 10; /* Ensure header stays above other content */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-  height: 70px; /* Fixed height for the header */
-  width: 100%; /* Ensure full width */
+  z-index: 10;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  height: 70px;
+  width: 100%;
 }
 
 .header-titles {
@@ -47,10 +47,21 @@
 }
 
 .page-title {
-  font-size: 20px;
+  font-size: 22px;
   font-weight: 600;
   margin: 0;
   color: #333;
+  position: relative;
+}
+
+.page-title:after {
+  content: "";
+  display: block;
+  width: 40px;
+  height: 3px;
+  background-color: #862d26;
+  margin-top: 5px;
+  border-radius: 2px;
 }
 
 /* New center section for the Add button */
@@ -66,16 +77,34 @@
   flex-direction: column;
   align-items: flex-end;
   flex: 1;
+  gap: 8px;
 }
 
 .admin-info {
-  margin-bottom: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
 }
 
-.admin-role {
+.user-profile-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.user-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+}
+
+.house-badge {
+  background-color: #f2cbb6;
+  color: #862d26;
+  padding: 3px 8px;
+  border-radius: 12px;
   font-size: 12px;
-  color: #777;
-  font-weight: 500;
+  font-weight: 600;
 }
 
 .search-container {
@@ -83,42 +112,58 @@
   align-items: center;
 }
 
-.search-input {
-  padding: 6px 10px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  width: 180px;
+.search-input-wrapper {
+  position: relative;
+  width: 220px;
 }
 
-.filter-button {
-  padding: 6px 12px;
-  background-color: #f5f5f5;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  margin-left: 5px;
-  cursor: pointer;
+.search-input {
+  padding: 8px 12px 8px 36px;
+  border: 1px solid #e0e0e0;
+  border-radius: 20px;
+  width: 100%;
+  font-size: 13px;
+  transition: all 0.2s;
+  background-color: #f8f9fa;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #862d26;
+  background-color: #fff;
+  box-shadow: 0 0 0 3px rgba(134, 45, 38, 0.1);
+}
+
+.search-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #999;
 }
 
 .add-button {
   display: flex;
   align-items: center;
   padding: 8px 16px;
-  background-color: #8b2e22;
+  background-color: #862d26;
   color: white;
   border: none;
-  border-radius: 4px;
+  border-radius: 20px;
   cursor: pointer;
   font-weight: 500;
-  transition: background-color 0.2s;
+  transition: all 0.2s;
+  box-shadow: 0 2px 4px rgba(134, 45, 38, 0.2);
 }
 
 .add-button:hover {
-  background-color: #7a291e;
+  background-color: #6b1f1a;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(134, 45, 38, 0.3);
 }
 
 .add-icon {
-  margin-right: 5px;
-  font-size: 16px;
+  margin-right: 6px;
 }
 
 .content-body {
@@ -132,32 +177,32 @@
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
-  .main-content {
-    margin-left: 0;
-    width: 100%;
-  }
-
   .content-header {
     flex-direction: column;
     align-items: flex-start;
-    padding: 10px;
-    height: auto; /* Allow header to expand on mobile */
+    padding: 12px 15px;
+    height: auto;
     min-height: 70px;
+    gap: 10px;
   }
 
   .header-center,
   .header-right {
     width: 100%;
-    margin-top: 10px;
     align-items: flex-start;
   }
 
-  .search-container {
+  .search-input-wrapper {
     width: 100%;
-    margin-top: 10px;
   }
 
-  .search-input {
+  .add-button {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .main-content {
+    margin-left: 0;
     width: 100%;
   }
 
@@ -172,4 +217,3 @@
     min-height: 400px; /* Ensure minimum height for content area on mobile */
   }
 }
-

@@ -2,15 +2,21 @@
 import { FaEye, FaTrashAlt, FaUserPlus, FaPen } from "react-icons/fa"
 import "../../styles/residentsAdmin/ResidentTable.css"
 
-function ResidentTable({ residents, onView, onUpdate, onToggleStatus, onDelete, onOpenForm }) {
+function ResidentTable({ residents, onView, onUpdate, onToggleStatus, onDelete, onOpenForm, searchTerm }) {
   // Si no hay residentes, mostrar mensaje centrado con botón similar a la vista de casas
   if (!residents || residents.length === 0) {
     return (
       <div className="no-residents">
-        <h3>No hay residentes registrados</h3>
-        <button className="add-resident-btn" onClick={onOpenForm}>
-          <FaUserPlus className="me-2" /> Agregar Residente
-        </button>
+        {searchTerm ? (
+          <h3>No se encontraron residentes con "{searchTerm}"</h3>
+        ) : (
+          <>
+            <h3>No hay residentes registrados</h3>
+            <button className="add-resident-btn" onClick={onOpenForm}>
+              <FaUserPlus className="me-2" /> Agregar Residente
+            </button>
+          </>
+        )}
       </div>
     )
   }
@@ -74,4 +80,3 @@ function ResidentTable({ residents, onView, onUpdate, onToggleStatus, onDelete, 
 }
 
 export default ResidentTable
-

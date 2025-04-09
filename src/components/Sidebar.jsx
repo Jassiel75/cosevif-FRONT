@@ -49,16 +49,7 @@ function Sidebar() {
 
       {/* Navigation */}
       <nav className="sidebar-nav">
-        <div
-          onClick={() => handleNavigation("/dashboard")}
-          className={`nav-item ${isActive("/dashboard") ? "active" : ""}`}
-          style={{ cursor: "pointer" }}
-        >
-          <span className="nav-icon">
-            <Home size={20} />
-          </span>
-          <span className={`nav-label ${expanded ? "visible" : "hidden"}`}>Dashboard</span>
-        </div>
+        
 
         <div
           onClick={() => handleNavigation("/dashboard")}
@@ -93,16 +84,7 @@ function Sidebar() {
           <span className={`nav-label ${expanded ? "visible" : "hidden"}`}>Guardias</span>
         </div>
 
-        <div
-          onClick={() => handleNavigation("/settings")}
-          className={`nav-item ${isActive("/settings") ? "active" : ""}`}
-          style={{ cursor: "pointer" }}
-        >
-          <span className="nav-icon">
-            <Settings size={20} />
-          </span>
-          <span className={`nav-label ${expanded ? "visible" : "hidden"}`}>Configuración</span>
-        </div>
+        
       </nav>
 
       {/* Logout at bottom */}

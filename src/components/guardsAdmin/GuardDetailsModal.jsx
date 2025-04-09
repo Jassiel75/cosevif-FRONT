@@ -1,5 +1,5 @@
 "use client"
-import { FaEnvelope, FaPhone, FaCalendarAlt, FaIdCard, FaMapMarkerAlt } from "react-icons/fa"
+import { User, Mail, Phone, Calendar, MapPin, Shield, UserCircle, CalendarIcon, X } from "lucide-react"
 import "../../styles/guardsAdmin/GuardDetailsModal.css"
 
 function GuardDetailsModal({ guard, onClose }) {
@@ -19,32 +19,56 @@ function GuardDetailsModal({ guard, onClose }) {
     }
   }
 
+  // Generar iniciales para el avatar
+  const getInitials = () => {
+    const nameInitial = guard.name ? guard.name.charAt(0) : ""
+    const surnameInitial = guard.lastName || guard.surnames ? (guard.lastName || guard.surnames).charAt(0) : ""
+    return (nameInitial + surnameInitial).toUpperCase()
+  }
+
   return (
     <div className="modal fade show d-block" tabIndex="-1" role="dialog" style={{ backgroundColor: "rgba(0,0,0,0.5)" }}>
       <div className="modal-dialog modal-dialog-centered">
-        <div className="modal-content p-4">
+        <div className="modal-content">
           <div className="modal-header">
             <h5 className="modal-title">Detalles del Guardia</h5>
-            <button type="button" className="btn-close" onClick={onClose}></button>
+            <button type="button" className="btn-close" onClick={onClose}>
+              <X size={24} />
+            </button>
           </div>
 
           <div className="modal-body">
             <div className="guard-details">
               <div className="guard-header">
-                <h4 className="guard-name">
-                  {guard.name} {guard.lastName}
-                </h4>
-                <span className={`status-badge ${guard.status ? "status-active" : "status-inactive"}`}>
-                  {guard.status ? "Activo" : "Inactivo"}
-                </span>
+                <div className="guard-avatar">
+                  <div className="avatar-circle">
+                    <span>{getInitials()}</span>
+                  </div>
+                </div>
+                <div className="guard-header-info">
+                  <h4 className="guard-name">
+                    {guard.name} {guard.lastName || guard.surnames || ""}
+                  </h4>
+                  <div className="guard-badges">
+                    <span className={`status-badge ${guard.status ? "status-active" : "status-inactive"}`}>
+                      {guard.status ? "Activo" : "Inactivo"}
+                    </span>
+                    <span className="role-badge">
+                      <Shield size={14} /> Guardia
+                    </span>
+                  </div>
+                </div>
               </div>
 
               <div className="details-section">
-                <h6 className="section-title">Información Personal</h6>
+                <h6 className="section-title">
+                  <UserCircle size={18} className="section-icon" />
+                  Información Personal
+                </h6>
 
                 <div className="detail-item">
                   <div className="detail-icon">
-                    <FaIdCard />
+                    <User />
                   </div>
                   <div className="detail-content">
                     <span className="detail-label">Nombre de Usuario</span>
@@ -54,7 +78,7 @@ function GuardDetailsModal({ guard, onClose }) {
 
                 <div className="detail-item">
                   <div className="detail-icon">
-                    <FaEnvelope />
+                    <Mail />
                   </div>
                   <div className="detail-content">
                     <span className="detail-label">Correo Electrónico</span>
@@ -64,7 +88,7 @@ function GuardDetailsModal({ guard, onClose }) {
 
                 <div className="detail-item">
                   <div className="detail-icon">
-                    <FaPhone />
+                    <Phone />
                   </div>
                   <div className="detail-content">
                     <span className="detail-label">Teléfono</span>
@@ -74,7 +98,7 @@ function GuardDetailsModal({ guard, onClose }) {
 
                 <div className="detail-item">
                   <div className="detail-icon">
-                    <FaCalendarAlt />
+                    <User />
                   </div>
                   <div className="detail-content">
                     <span className="detail-label">Edad</span>
@@ -84,7 +108,7 @@ function GuardDetailsModal({ guard, onClose }) {
 
                 <div className="detail-item">
                   <div className="detail-icon">
-                    <FaCalendarAlt />
+                    <CalendarIcon />
                   </div>
                   <div className="detail-content">
                     <span className="detail-label">Fecha de Nacimiento</span>
@@ -94,11 +118,14 @@ function GuardDetailsModal({ guard, onClose }) {
               </div>
 
               <div className="details-section">
-                <h6 className="section-title">Dirección</h6>
+                <h6 className="section-title">
+                  <MapPin size={18} className="section-icon" />
+                  Dirección
+                </h6>
 
                 <div className="detail-item">
                   <div className="detail-icon">
-                    <FaMapMarkerAlt />
+                    <MapPin />
                   </div>
                   <div className="detail-content">
                     <span className="detail-label">Dirección</span>
@@ -108,7 +135,7 @@ function GuardDetailsModal({ guard, onClose }) {
 
                 <div className="detail-item">
                   <div className="detail-icon">
-                    <FaMapMarkerAlt />
+                    <MapPin />
                   </div>
                   <div className="detail-content">
                     <span className="detail-label">Calle</span>
@@ -116,11 +143,30 @@ function GuardDetailsModal({ guard, onClose }) {
                   </div>
                 </div>
               </div>
+
+              {guard.createdAt && (
+                <div className="details-section">
+                  <h6 className="section-title">
+                    <Calendar size={18} className="section-icon" />
+                    Información Adicional
+                  </h6>
+
+                  <div className="detail-item">
+                    <div className="detail-icon">
+                      <Calendar />
+                    </div>
+                    <div className="detail-content">
+                      <span className="detail-label">Fecha de Registro</span>
+                      <span className="detail-value">{formatDate(guard.createdAt)}</span>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
 
           <div className="modal-footer">
-            <button type="button" className="btn btn-secondary" onClick={onClose}>
+            <button type="button" className="btn-close-modal" onClick={onClose}>
               Cerrar
             </button>
           </div>
@@ -131,4 +177,3 @@ function GuardDetailsModal({ guard, onClose }) {
 }
 
 export default GuardDetailsModal
-
