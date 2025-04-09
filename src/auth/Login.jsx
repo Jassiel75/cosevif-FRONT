@@ -1,12 +1,10 @@
-"use client"
-
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import axios from "axios"
 import "../App.css"
 import logo from "../assets/logos/LogoCosevif-removed.png"
 import portada from "../assets/images/cosevif-portada.jpg"
-import { API_URL } from "../auth/IP";  // Ajusta la ruta según tu estructura
+import { API_URL } from "../auth/IP";
 
 
 function Login() {
