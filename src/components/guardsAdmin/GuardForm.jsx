@@ -5,6 +5,9 @@ import axios from "axios"
 import { User, Mail, Lock, Phone, Calendar, MapPin } from "lucide-react"
 import "../../styles/guardsAdmin/GuardForm.css"
 
+import { API_URL } from "../../auth/IP";  // Ajusta la ruta según tu estructura
+
+
 function GuardForm({ onClose, onSuccess }) {
   const [form, setForm] = useState({
     name: "",
@@ -37,7 +40,7 @@ function GuardForm({ onClose, onSuccess }) {
     const token = localStorage.getItem("token")
 
     try {
-      await axios.post("http://localhost:8080/admin/guards", form, {
+      await axios.post(`${API_URL}/admin/guards`, form, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",

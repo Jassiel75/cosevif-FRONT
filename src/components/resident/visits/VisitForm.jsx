@@ -4,6 +4,7 @@ import { useState, useEffect } from "react"
 import axios from "axios"
 import { Calendar, Users, Key, Car, FileText, User, Link } from "lucide-react"
 import "../../../styles/resident/visits/VisitForm.css"
+import { API_URL } from "../../../auth/IP"
 
 function VisitForm({ onClose, onSuccess, userData }) {
   const [form, setForm] = useState({
@@ -45,7 +46,7 @@ function VisitForm({ onClose, onSuccess, userData }) {
 
       const token = localStorage.getItem("token")
 
-      await axios.post("http://localhost:8080/resident/visit", visitData, {
+      await axios.post(`${API_URL}/resident/visit`, visitData, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",

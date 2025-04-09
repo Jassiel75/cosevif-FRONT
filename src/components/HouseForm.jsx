@@ -4,6 +4,7 @@ import { useState, useEffect } from "react"
 import axios from "axios"
 import { Building, MapPin, FileText, Upload, Hash } from "lucide-react"
 import "../styles/HouseForm.css"
+import { API_URL } from "../auth/IP"
 
 function HouseForm({ onClose, onSuccess }) {
   const [form, setForm] = useState({
@@ -28,7 +29,7 @@ function HouseForm({ onClose, onSuccess }) {
           return
         }
 
-        const response = await axios.get("http://localhost:8080/admin/houses", {
+        const response = await axios.get(`${API_URL}/admin/houses`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -94,7 +95,7 @@ function HouseForm({ onClose, onSuccess }) {
     formData.append("photo", form.photo)
 
     try {
-      await axios.post("http://localhost:8080/admin/houses", formData, {
+      await axios.post(`${API_URL}/admin/houses`, formData, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "multipart/form-data",

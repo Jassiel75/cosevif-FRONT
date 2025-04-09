@@ -12,6 +12,8 @@ import { FaHome } from "react-icons/fa" // Importamos los iconos
 
 import "../styles/Dashboard.css"
 
+import { API_URL } from "../auth/IP"
+
 function Dashboard() {
   const [houses, setHouses] = useState([])
   const [filteredHouses, setFilteredHouses] = useState([])
@@ -28,8 +30,8 @@ function Dashboard() {
     const token = localStorage.getItem("token")
 
     axios
-      .get("http://localhost:8080/admin/houses", {
-        headers: {
+    .get(`${API_URL}/admin/houses`, {
+      headers: {
           Authorization: `Bearer ${token}`,
         },
       })
@@ -98,8 +100,8 @@ function Dashboard() {
   const handleDelete = (id) => {
     const token = localStorage.getItem("token")
     axios
-      .delete(`http://localhost:8080/admin/houses/${id}`, {
-        headers: {
+    .delete(`${API_URL}/admin/houses/${id}`, {
+      headers: {
           Authorization: `Bearer ${token}`,
         },
       })

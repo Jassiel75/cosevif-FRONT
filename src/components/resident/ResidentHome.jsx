@@ -6,6 +6,7 @@ import ResidentLayout from "./ResidentLayout"
 import ResidentVisitsDashboard from "./ResidentVisitsDashboard"
 import ResidentWorkersDashboard from "./ResidentWorkersDashboard"
 import axios from "axios"
+import { API_URL } from "../../auth/IP"
 
 function ResidentHome() {
   const [activeView, setActiveView] = useState("visits") // "visits" o "workers"
@@ -43,8 +44,8 @@ function ResidentHome() {
     // Obtener información de la casa del residente
     if (userId) {
       axios
-        .get(`http://localhost:8080/auth/resident/profile`, {
-          headers: {
+      .get(`${API_URL}/auth/resident/profile`, {
+        headers: {
             Authorization: `Bearer ${token}`,
           },
         })

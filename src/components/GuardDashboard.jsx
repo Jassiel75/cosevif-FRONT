@@ -12,6 +12,8 @@ import ConfirmToggleStatus from "./guardsAdmin/ConfirmToggleStatus"
 
 import "../styles/guardsAdmin/GuardDashboard.css"
 
+import { API_URL } from "../auth/IP"
+
 function GuardDashboard() {
   const [guards, setGuards] = useState([])
   const [filteredGuards, setFilteredGuards] = useState([])
@@ -33,8 +35,8 @@ function GuardDashboard() {
     setLoading(true)
 
     axios
-      .get("http://localhost:8080/admin/guards", {
-        headers: {
+    .get(`${API_URL}/admin/guards`, {
+      headers: {
           Authorization: `Bearer ${token}`,
         },
       })
@@ -181,8 +183,8 @@ function GuardDashboard() {
     const token = localStorage.getItem("token")
 
     axios
-      .delete(`http://localhost:8080/admin/guards/${guardToDelete.id}`, {
-        headers: {
+    .delete(`${API_URL}/admin/guards/${guardToDelete.id}`, {
+      headers: {
           Authorization: `Bearer ${token}`,
         },
       })

@@ -4,6 +4,7 @@ import { useState, useEffect } from "react"
 import axios from "axios"
 import { User, Mail, Lock, Phone, Calendar, MapPin, Building } from "lucide-react"
 import "../../styles/residentsAdmin/ResidentForm.css"
+import { API_URL } from "../../auth/IP"
 
 function ResidentForm({ onClose, onSuccess }) {
   // Asegurarse de que el estado inicial incluya status: true
@@ -29,8 +30,8 @@ function ResidentForm({ onClose, onSuccess }) {
     const token = localStorage.getItem("token")
 
     axios
-      .get("http://localhost:8080/admin/houses", {
-        headers: {
+    .get(`${API_URL}/admin/houses`, {
+      headers: {
           Authorization: `Bearer ${token}`,
         },
       })
@@ -78,7 +79,7 @@ function ResidentForm({ onClose, onSuccess }) {
     }
 
     try {
-      await axios.post("http://localhost:8080/admin/residents", formData, {
+      await axios.post(`${API_URL}/admin/residents`, formData, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",

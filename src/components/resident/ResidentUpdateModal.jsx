@@ -4,6 +4,7 @@ import { useState, useEffect } from "react"
 import axios from "axios"
 import { User, Mail, Lock, Phone, Calendar, MapPin, Home } from "lucide-react"
 import "../../styles/resident/ResidentUpdateModal.css"
+import { API_URL } from "../../auth/IP"
 
 function ResidentUpdateModal({ resident, onClose, onSuccess }) {
   const [form, setForm] = useState({
@@ -62,7 +63,7 @@ function ResidentUpdateModal({ resident, onClose, onSuccess }) {
     }
 
     try {
-      const response = await axios.put(`http://localhost:8080/auth/resident/profile`, updateData, {
+      const response = await axios.put(`${API_URL}/auth/resident/profile`, updateData, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",

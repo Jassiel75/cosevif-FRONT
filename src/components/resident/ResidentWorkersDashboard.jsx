@@ -10,6 +10,8 @@ import ConfirmDeleteWorker from "./workers/ConfirmDeleteWorker"
 
 import "../../styles/resident/ResidentWorkersDashboard.css"
 
+import { API_URL } from "../../auth/IP"
+
 const ResidentWorkersDashboard = forwardRef(({ showForm, setShowForm }, ref) => {
   const [workers, setWorkers] = useState([])
   const [filteredWorkers, setFilteredWorkers] = useState([])
@@ -28,8 +30,8 @@ const ResidentWorkersDashboard = forwardRef(({ showForm, setShowForm }, ref) => 
     const token = localStorage.getItem("token")
 
     axios
-      .get("http://localhost:8080/resident/workerVisits", {
-        headers: {
+    .get(`${API_URL}/resident/workerVisits`, {
+      headers: {
           Authorization: `Bearer ${token}`,
         },
       })
@@ -131,8 +133,8 @@ const ResidentWorkersDashboard = forwardRef(({ showForm, setShowForm }, ref) => 
     const token = localStorage.getItem("token")
 
     axios
-      .delete(`http://localhost:8080/resident/workerVisits/${workerToDelete.id}`, {
-        headers: {
+    .delete(`${API_URL}/resident/workerVisits/${workerToDelete.id}`, {
+      headers: {
           Authorization: `Bearer ${token}`,
         },
       })

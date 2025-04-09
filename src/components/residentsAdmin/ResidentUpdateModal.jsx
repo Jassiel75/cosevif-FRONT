@@ -4,6 +4,7 @@ import { useState, useEffect } from "react"
 import axios from "axios"
 import { User, Mail, Lock, Phone, Calendar, MapPin, Building } from "lucide-react"
 import "../../styles/residentsAdmin/ResidentUpdateModal.css"
+import { API_URL } from "../../auth/IP"
 
 function ResidentUpdateModal({ resident, onClose, onSuccess }) {
   const [houses, setHouses] = useState([])
@@ -27,8 +28,8 @@ function ResidentUpdateModal({ resident, onClose, onSuccess }) {
     const token = localStorage.getItem("token")
 
     axios
-      .get("http://localhost:8080/admin/houses", {
-        headers: {
+    .get(`${API_URL}/admin/houses`, {
+      headers: {
           Authorization: `Bearer ${token}`,
         },
       })
@@ -78,7 +79,7 @@ function ResidentUpdateModal({ resident, onClose, onSuccess }) {
     }
 
     try {
-      await axios.put(`http://localhost:8080/admin/residents/${resident.id}`, updateData, {
+      await axios.put(`${API_URL}/admin/residents/${resident.id}`, updateData, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",

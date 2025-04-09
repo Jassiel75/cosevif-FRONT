@@ -11,8 +11,7 @@ import ShareLinkModal from "./visits/ShareLinkModal"
 import ConfirmDeleteVisit from "./visits/ConfirmDeleteVisit"
 import ConfirmCancelVisit from "./visits/ConfirmCancelVisit"
 import { determineVisitStatus } from "./visits/VisitModel"
-import { API_URL } from "../../auth/IP";  // Asegúrate de que la ruta sea correcta
-
+import { API_URL } from "../../auth/IP"
 
 const ResidentVisitsDashboard = forwardRef(({ showForm, setShowForm, userData }, ref) => {
   const [visits, setVisits] = useState([])
@@ -39,8 +38,8 @@ const ResidentVisitsDashboard = forwardRef(({ showForm, setShowForm, userData },
     setLoading(true)
 
     axios
-      .get("http://localhost:8080/resident/visits", {
-        headers: {
+    .get(`${API_URL}/resident/visits`, {
+      headers: {
           Authorization: `Bearer ${token}`,
         },
       })
@@ -237,8 +236,8 @@ const ResidentVisitsDashboard = forwardRef(({ showForm, setShowForm, userData },
     const token = localStorage.getItem("token")
 
     axios
-      .delete(`http://localhost:8080/resident/visit/${visitToDelete.id}`, {
-        headers: {
+    .delete(`${API_URL}/resident/visit/${visitToDelete.id}`, {
+      headers: {
           Authorization: `Bearer ${token}`,
         },
       })
@@ -279,7 +278,7 @@ const ResidentVisitsDashboard = forwardRef(({ showForm, setShowForm, userData },
 
     axios
       .put(
-        `http://localhost:8080/resident/visit/${visitToCancel.id}/cancel`,
+        `${API_URL}/resident/visit/${visitToCancel.id}/cancel`,
         {},
         {
           headers: {

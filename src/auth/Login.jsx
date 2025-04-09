@@ -6,7 +6,7 @@ import axios from "axios"
 import "../App.css"
 import logo from "../assets/logos/LogoCosevif-removed.png"
 import portada from "../assets/images/cosevif-portada.jpg"
-import { API_URL } from "../auth/IP"
+import { API_URL } from "../auth/IP";  // Ajusta la ruta según tu estructura
 
 
 function Login() {
@@ -21,7 +21,7 @@ function Login() {
 
     try {
       // Primero intentamos login como RESIDENTE
-      const residentRes = await axios.post("http://localhost:8080/auth/resident/login", {
+      const residentRes = await axios.post(`${API_URL}/auth/resident/login`, {
         email,
         password,
       })
@@ -48,7 +48,7 @@ function Login() {
     } catch (err) {
       // Si falla como RESIDENT, intentamos como ADMIN
       try {
-        const adminRes = await axios.post("http://localhost:8080/auth/login", {
+        const adminRes = await axios.post(`${API_URL}/auth/login`, {
           email,
           password,
         })

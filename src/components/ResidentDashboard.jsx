@@ -12,6 +12,8 @@ import ConfirmStatusChange from "../components/alerts/ConfirmStatusChange"
 
 import "../styles/residentsAdmin/ResidentDashboard.css"
 
+import { API_URL } from "../auth/IP"
+
 function ResidentDashboard() {
   const [residents, setResidents] = useState([])
   const [filteredResidents, setFilteredResidents] = useState([])
@@ -34,8 +36,8 @@ function ResidentDashboard() {
     setLoading(true)
 
     axios
-      .get("http://localhost:8080/admin/residents", {
-        headers: {
+    .get(`${API_URL}/admin/residents`, {
+      headers: {
           Authorization: `Bearer ${token}`,
         },
       })
@@ -185,8 +187,8 @@ function ResidentDashboard() {
     const token = localStorage.getItem("token")
 
     axios
-      .delete(`http://localhost:8080/admin/residents/${residentToDelete.id}`, {
-        headers: {
+    .delete(`${API_URL}/admin/residents/${residentToDelete.id}`, {
+      headers: {
           Authorization: `Bearer ${token}`,
         },
       })

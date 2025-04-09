@@ -4,6 +4,7 @@ import { useState } from "react"
 import axios from "axios"
 import { Calendar, Users, Key, Car, FileText, User } from "lucide-react"
 import "../../../styles/resident/visits/VisitUpdateModal.css"
+import { API_URL } from "../../../auth/IP"
 
 function VisitUpdateModal({ visit, onClose, onSuccess }) {
   // Formatear la fecha y hora para el input datetime-local
@@ -63,7 +64,7 @@ function VisitUpdateModal({ visit, onClose, onSuccess }) {
       console.log("Actualizando visita con datos:", visitData)
 
       const token = localStorage.getItem("token")
-      await axios.put(`http://localhost:8080/resident/visit/${visit.id}`, visitData, {
+      await axios.put(`${API_URL}/resident/visit/${visit.id}`, visitData, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",

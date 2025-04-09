@@ -32,7 +32,7 @@ function RegisterVisit() {
 
     const fetchResidentInfo = async () => {
       try {
-        const response = await axios.get(`http://localhost:8080/public/resident/${residentId}`)
+        const response = await axios.get(`${API_URL}/public/resident/${residentId}`);
         setResidentInfo(response.data)
       } catch (err) {
         console.error("Error al obtener información del residente:", err)
@@ -72,7 +72,7 @@ function RegisterVisit() {
       }
 
       // Enviar la solicitud al endpoint correcto
-      const response = await axios.post(`http://localhost:8080/public/visit?residentId=${residentId}`, visitData)
+      const response = await axios.post(`${API_URL}/public/visit?residentId=${residentId}`, visitData);
 
       console.log("Respuesta del servidor:", response.data)
       setSuccess(true)

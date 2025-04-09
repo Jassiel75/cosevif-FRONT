@@ -4,6 +4,7 @@ import { useState, useEffect } from "react"
 import axios from "axios"
 import { Building, MapPin, FileText, Upload, Hash } from "lucide-react"
 import "../../styles/HouseUpdateModal.css";
+import { API_URL } from "../../auth/IP" // Ajusta la ruta según tu estructura
 
 function HouseUpdateModal({ house, onClose, onSuccess }) {
   const [form, setForm] = useState({
@@ -60,7 +61,7 @@ function HouseUpdateModal({ house, onClose, onSuccess }) {
     }
 
     try {
-      await axios.put(`http://localhost:8080/admin/houses/${house.id}`, formData, {
+      await axios.put(`${API_URL}/admin/houses/${house.id}`, formData, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "multipart/form-data",

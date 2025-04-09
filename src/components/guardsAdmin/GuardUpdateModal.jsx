@@ -4,6 +4,8 @@ import { useState, useEffect } from "react"
 import axios from "axios"
 import { User, Mail, Lock, Phone, Calendar, MapPin } from "lucide-react"
 import "../../styles/guardsAdmin/GuardUpdateModal.css"
+import { API_URL } from "../../auth/IP";  
+
 
 function GuardUpdateModal({ guard, onClose, onSuccess }) {
   const [form, setForm] = useState({
@@ -63,7 +65,7 @@ function GuardUpdateModal({ guard, onClose, onSuccess }) {
     }
 
     try {
-      await axios.put(`http://localhost:8080/admin/guards/${guard.id}`, updateData, {
+      await axios.put(`${API_URL}/admin/guards/${guard.id}`, updateData, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
