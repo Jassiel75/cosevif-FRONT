@@ -2,6 +2,7 @@
   display: flex;
   min-height: 100vh;
   width: 100%;
+  position: relative;
 }
 
 .main-content {
@@ -175,6 +176,48 @@
   width: 100%; /* Ensure full width */
 }
 
+/* Mobile search bar */
+.mobile-search-container {
+  display: none; /* Hidden by default, shown only on mobile */
+  position: fixed;
+  top: 15px;
+  left: 70px; /* Position it to the right of the mobile menu button */
+  right: 15px;
+  z-index: 1000;
+  height: 40px;
+}
+
+.mobile-search-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.mobile-search-input {
+  width: 100%;
+  height: 100%;
+  padding: 8px 12px 8px 36px;
+  border: 1px solid #e0e0e0;
+  border-radius: 20px;
+  font-size: 13px;
+  background-color: #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.mobile-search-input:focus {
+  outline: none;
+  border-color: #862d26;
+  box-shadow: 0 0 0 3px rgba(134, 45, 38, 0.1);
+}
+
+.mobile-search-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #999;
+}
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .content-header {
@@ -192,10 +235,6 @@
     align-items: flex-start;
   }
 
-  .search-input-wrapper {
-    width: 100%;
-  }
-
   .add-button {
     width: 100%;
     justify-content: center;
@@ -210,5 +249,16 @@
   .content-body {
     height: calc(100vh - 150px); /* Adjust for taller header on mobile */
     min-height: 400px; /* Ensure minimum height for content area on mobile */
+    padding-top: 50px; /* Add space for the mobile search bar */
+  }
+
+  /* Show mobile search bar on mobile devices */
+  .mobile-search-container {
+    display: block;
+  }
+
+  /* Adjust padding-top for main content to accommodate both menu button and search bar */
+  .main-content {
+    padding-top: 70px;
   }
 }
