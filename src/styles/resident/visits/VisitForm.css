@@ -162,10 +162,6 @@
   font-size: 0.9rem; /* Reducido el tamaño de fuente */
 }
 
-.link-icon {
-  color: #28a745;
-}
-
 .link-input-group {
   display: flex;
   gap: 8px;
@@ -262,12 +258,14 @@
 
   .visit-form-modal {
     width: 95%;
-    max-height: 85vh;
+    max-height: 85vh; /* Limitar altura en dispositivos móviles */
+    overflow: hidden; /* Contener el scroll */
   }
 
   .visit-form-body {
     padding: 12px;
-    max-height: calc(85vh - 110px);
+    max-height: calc(85vh - 110px); /* Ajustar para el header y footer */
+    overflow-y: auto !important; /* Forzar scroll vertical */
   }
 
   .visit-form-footer {

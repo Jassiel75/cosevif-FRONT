@@ -182,10 +182,14 @@
 
   .visit-update-modal {
     width: 95%;
+    max-height: 85vh; /* Limitar altura en dispositivos móviles */
+    overflow: hidden; /* Contener el scroll */
   }
 
   .visit-update-body {
     padding: 12px;
+    max-height: calc(85vh - 110px); /* Ajustar para el header y footer */
+    overflow-y: auto !important; /* Forzar scroll vertical */
   }
 
   .visit-update-footer {

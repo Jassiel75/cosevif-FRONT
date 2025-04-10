@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react"
 import { FaCopy, FaWhatsapp, FaEnvelope, FaCheck } from "react-icons/fa"
 import "../../../styles/resident/visits/ShareLinkModal.css"
+import { API_URL } from "../../../auth/IP"	
 
 function ShareLinkModal({ visit, onClose }) {
   const [registrationLink, setRegistrationLink] = useState("")
