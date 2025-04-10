@@ -7,21 +7,15 @@ export const VISIT_STATUS = {
   CANCELLED: "CANCELADO", // Visita cancelada por el residente
 }
 
-// Modificar las funciones para manejar correctamente la zona horaria
-export function shouldShowQR(visitDateTime) {
-  if (!visitDateTime) return false
+// Modificar la función para permitir mostrar el QR en cualquier momento hasta que se escanee dos veces
+export function shouldShowQR(visitDateTime, scanCount = 0) {
+  // Si ya se escaneó dos veces, no mostrar el QR
+  if (scanCount >= 2) {
+    return false
+  }
 
-  const visitDate = new Date(visitDateTime)
-  const now = new Date()
-
-  // Calcular la diferencia en milisegundos
-  const diffMs = visitDate.getTime() - now.getTime()
-
-  // Convertir a horas
-  const diffHours = diffMs / (1000 * 60 * 60)
-
-  // Mostrar QR si falta una hora o menos para la visita
-  return diffHours <= 1 && diffHours > -2
+  // Permitir mostrar el QR en cualquier momento (eliminamos la restricción de tiempo)
+  return true
 }
 
 export function determineVisitStatus(visit) {
@@ -57,4 +51,3 @@ export function generateRegistrationLink(visitId) {
   const uniqueToken = btoa(`visit_${visitId}_${Date.now()}`) // Codificación simple
   return `${baseUrl}/register-visit/${visitId}/${uniqueToken}`
 }
-

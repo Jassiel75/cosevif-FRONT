@@ -82,20 +82,30 @@
   background-color: #dc3545 !important;
 }
 
+/* Columna de acciones con ancho fijo */
+.actions-column {
+  width: 180px !important;
+  min-width: 180px !important;
+  max-width: 180px !important;
+}
+
 /* Contenedor para los botones de acción */
 .action-buttons {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
+  flex-wrap: nowrap !important; /* Forzar que los botones permanezcan en una línea */
+  gap: 4px;
   width: 100%;
-  gap: 5px;
 }
 
 /* Estilo común para todos los botones de acción */
 .action-button {
-  width: 36px;
-  height: 36px;
-  flex: 0 0 36px;
+  width: 30px;
+  height: 30px;
+  min-width: 30px;
+  max-width: 30px;
+  flex: 0 0 30px;
   padding: 0;
   display: flex;
   justify-content: center;
@@ -173,43 +183,160 @@
   transform: none;
 }
 
-/* Estilo para los botones de acción */
-td .justify-content-center {
+/* Asegurar que los botones de acción siempre estén en línea horizontal */
+.mobile-actions {
   display: flex !important;
-  justify-content: center !important;
-  gap: 4px !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  justify-content: flex-end !important;
+  gap: 8px !important;
 }
 
-/* Responsive para dispositivos pequeños */
-@media (max-width: 768px) {
+.mobile-actions .action-button {
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
+  max-width: 36px;
+  flex: 0 0 36px;
+  font-size: 16px;
+}
+
+/* Mejoras para dispositivos móviles */
+@media (max-width: 767.98px) {
   .table thead th,
   .table tbody td {
     padding: 8px 4px;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
   }
 
-  .action-button {
-    width: 32px;
-    height: 32px;
-    font-size: 12px;
+  /* Ajustar ancho de columna de acciones en móvil */
+  .actions-column {
+    width: 160px !important;
+    min-width: 160px !important;
+    max-width: 160px !important;
   }
 
-  .action-buttons-container {
+  .action-buttons {
     gap: 2px;
   }
+
+  .action-button {
+    width: 28px;
+    height: 28px;
+    min-width: 28px;
+    max-width: 28px;
+    flex: 0 0 28px;
+    font-size: 12px;
+  }
+
+  /* Estilos para las tarjetas en dispositivos móviles */
+  .visit-card {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 16px;
+    overflow: hidden;
+  }
+
+  .visit-card-header {
+    background-color: #f8f9fa;
+    padding: 12px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #e9ecef;
+  }
+
+  .visit-name {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+  }
+
+  .visit-card-body {
+    padding: 16px;
+  }
+
+  .visit-info-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    font-size: 14px;
+  }
+
+  .visit-info-label {
+    font-weight: 600;
+    color: #6c757d;
+  }
+
+  .visit-card-footer {
+    padding: 12px 16px;
+    background-color: #f8f9fa;
+    border-top: 1px solid #e9ecef;
+  }
+
+  .visit-card .action-buttons {
+    justify-content: flex-end;
+    gap: 8px;
+  }
+
+  .visit-card .action-button {
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+    max-width: 36px;
+    flex: 0 0 36px;
+    font-size: 16px;
+  }
+
+  /* Eliminar el grid que podría estar causando la disposición vertical */
+  .visit-card .action-buttons {
+    display: flex !important;
+    grid-template-columns: unset !important;
+  }
 }
 
-/* Ajustes para el responsive */
-@media (max-width: 768px) {
+/* Ajustes adicionales para pantallas muy pequeñas */
+@media (max-width: 575.98px) {
+  .table {
+    font-size: 0.8rem;
+  }
+
+  /* Ajustar ancho de columna de acciones en pantallas muy pequeñas */
+  .actions-column {
+    width: 150px !important;
+    min-width: 150px !important;
+    max-width: 150px !important;
+  }
+
   .action-buttons {
-    gap: 3px;
+    gap: 1px;
   }
 
   .action-button {
-    width: 32px;
-    height: 32px;
-    flex: 0 0 32px;
-    font-size: 12px;
+    width: 26px;
+    height: 26px;
+    min-width: 26px;
+    max-width: 26px;
+    flex: 0 0 26px;
+    font-size: 11px;
   }
 }
 
+/* Ajuste específico para cuando la pantalla es pequeña pero no tanto como móvil */
+@media (min-width: 768px) and (max-width: 991.98px) {
+  .actions-column {
+    width: 170px !important;
+    min-width: 170px !important;
+    max-width: 170px !important;
+  }
+
+  .action-button {
+    width: 28px;
+    height: 28px;
+    min-width: 28px;
+    max-width: 28px;
+    flex: 0 0 28px;
+    font-size: 12px;
+  }
+}

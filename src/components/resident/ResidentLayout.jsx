@@ -1,9 +1,9 @@
 "use client"
 
+import { useState, useEffect } from "react"
 import ResidentSidebar from "./ResidentSidebar"
 import "../../styles/Layout.css"
 import { CirclePlus, Search } from "lucide-react"
-import { useState } from "react"
 
 function ResidentLayout({
   children,
@@ -16,6 +16,23 @@ function ResidentLayout({
   onSearch,
 }) {
   const [searchTerm, setSearchTerm] = useState("")
+  const [isMobile, setIsMobile] = useState(false)
+
+  // Check if the screen is mobile size
+  useEffect(() => {
+    const checkIfMobile = () => {
+      setIsMobile(window.innerWidth <= 768)
+    }
+
+    // Initial check
+    checkIfMobile()
+
+    // Add event listener for window resize
+    window.addEventListener("resize", checkIfMobile)
+
+    // Cleanup
+    return () => window.removeEventListener("resize", checkIfMobile)
+  }, [])
 
   const handleSearchChange = (e) => {
     const value = e.target.value
@@ -25,9 +42,31 @@ function ResidentLayout({
     }
   }
 
+  const getPlaceholderText = () => {
+    if (viewType === "visits") return "Buscar Visita"
+    return "Buscar Trabajador"
+  }
+
   return (
     <div className="layout-container">
       <ResidentSidebar onViewChange={onViewChange} activeView={viewType} userData={userData} />
+
+      {/* Mobile Search Bar - Only visible on mobile */}
+      {isMobile && (
+        <div className="mobile-search-container">
+          <div className="mobile-search-wrapper">
+            <Search className="mobile-search-icon" size={18} />
+            <input
+              type="text"
+              placeholder={getPlaceholderText()}
+              className="mobile-search-input"
+              value={searchTerm}
+              onChange={handleSearchChange}
+            />
+          </div>
+        </div>
+      )}
+
       <main className="main-content">
         <div className="content-header">
           {/* Left section - Title only */}
@@ -55,33 +94,35 @@ function ResidentLayout({
             )}
           </div>
 
-          {/* Right section - Search and Resident info */}
+          {/* Right section - Search and Resident info - Hidden on mobile */}
           <div className="header-right">
             <div className="admin-info">
-              <div className="user-profile-info">
-                <span className="user-name">{userData?.name || "Usuario"}</span>
-                {userData?.house && <span className="house-badge">Casa #{userData.house.houseNumber}</span>}
+              <span className="admin-role"></span>
+            </div>
+            {!isMobile && (
+              <div className="search-container">
+                <input
+                  type="text"
+                  placeholder={getPlaceholderText()}
+                  className="search-input"
+                  value={searchTerm}
+                  onChange={handleSearchChange}
+                />
               </div>
-            </div>
-            <div className="search-container">
-              {viewType !== "profile" && (
-                <div className="search-input-wrapper">
-                  <input
-                    type="text"
-                    placeholder={viewType === "visits" ? "Buscar Visita" : "Buscar Trabajador"}
-                    className="search-input"
-                    value={searchTerm}
-                    onChange={handleSearchChange}
-                    aria-label="Buscar"
-                  />
-                  <span className="search-icon">
-                    <Search size={16} />
-                  </span>
-                </div>
-              )}
-            </div>
+            )}
           </div>
         </div>
+
+        {/* Mobile Add Button */}
+        {/* {viewType !== "profile" && (
+          <div className="d-flex d-md-none justify-content-center my-3">
+            <button className="add-button mobile-add-button" onClick={onOpenForm}>
+              <CirclePlus className="add-icon" size={18} />
+              {viewType === "visits" ? "Agregar Visita" : "Agregar Trabajador"}
+            </button>
+          </div>
+        )} */}
+
         <div className="content-body">{children}</div>
       </main>
     </div>
@@ -89,3 +130,4 @@ function ResidentLayout({
 }
 
 export default ResidentLayout
+

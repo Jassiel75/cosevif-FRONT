@@ -49,6 +49,7 @@
 .profile-badges {
   display: flex;
   gap: 12px;
+  flex-wrap: wrap;
 }
 
 .profile-role,
@@ -193,10 +194,20 @@
     top: auto;
     right: auto;
     margin-top: 15px;
+    width: 100%;
+    justify-content: center;
   }
 
   .profile-content {
     padding: 15px;
     grid-template-columns: 1fr;
+  }
+
+  .info-item {
+    padding: 8px 0;
+  }
+
+  .card-body {
+    padding: 15px;
   }
 }

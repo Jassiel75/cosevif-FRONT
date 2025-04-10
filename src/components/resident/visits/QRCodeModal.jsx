@@ -2,11 +2,16 @@
 import { useEffect, useState, useRef } from "react"
 import { QRCodeCanvas } from "qrcode.react"
 import jsPDF from "jspdf"
+import axios from "axios"
 import "../../../styles/resident/visits/QRCodeModal.css"
+import { API_URL } from "../../../auth/IP"
 
 function QRCodeModal({ visit, onClose }) {
   const [qrValue, setQrValue] = useState("")
   const [timeLeft, setTimeLeft] = useState("")
+  const [scanCount, setScanCount] = useState(0)
+  const [isExpired, setIsExpired] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
 
   // Dentro del componente QRCodeModal, añadir una referencia al QR
   const qrRef = useRef(null)
@@ -38,8 +43,6 @@ function QRCodeModal({ visit, onClose }) {
     if (!dateTimeStr) return "N/A"
 
     // Si la fecha viene en formato ISO 8601 (con T), convertirla a objeto Date
-    // Si viene en formato ISO 8601 (con T), convertirla a objeto Date
-    // Si viene en formato YYYY-MM-DDThh:mm (del input), mantenerla como está
     let date
     if (dateTimeStr.includes("T")) {
       date = new Date(dateTimeStr)
@@ -56,14 +59,46 @@ function QRCodeModal({ visit, onClose }) {
     })
   }
 
+  // Function to check and update QR scan count
+  const checkQRScanCount = async () => {
+    if (!visit || !visit.id) return
+
+    try {
+      setIsLoading(true)
+      const token = localStorage.getItem("token")
+      const response = await axios.get(`${API_URL}/resident/visit/${visit.id}/qr-status`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+
+      const { scanCount: currentScanCount = 0 } = response.data || {}
+      setScanCount(currentScanCount)
+
+      // If scan count is 2 or more, mark as expired
+      if (currentScanCount >= 2) {
+        setIsExpired(true)
+      }
+      setIsLoading(false)
+    } catch (error) {
+      console.error("Error checking QR scan count:", error)
+      // If we can't check the scan count, assume it's valid
+      setScanCount(0)
+      setIsLoading(false)
+    }
+  }
+
   useEffect(() => {
     if (!visit) return
 
-    // Si el QR ya viene en base64 desde el backend, usarlo directamente
+    // Check QR scan count
+    checkQRScanCount()
+
+    // If the QR already comes in base64 from the backend, use it directly
     if (visit.qrCode && visit.qrCode.startsWith("data:image/")) {
       setQrValue(visit.qrCode)
     } else {
-      // Crear un objeto con la información relevante de la visita
+      // Create an object with the relevant visit information
       const visitInfo = {
         id: visit.id,
         visitorName: visit.visitorName,
@@ -71,14 +106,15 @@ function QRCodeModal({ visit, onClose }) {
         numPeople: visit.numPeople,
         password: visit.password,
         vehiclePlate: visit.vehiclePlate || "N/A",
+        scanCount: scanCount, // Include current scan count
         timestamp: new Date().toISOString(),
       }
 
-      // Convertir a JSON y luego a string para el QR
+      // Convert to JSON and then to string for the QR
       setQrValue(JSON.stringify(visitInfo))
     }
 
-    // Actualizar el tiempo restante cada segundo
+    // Update the time remaining every second
     const interval = setInterval(() => {
       const visitDate = new Date(visit.dateTime)
       const now = new Date()
@@ -98,7 +134,7 @@ function QRCodeModal({ visit, onClose }) {
     }, 1000)
 
     return () => clearInterval(interval)
-  }, [visit])
+  }, [visit, scanCount])
 
   // Reemplazar la función de impresión con la función para descargar PDF
   const downloadQRAsPDF = () => {
@@ -138,7 +174,7 @@ function QRCodeModal({ visit, onClose }) {
 
       // Añadir nota al pie
       pdf.setFontSize(10)
-      pdf.text("Este código QR es válido solo hasta 2 horas después de la hora programada.", 105, 200, {
+      pdf.text("Este código QR es válido solo para 2 escaneos.", 105, 200, {
         align: "center",
       })
       pdf.text("Muéstrelo al guardia para acceder.", 105, 206, { align: "center" })
@@ -160,48 +196,69 @@ function QRCodeModal({ visit, onClose }) {
           </div>
 
           <div className="modal-body text-center">
-            {/* Modificar la parte del render donde está el contenedor del QR */}
-            <div className="qr-container" ref={qrRef}>
-              {visit.qrCode && visit.qrCode.startsWith("data:image/") ? (
-                <img src={visit.qrCode || "/placeholder.svg"} alt="Código QR" className="qr-image" />
-              ) : (
-                <QRCodeCanvas value={qrValue} size={250} level="H" includeMargin={true} renderAs="canvas" />
-              )}
-            </div>
-
-            <div className="visit-info mt-3">
-              <h6>{visit.visitorName}</h6>
-              <p className="mb-1">
-                <strong>Fecha:</strong> {formatDate(visit.dateTime)}
-              </p>
-              <p className="mb-1">
-                <strong>Hora:</strong> {formatTime(visit.dateTime)}
-              </p>
-              <p className="mb-1">
-                <strong>Personas:</strong> {visit.numPeople}
-              </p>
-              <p className="mb-1">
-                <strong>Contraseña:</strong> {visit.password}
-              </p>
-
-              <div className="time-remaining mt-3">
-                <p className="countdown">Tiempo restante: {timeLeft}</p>
+            {isLoading ? (
+              <div className="d-flex justify-content-center">
+                <div className="spinner-border text-primary" role="status">
+                  <span className="visually-hidden">Cargando...</span>
+                </div>
               </div>
-
-              <div className="qr-instructions mt-3">
-                <p className="text-muted">
-                  Este código QR es válido solo hasta 2 horas después de la hora programada. Muéstrelo al guardia para
-                  acceder.
-                </p>
+            ) : isExpired ? (
+              <div className="expired-qr-container">
+                <div className="alert alert-danger">
+                  <h4>¡Código QR Caducado!</h4>
+                  <p>Este código QR ya ha sido escaneado 2 veces y ha caducado.</p>
+                  <p>Por favor, genere un nuevo código QR si necesita acceso adicional.</p>
+                </div>
               </div>
-            </div>
+            ) : (
+              <>
+                {/* Modificar la parte del render donde está el contenedor del QR */}
+                <div className="qr-container" ref={qrRef}>
+                  {visit.qrCode && visit.qrCode.startsWith("data:image/") ? (
+                    <img src={visit.qrCode || "/placeholder.svg"} alt="Código QR" className="qr-image" />
+                  ) : (
+                    <QRCodeCanvas value={qrValue} size={250} level="H" includeMargin={true} renderAs="canvas" />
+                  )}
+                </div>
+
+                <div className="visit-info mt-3">
+                  <h6>{visit.visitorName}</h6>
+                  <p className="mb-1">
+                    <strong>Fecha:</strong> {formatDate(visit.dateTime)}
+                  </p>
+                  <p className="mb-1">
+                    <strong>Hora:</strong> {formatTime(visit.dateTime)}
+                  </p>
+                  <p className="mb-1">
+                    <strong>Personas:</strong> {visit.numPeople}
+                  </p>
+                  <p className="mb-1">
+                    <strong>Contraseña:</strong> {visit.password}
+                  </p>
+                  <p className="mb-1">
+                    <strong>Escaneos realizados:</strong> {scanCount}/2
+                  </p>
+
+                  <div className="time-remaining mt-3">
+                    <p className="countdown">Tiempo restante: {timeLeft}</p>
+                  </div>
+
+                  <div className="qr-instructions mt-3">
+                    <p className="text-muted">
+                      Este código QR es válido solo para 2 escaneos. Después de eso, caducará automáticamente.
+                    </p>
+                  </div>
+                </div>
+              </>
+            )}
           </div>
 
           <div className="modal-footer">
-            {/* Modificar el botón de imprimir por el de descargar */}
-            <button type="button" className="btn btn-primary" onClick={downloadQRAsPDF}>
-              Descargar PDF
-            </button>
+            {!isExpired && !isLoading && (
+              <button type="button" className="btn btn-primary" onClick={downloadQRAsPDF}>
+                Descargar PDF
+              </button>
+            )}
             <button type="button" className="btn btn-secondary" onClick={onClose}>
               Cerrar
             </button>
@@ -213,4 +270,3 @@ function QRCodeModal({ visit, onClose }) {
 }
 
 export default QRCodeModal
-

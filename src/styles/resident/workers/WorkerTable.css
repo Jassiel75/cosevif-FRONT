@@ -68,15 +68,18 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-wrap: nowrap;
+  gap: 4px;
   width: 100%;
-  gap: 5px;
 }
 
 /* Estilo común para todos los botones de acción */
 .action-button {
-  width: 36px;
-  height: 36px;
-  flex: 0 0 36px;
+  width: 30px;
+  height: 30px;
+  min-width: 30px;
+  max-width: 30px;
+  flex: 0 0 30px;
   padding: 0;
   display: flex;
   justify-content: center;
@@ -115,23 +118,132 @@
   background-color: #c82333;
 }
 
-/* Responsive para dispositivos pequeños */
-@media (max-width: 768px) {
+/* Mejoras para dispositivos móviles */
+@media (max-width: 767.98px) {
   .table thead th,
   .table tbody td {
-    padding: 8px 4px;
+    padding: 10px 6px;
     font-size: 0.9rem;
   }
 
+  /* Asegurar que la columna de acciones tenga suficiente espacio */
+  td:last-child {
+    min-width: 130px;
+  }
+
+  /* Mejorar la visualización de los botones de acción en móvil */
   .action-buttons {
-    gap: 3px;
+    display: flex !important;
+    grid-template-columns: unset !important;
+    gap: 6px;
+    justify-content: center;
   }
 
   .action-button {
-    width: 32px;
-    height: 32px;
-    flex: 0 0 32px;
-    font-size: 12px;
+    width: 40px;
+    height: 40px;
+    flex: 0 0 40px;
+    font-size: 16px;
+  }
+
+  /* Estilos para las tarjetas en dispositivos móviles */
+  .worker-card {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 16px;
+    overflow: hidden;
+  }
+
+  .worker-card-header {
+    background-color: #f8f9fa;
+    padding: 12px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #e9ecef;
+  }
+
+  .worker-name {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+  }
+
+  .worker-card-body {
+    padding: 16px;
+  }
+
+  .worker-info-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    font-size: 14px;
+  }
+
+  .worker-info-label {
+    font-weight: 600;
+    color: #6c757d;
+  }
+
+  .worker-card-footer {
+    padding: 12px 16px;
+    background-color: #f8f9fa;
+    border-top: 1px solid #e9ecef;
+  }
+
+  .worker-card .action-buttons {
+    justify-content: flex-end;
+    gap: 8px;
+  }
+
+  .worker-card .action-button {
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+    max-width: 36px;
+    flex: 0 0 36px;
+    font-size: 16px;
   }
 }
 
+/* Ajustes adicionales para pantallas muy pequeñas */
+@media (max-width: 575.98px) {
+  .table {
+    font-size: 0.85rem;
+  }
+
+  .action-buttons {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .action-button {
+    width: 38px;
+    height: 38px;
+    flex: 0 0 38px;
+  }
+
+  /* Asegurar que la tabla no se desborde */
+  .table-responsive {
+    margin-bottom: 1rem;
+    overflow-y: hidden;
+  }
+}
+
+/* Asegurar que los botones de acción siempre estén en línea horizontal */
+.mobile-actions {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  justify-content: flex-end !important;
+  gap: 8px !important;
+}
+
+.mobile-actions .action-button {
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
+  max-width: 36px;
+  flex: 0 0 36px;
+  font-size: 16px;
+}
