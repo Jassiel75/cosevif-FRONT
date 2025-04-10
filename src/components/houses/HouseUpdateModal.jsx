@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import axios from "axios"
 import { Building, MapPin, FileText, Upload, Hash } from "lucide-react"
-import "../../styles/HouseUpdateModal.css";
+import "../../styles/HouseUpdateModal.css"
 import { API_URL } from "../../auth/IP" // Ajusta la ruta según tu estructura
 
 function HouseUpdateModal({ house, onClose, onSuccess }) {
@@ -87,7 +87,7 @@ function HouseUpdateModal({ house, onClose, onSuccess }) {
           </button>
         </div>
 
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className="house-update-form">
           <div className="house-update-body">
             {error && <div className="error-alert">{error}</div>}
 
@@ -147,10 +147,11 @@ function HouseUpdateModal({ house, onClose, onSuccess }) {
                 <textarea
                   name="description"
                   className="form-control"
-                  rows="3"
+                  rows="5"
                   value={form.description}
                   onChange={handleChange}
                   required
+                  placeholder="Descripción de la casa"
                 ></textarea>
               </div>
             </div>

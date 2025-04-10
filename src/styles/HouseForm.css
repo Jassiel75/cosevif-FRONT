@@ -88,9 +88,12 @@
   color: #9b2d20; /* Color del título */
 }
 
+/* Modificar el house-form-body para agregar scroll */
 .house-form-body {
   padding: 15px 20px;
   flex: 1;
+  overflow-y: auto;
+  max-height: 70vh; /* Altura máxima del 70% de la ventana */
 }
 
 .modal-body {
@@ -142,9 +145,11 @@
   outline: none;
 }
 
+/* Asegurar que el textarea no cause problemas de layout */
 .form-group textarea {
   resize: vertical;
   min-height: 80px;
+  max-height: 150px; /* Limitar la altura máxima del textarea */
 }
 
 .modal-footer {
@@ -292,6 +297,21 @@ input[type="file"] {
 /* Alineamos los botones de acción a la derecha */
 .modal-footer {
   justify-content: flex-end;
+}
+
+/* Mantener el encabezado y pie de página fijos */
+.house-form-header {
+  background-color: #862d26;
+  color: white;
+  padding: 12px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px 12px 0 0;
+  position: sticky;
+  top: 0;
+  z-index: 10;
 }
 
 .house-form-footer {

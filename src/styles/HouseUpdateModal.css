@@ -18,6 +18,7 @@
   border-radius: 12px;
   width: 100%;
   max-width: 650px;
+  min-height: 500px; /* Altura mínima para evitar que se compacte */
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
   display: flex;
   flex-direction: column;
@@ -71,9 +72,19 @@
   font-size: 0.9rem;
 }
 
+.house-update-form {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 450px; /* Asegurar que el formulario tenga una altura mínima */
+}
+
 .house-update-body {
   padding: 15px 20px;
   flex: 1;
+  overflow-y: auto;
+  max-height: 70vh; /* Altura máxima del 70% de la ventana */
+  min-height: 350px; /* Altura mínima para evitar que se compacte */
 }
 
 .form-row {
@@ -120,7 +131,8 @@
 
 .form-group textarea {
   resize: vertical;
-  min-height: 80px;
+  min-height: 100px; /* Aumentado para que sea más alto por defecto */
+  height: auto; /* Permitir que se ajuste automáticamente */
 }
 
 /* Estilos para el área de carga de imágenes */
@@ -243,10 +255,12 @@
 
   .house-update-modal {
     width: 95%;
+    min-height: 450px; /* Mantener altura mínima en móviles */
   }
 
   .house-update-body {
     padding: 12px;
+    min-height: 300px; /* Altura mínima para móviles */
   }
 
   .house-update-footer {
