@@ -202,14 +202,9 @@
   }
 
   .main-content {
-    margin-left: 0;
-    width: 100%;
-  }
-
-  .sidebar.collapsed ~ .main-content,
-  .sidebar.expanded ~ .main-content {
-    margin-left: 0; /* In mobile, the sidebar is hidden completely */
-    width: 100%;
+    margin-left: 0 !important;
+    width: 100% !important;
+    padding-top: 60px; /* Add space for the mobile menu button */
   }
 
   .content-body {
