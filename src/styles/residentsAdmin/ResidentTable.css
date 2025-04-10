@@ -171,7 +171,16 @@ input:checked + .slider:before {
 }
 
 /* Responsive para dispositivos pequeños */
-@media (max-width: 768px) {
+@media (max-width: 992px) {
+  .table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .table {
+    min-width: 650px; /* Asegura que la tabla tenga un ancho mínimo */
+  }
+
   .table thead th,
   .table tbody td {
     padding: 8px 4px;
@@ -196,5 +205,61 @@ input:checked + .slider:before {
 
   input:checked + .slider:before {
     transform: translateX(22px);
+  }
+}
+
+/* Versión de tarjeta para móviles muy pequeños */
+@media (max-width: 576px) {
+  .table-card-view .table {
+    display: none; /* Ocultar la tabla original */
+  }
+
+  .resident-card {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 16px;
+    padding: 16px;
+  }
+
+  .resident-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 8px;
+  }
+
+  .resident-card-name {
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: #333;
+  }
+
+  .resident-card-content {
+    margin-bottom: 12px;
+  }
+
+  .resident-card-item {
+    display: flex;
+    margin-bottom: 8px;
+  }
+
+  .resident-card-label {
+    font-weight: 500;
+    width: 100px;
+    color: #666;
+  }
+
+  .resident-card-value {
+    flex: 1;
+  }
+
+  .resident-card-actions {
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid #eee;
+    padding-top: 12px;
   }
 }

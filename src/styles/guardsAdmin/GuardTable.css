@@ -1,201 +1,265 @@
 /* Estilos generales para la tabla */
 .table-responsive {
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  margin-bottom: 1rem;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.table thead th {
+  background-color: #f2cbb6;
+  color: #333;
+  font-weight: 600;
+  border-color: #e9ecef;
+  padding: 12px 8px;
+  vertical-align: middle;
+}
+
+.table tbody td {
+  vertical-align: middle;
+  border-color: #e9ecef;
+  padding: 10px 8px;
+  text-align: center; /* Centrar todo el contenido */
+}
+
+/* Estilos para cuando no hay guardias */
+.no-guards {
+  text-align: center;
+  padding: 50px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  min-height: 300px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.no-guards h3 {
+  margin-bottom: 20px;
+  color: #555;
+}
+
+.add-guard-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  background-color: #862d26;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.2s;
+}
+
+.add-guard-btn:hover {
+  background-color: #6b1f1a;
+}
+
+/* Estilos para los botones de acción */
+.btn-action,
+.btn-sm {
+  width: 36px;
+  height: 36px;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border-radius: 6px;
+  padding: 0 !important;
+  margin: 0 auto;
+  border: none;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+/* Centrar los iconos dentro de los botones */
+.btn-action svg,
+.btn-sm svg {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  margin: 0;
+}
+
+/* Botón de ver (ojo) */
+.btn-info {
+  background-color: #17a2b8;
+  color: white;
+}
+
+.btn-info:hover {
+  background-color: #138496;
+  transform: translateY(-2px);
+}
+
+/* Botón de editar (lápiz) */
+.btn-primary {
+  background-color: #007bff;
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: #0069d9;
+  transform: translateY(-2px);
+}
+
+/* Botón de eliminar (papelera) */
+.btn-danger {
+  background-color: #dc3545;
+  color: white;
+}
+
+.btn-danger:hover {
+  background-color: #c82333;
+  transform: translateY(-2px);
+}
+
+/* Estilos para el switch personalizado */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 24px;
+  margin: 0;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #000;
+  transition: .4s;
+  border-radius: 34px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: .4s;
+  border-radius: 50%;
+}
+
+input:checked + .slider {
+  background-color: #2ecc71;
+}
+
+input:checked + .slider:before {
+  transform: translateX(26px);
+}
+
+/* Responsive para dispositivos pequeños */
+@media (max-width: 992px) {
+  .table-responsive {
     overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
   }
-  
+
   .table {
-    width: 100%;
-    margin-bottom: 1rem;
-    border-collapse: separate;
-    border-spacing: 0;
+    min-width: 650px; /* Asegura que la tabla tenga un ancho mínimo */
   }
-  
-  .table thead th {
-    background-color: #f2cbb6;
-    color: #333;
-    font-weight: 600;
-    border-color: #e9ecef;
-    padding: 12px 8px;
-    vertical-align: middle;
-  }
-  
+
+  .table thead th,
   .table tbody td {
-    vertical-align: middle;
-    border-color: #e9ecef;
-    padding: 10px 8px;
-    text-align: center; /* Centrar todo el contenido */
+    padding: 8px 4px;
+    font-size: 0.9rem;
   }
-  
-  /* Estilos para cuando no hay guardias */
-  .no-guards {
-    text-align: center;
-    padding: 50px;
-    background-color: white;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-    min-height: 300px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-  }
-  
-  .no-guards h3 {
-    margin-bottom: 20px;
-    color: #555;
-  }
-  
-  .add-guard-btn {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 10px 16px;
-    background-color: #862d26;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 14px;
-    transition: background-color 0.2s;
-  }
-  
-  .add-guard-btn:hover {
-    background-color: #6b1f1a;
-  }
-  
-  /* Estilos para los botones de acción */
+
   .btn-action,
   .btn-sm {
-    width: 36px;
-    height: 36px;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    border-radius: 6px;
-    padding: 0 !important;
-    margin: 0 auto;
-    border: none;
-    transition: all 0.2s ease;
-    position: relative;
+    width: 32px;
+    height: 32px;
   }
-  
-  /* Centrar los iconos dentro de los botones */
-  .btn-action svg,
-  .btn-sm svg {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    margin: 0;
-  }
-  
-  /* Botón de ver (ojo) */
-  .btn-info {
-    background-color: #17a2b8;
-    color: white;
-  }
-  
-  .btn-info:hover {
-    background-color: #138496;
-    transform: translateY(-2px);
-  }
-  
-  /* Botón de editar (lápiz) */
-  .btn-primary {
-    background-color: #007bff;
-    color: white;
-  }
-  
-  .btn-primary:hover {
-    background-color: #0069d9;
-    transform: translateY(-2px);
-  }
-  
-  /* Botón de eliminar (papelera) */
-  .btn-danger {
-    background-color: #dc3545;
-    color: white;
-  }
-  
-  .btn-danger:hover {
-    background-color: #c82333;
-    transform: translateY(-2px);
-  }
-  
-  /* Estilos para el switch personalizado */
+
   .switch {
-    position: relative;
-    display: inline-block;
-    width: 50px;
-    height: 24px;
-    margin: 0;
+    width: 44px;
+    height: 22px;
   }
-  
-  .switch input {
-    opacity: 0;
-    width: 0;
-    height: 0;
-  }
-  
-  .slider {
-    position: absolute;
-    cursor: pointer;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: #000;
-    transition: .4s;
-    border-radius: 34px;
-  }
-  
+
   .slider:before {
-    position: absolute;
-    content: "";
-    height: 18px;
-    width: 18px;
-    left: 3px;
-    bottom: 3px;
-    background-color: white;
-    transition: .4s;
-    border-radius: 50%;
+    height: 16px;
+    width: 16px;
   }
-  
-  input:checked + .slider {
-    background-color: #2ecc71;
-  }
-  
+
   input:checked + .slider:before {
-    transform: translateX(26px);
+    transform: translateX(22px);
   }
-  
-  /* Responsive para dispositivos pequeños */
-  @media (max-width: 768px) {
-    .table thead th,
-    .table tbody td {
-      padding: 8px 4px;
-      font-size: 0.9rem;
-    }
-  
-    .btn-action,
-    .btn-sm {
-      width: 32px;
-      height: 32px;
-    }
-  
-    .switch {
-      width: 44px;
-      height: 22px;
-    }
-  
-    .slider:before {
-      height: 16px;
-      width: 16px;
-    }
-  
-    input:checked + .slider:before {
-      transform: translateX(22px);
-    }
+}
+
+/* Versión de tarjeta para móviles muy pequeños */
+@media (max-width: 576px) {
+  .table-card-view .table {
+    display: none; /* Ocultar la tabla original */
   }
-  
+
+  .guard-card {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 16px;
+    padding: 16px;
+  }
+
+  .guard-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 8px;
+  }
+
+  .guard-card-name {
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: #333;
+  }
+
+  .guard-card-content {
+    margin-bottom: 12px;
+  }
+
+  .guard-card-item {
+    display: flex;
+    margin-bottom: 8px;
+  }
+
+  .guard-card-label {
+    font-weight: 500;
+    width: 100px;
+    color: #666;
+  }
+
+  .guard-card-value {
+    flex: 1;
+  }
+
+  .guard-card-actions {
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid #eee;
+    padding-top: 12px;
+  }
+}
