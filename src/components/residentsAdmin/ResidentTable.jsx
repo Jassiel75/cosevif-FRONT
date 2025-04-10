@@ -31,10 +31,7 @@ function ResidentTable({ residents, onView, onUpdate, onToggleStatus, onDelete, 
             <th>Correo</th>
             <th>Calle</th>
             <th>Teléfono</th>
-            <th>Ver más</th>
-            <th>Actualizar</th>
-            <th>Bloquear / Desbloquear</th>
-            <th>Eliminar</th>
+            <th>Acciones</th>
           </tr>
         </thead>
         <tbody>
@@ -48,28 +45,36 @@ function ResidentTable({ residents, onView, onUpdate, onToggleStatus, onDelete, 
               <td>{residente.house?.street || residente.street || "N/A"}</td>
               <td>{residente.phone}</td>
               <td>
-                <button className="btn btn-info btn-action" onClick={() => onView(residente)}>
-                  <FaEye />
-                </button>
-              </td>
-              <td>
-                <button className="btn btn-primary btn-sm" onClick={() => onUpdate(residente)}>
-                  <FaPen />
-                </button>
-              </td>
-              <td>
-                <span
-                  className={`badge rounded-pill ${residente.status ? "bg-success" : "bg-danger"}`}
-                  style={{ cursor: "pointer" }}
-                  onClick={() => onToggleStatus(residente)}
-                >
-                  {residente.status ? "Activo" : "Inactivo"}
-                </span>
-              </td>
-              <td>
-                <button className="btn btn-danger btn-sm" onClick={() => onDelete(residente)}>
-                  <FaTrashAlt />
-                </button>
+                <div className="justify-content-center gap-2">
+                  {/* Ver detalles */}
+                  <button className="btn btn-info btn-sm" onClick={() => onView(residente)} title="Ver detalles">
+                    <FaEye />
+                  </button>
+
+                  {/* Actualizar */}
+                  <button
+                    className="btn btn-primary btn-sm"
+                    onClick={() => onUpdate(residente)}
+                    title="Actualizar residente"
+                  >
+                    <FaPen />
+                  </button>
+
+                  {/* Toggle estado (switch) */}
+                  <label className="switch" title={residente.status ? "Desactivar residente" : "Activar residente"}>
+                    <input type="checkbox" checked={residente.status} onChange={() => onToggleStatus(residente)} />
+                    <span className="slider"></span>
+                  </label>
+
+                  {/* Eliminar */}
+                  <button
+                    className="btn btn-danger btn-sm"
+                    onClick={() => onDelete(residente)}
+                    title="Eliminar residente"
+                  >
+                    <FaTrashAlt />
+                  </button>
+                </div>
               </td>
             </tr>
           ))}

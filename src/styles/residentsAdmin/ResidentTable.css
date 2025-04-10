@@ -64,32 +64,11 @@
   background-color: #6b1f1a;
 }
 
-/* Estilos para el badge de estado */
-.badge {
-  font-size: 0.85rem;
-  padding: 0.4em 0.6em;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-  border-radius: 20px;
-  min-width: 80px; /* Ancho mínimo para los badges */
-}
-
-.bg-success {
-  background-color: #28a745 !important;
-}
-
-.bg-danger {
-  background-color: #dc3545 !important;
-}
-
 /* Estilos para los botones de acción */
 .btn-action,
 .btn-sm {
-  width: 40px;
-  height: 40px;
+  width: 36px;
+  height: 36px;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
@@ -144,6 +123,53 @@
   transform: translateY(-2px);
 }
 
+/* Estilos para el switch personalizado */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 24px;
+  margin: 0;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #000;
+  transition: .4s;
+  border-radius: 34px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: .4s;
+  border-radius: 50%;
+}
+
+input:checked + .slider {
+  background-color: #2ecc71;
+}
+
+input:checked + .slider:before {
+  transform: translateX(26px);
+}
+
 /* Responsive para dispositivos pequeños */
 @media (max-width: 768px) {
   .table thead th,
@@ -154,7 +180,21 @@
 
   .btn-action,
   .btn-sm {
-    width: 36px;
-    height: 36px;
+    width: 32px;
+    height: 32px;
+  }
+
+  .switch {
+    width: 44px;
+    height: 22px;
+  }
+
+  .slider:before {
+    height: 16px;
+    width: 16px;
+  }
+
+  input:checked + .slider:before {
+    transform: translateX(22px);
   }
 }

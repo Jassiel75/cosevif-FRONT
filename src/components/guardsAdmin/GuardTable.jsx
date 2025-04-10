@@ -1,6 +1,6 @@
 "use client"
 import { FaEye, FaTrashAlt, FaShieldAlt, FaPen } from "react-icons/fa"
-//import "../../styles/guardsAdmin/GuardTable.css"
+import "../../styles/guardsAdmin/GuardTable.css"
 
 function GuardTable({ guards, onView, onUpdate, onToggleStatus, onDelete, onOpenForm, searchTerm }) {
   // Si no hay guardias, mostrar mensaje centrado con botón para agregar
@@ -31,10 +31,7 @@ function GuardTable({ guards, onView, onUpdate, onToggleStatus, onDelete, onOpen
             <th>Correo</th>
             <th>Teléfono</th>
             <th>Edad</th>
-            <th>Ver más</th>
-            <th>Actualizar</th>
-            <th>Estado</th>
-            <th>Eliminar</th>
+            <th>Acciones</th>
           </tr>
         </thead>
         <tbody>
@@ -48,41 +45,40 @@ function GuardTable({ guards, onView, onUpdate, onToggleStatus, onDelete, onOpen
               <td>{guardia.phone || "N/A"}</td>
               <td>{guardia.age || "N/A"}</td>
               <td>
-                <button className="btn btn-info btn-action" onClick={() => onView(guardia)}>
-                  <FaEye />
-                </button>
-              </td>
-              <td>
-                <button
-                  className="btn btn-primary btn-sm"
-                  onClick={(e) => {
-                    e.preventDefault() // Prevenir comportamiento por defecto
-                    console.log("Botón de actualizar clickeado para guardia:", guardia)
-                    // Verificar que el guardia tiene un ID
-                    if (!guardia || !guardia.id) {
-                      console.error("Error: Guardia sin ID", guardia)
-                      alert("No se puede actualizar el guardia porque no tiene un ID válido")
-                      return
-                    }
-                    onUpdate(guardia)
-                  }}
-                >
-                  <FaPen />
-                </button>
-              </td>
-              <td>
-                <span
-                  className={`badge rounded-pill ${guardia.status ? "bg-success" : "bg-danger"}`}
-                  style={{ cursor: "pointer" }}
-                  onClick={() => onToggleStatus(guardia)}
-                >
-                  {guardia.status ? "Activo" : "Inactivo"}
-                </span>
-              </td>
-              <td>
-                <button className="btn btn-danger btn-sm" onClick={() => onDelete(guardia)}>
-                  <FaTrashAlt />
-                </button>
+                <div className="justify-content-center gap-2">
+                  {/* Ver detalles */}
+                  <button className="btn btn-info btn-sm" onClick={() => onView(guardia)} title="Ver detalles">
+                    <FaEye />
+                  </button>
+
+                  {/* Actualizar */}
+                  <button
+                    className="btn btn-primary btn-sm"
+                    onClick={(e) => {
+                      e.preventDefault()
+                      if (!guardia || !guardia.id) {
+                        console.error("Error: Guardia sin ID", guardia)
+                        alert("No se puede actualizar el guardia porque no tiene un ID válido")
+                        return
+                      }
+                      onUpdate(guardia)
+                    }}
+                    title="Actualizar guardia"
+                  >
+                    <FaPen />
+                  </button>
+
+                  {/* Toggle estado (switch) */}
+                  <label className="switch" title={guardia.status ? "Desactivar guardia" : "Activar guardia"}>
+                    <input type="checkbox" checked={guardia.status} onChange={() => onToggleStatus(guardia)} />
+                    <span className="slider"></span>
+                  </label>
+
+                  {/* Eliminar */}
+                  <button className="btn btn-danger btn-sm" onClick={() => onDelete(guardia)} title="Eliminar guardia">
+                    <FaTrashAlt />
+                  </button>
+                </div>
               </td>
             </tr>
           ))}

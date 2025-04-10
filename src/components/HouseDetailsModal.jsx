@@ -1,6 +1,6 @@
 "use client"
 
-import { MapPin, Hash, FileText, Calendar, User, X } from "lucide-react"
+import { MapPin, Hash, FileText, User, X } from "lucide-react"
 import "../styles/HouseDetailsModal.css"
 
 function HouseDetailsModal({ house, onClose }) {
@@ -33,79 +33,58 @@ function HouseDetailsModal({ house, onClose }) {
 
           <div className="modal-body">
             <div className="house-details">
-              {/* Imagen de la casa si existe */}
-              {house.photo && (
-                <div className="house-image-container">
-                  <img
-                    src={`data:image/jpeg;base64,${house.photo}`}
-                    alt={`Casa #${house.houseNumber}`}
-                    className="house-image"
-                  />
-                </div>
-              )}
-
               <div className="details-section">
                 <h6 className="section-title">Información de la Propiedad</h6>
 
-                <div className="detail-item">
-                  <div className="detail-icon">
-                    <Hash />
-                  </div>
-                  <div className="detail-content">
-                    <span className="detail-label">Número de Casa</span>
-                    <span className="detail-value">{house.houseNumber}</span>
-                  </div>
-                </div>
-
-                <div className="detail-item">
-                  <div className="detail-icon">
-                    <MapPin />
-                  </div>
-                  <div className="detail-content">
-                    <span className="detail-label">Dirección</span>
-                    <span className="detail-value">{house.address || "No disponible"}</span>
-                  </div>
-                </div>
-
-                <div className="detail-item">
-                  <div className="detail-icon">
-                    <MapPin />
-                  </div>
-                  <div className="detail-content">
-                    <span className="detail-label">Calle</span>
-                    <span className="detail-value">{house.street || "No disponible"}</span>
-                  </div>
-                </div>
-
-                <div className="detail-item">
-                  <div className="detail-icon">
-                    <FileText />
-                  </div>
-                  <div className="detail-content">
-                    <span className="detail-label">Descripción</span>
-                    <span className="detail-value">{house.description || "Sin descripción"}</span>
-                  </div>
-                </div>
-
-                {house.createdAt && (
+                <div className="details-grid">
                   <div className="detail-item">
                     <div className="detail-icon">
-                      <Calendar />
+                      <Hash />
                     </div>
                     <div className="detail-content">
-                      <span className="detail-label">Fecha de Registro</span>
-                      <span className="detail-value">{formatDate(house.createdAt)}</span>
+                      <span className="detail-label">Número de Casa</span>
+                      <span className="detail-value">{house.houseNumber}</span>
                     </div>
                   </div>
-                )}
+
+                  <div className="detail-item">
+                    <div className="detail-icon">
+                      <MapPin />
+                    </div>
+                    <div className="detail-content">
+                      <span className="detail-label">Dirección</span>
+                      <span className="detail-value">{house.address || "No disponible"}</span>
+                    </div>
+                  </div>
+
+                  <div className="detail-item">
+                    <div className="detail-icon">
+                      <MapPin />
+                    </div>
+                    <div className="detail-content">
+                      <span className="detail-label">Calle</span>
+                      <span className="detail-value">{house.street || "No disponible"}</span>
+                    </div>
+                  </div>
+
+                  <div className="detail-item">
+                    <div className="detail-icon">
+                      <FileText />
+                    </div>
+                    <div className="detail-content">
+                      <span className="detail-label">Descripción</span>
+                      <span className="detail-value">{house.description || "Sin descripción"}</span>
+                    </div>
+                  </div>
+                </div>
               </div>
 
               {/* Sección de residente si existe */}
               {house.resident && (
-                <div className="details-section">
+                <div className="details-section resident-section">
                   <h6 className="section-title">Residente Asignado</h6>
 
-                  <div className="detail-item">
+                  <div className="detail-item centered-item">
                     <div className="detail-icon">
                       <User />
                     </div>
@@ -116,6 +95,17 @@ function HouseDetailsModal({ house, onClose }) {
                       </span>
                     </div>
                   </div>
+                </div>
+              )}
+
+              {/* Imagen de la casa si existe - ahora al final */}
+              {house.photo && (
+                <div className="image-section">
+                  <img
+                    src={`data:image/jpeg;base64,${house.photo}`}
+                    alt={`Casa #${house.houseNumber}`}
+                    className="house-image"
+                  />
                 </div>
               )}
             </div>
